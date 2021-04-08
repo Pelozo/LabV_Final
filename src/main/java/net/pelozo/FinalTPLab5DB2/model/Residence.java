@@ -25,6 +25,11 @@ public class Residence {
 
     @NotNull
     @OneToOne
+    @JoinColumn(name = "meter_id")
+    private Meter meter;
+
+    @NotNull
+    @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
