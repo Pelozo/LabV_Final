@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: localhost:3306//personDB
-  jpa:
-    show-sql: true
