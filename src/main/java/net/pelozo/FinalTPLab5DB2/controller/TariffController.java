@@ -16,17 +16,17 @@ public class TariffController {
     TariffService tariffService;
 
     @GetMapping
-    public ResponseEntity<List<Tariff>> getAll(){
+    public List<Tariff> getAll(){
         return tariffService.getAll();
     }
 
     @PostMapping
-    public ResponseEntity<Tariff> addTariff(@RequestBody Tariff tariff){
-        return tariffService.save(tariff);
+    public Tariff addTariff(@RequestBody Tariff tariff){
+        return tariffService.add(tariff);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tariff> getById(@PathVariable Long id){
+    public Tariff getById(@PathVariable Long id){
         return tariffService.getById(id);
     }
 
@@ -36,7 +36,7 @@ public class TariffController {
     }
 
     @PutMapping
-    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) {
+    public Tariff updateTariff(@RequestBody Tariff tariff) {
         return tariffService.update(tariff);
     }
 

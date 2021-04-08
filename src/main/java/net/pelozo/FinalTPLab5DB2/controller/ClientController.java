@@ -18,13 +18,13 @@ public class ClientController {
     ClientService clientService;
 
     @GetMapping
-    public ResponseEntity getAll(){
+    public List<Client> getAll(){
         return clientService.getAll();
     }
 
     @PostMapping
-    public ResponseEntity add(@RequestBody Client client){
-        return clientService.save(client);
+    public Client add(@RequestBody Client client){
+        return clientService.add(client);
     }
 
     @DeleteMapping("/{id}")
@@ -33,7 +33,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getById(@PathVariable Long id){
+    public Client getById(@PathVariable Long id){
         return clientService.getById(id);
     }
 

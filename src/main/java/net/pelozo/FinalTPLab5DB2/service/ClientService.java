@@ -8,8 +8,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -17,32 +19,35 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-    public ResponseEntity getAll() {
+    public List<Client> getAll() {
         List<Client> clients = clientRepository.findAll();
         if(!clients.isEmpty()){
-            return ResponseEntity.ok(clients);
+            return clients;
         }else{
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
     }
 
-    public ResponseEntity save(Client client){
-        //try{
-            Client newClient = clientRepository.save(client);
-            return ResponseEntity.ok(newClient);
-        //} catch (DataIntegrityViolationException e) {
-        //    return ResponseEntity.status(HttpStatus.CONFLICT)
-        //            .body("Username already in use");
-        //}
+    public Client add(Client client){
+        try{
+            return clientRepository.save(client);
+        }catch (DataIntegrityViolationException e) {
+            System.out.println("client already exists");
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public void deleteById(Long id) {
         clientRepository.deleteById(id);
     }
 
-    public ResponseEntity<Client> getById(Long id) {
-        return clientRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
+    public Client getById(Long id) {
+        Optional<Client> client = clientRepository.findById(id);
+        if(client.isPresent()) {
+            return client.get();
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }
