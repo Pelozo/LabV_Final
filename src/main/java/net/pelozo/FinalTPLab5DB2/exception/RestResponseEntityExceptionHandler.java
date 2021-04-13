@@ -20,7 +20,7 @@ import java.util.List;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ConstraintViolationException.class, DataIntegrityViolationException.class, ResponseStatusException.class})
+    @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request){
         List<String> errors = new ArrayList<>();
         for(ConstraintViolation violation : ex.getConstraintViolations()){
@@ -30,14 +30,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
     }
 
-    /*public ResponseEntity<Object> handleConstraintViolation(DataIntegrityViolationException ex, WebRequest request){
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolation(DataIntegrityViolationException ex, WebRequest request){
         List<String> errors = new ArrayList<>();
-        *//*for(ConstraintViolation violation : ex.()){
+        /*for(ConstraintViolation violation : ex.()){
             errors.add(violation.getMessage());
-        }*//*
+        }*/
         errors.add(ex.getMessage());
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
-    }*/
+    }
 
 }
