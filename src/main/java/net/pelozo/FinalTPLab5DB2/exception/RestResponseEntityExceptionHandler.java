@@ -33,9 +33,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(DataIntegrityViolationException ex, WebRequest request){
         List<String> errors = new ArrayList<>();
-        /*for(ConstraintViolation violation : ex.()){
-            errors.add(violation.getMessage());
-        }*/
+        errors.add(ex.getMessage());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
+    }
+
+    @ExceptionHandler({ClientExistsException.class})
+    public ResponseEntity<Object> handleClientExistsException(ClientExistsException ex, WebRequest request){
+        List<String> errors = new ArrayList<>();
         errors.add(ex.getMessage());
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
