@@ -1,9 +1,9 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Data
@@ -14,6 +14,9 @@ public class Residence {
     @GeneratedValue
     private Long id;
 
+    // TODO: a esto hay que ponerle @JsonIgnore
+    // TODO: es necesario hacer ResidenceDTO por si queresmos mostrar el dueño de una casa???
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
