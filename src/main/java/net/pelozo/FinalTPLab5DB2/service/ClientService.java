@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class ClientService {
 
-    private final static String CLIENT_URL = "client";
+    //private final static String CLIENT_URL = "client";
     @Autowired
     ClientRepository clientRepository;
 
