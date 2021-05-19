@@ -40,10 +40,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({ClientExistsException.class})
     public ResponseEntity<Object> handleClientExistsException(ClientExistsException ex, WebRequest request){
-        List<String> errors = new ArrayList<>();
-        errors.add(ex.getMessage());
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(ClientNotExistsException.class)
+    public ResponseEntity<Object> clientNotExistsHandler(ClientNotExistsException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This client does not exists!");
     }
 
 }

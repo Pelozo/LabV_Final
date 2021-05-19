@@ -23,6 +23,8 @@ public class Tariff {
     @NotEmpty(message = "cannot be empty")
     private String name;
 
+    private boolean isDeleted;
+
     @NotNull(message = "cannot be null")
     private Float value;
 }

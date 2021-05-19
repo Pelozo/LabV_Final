@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -21,12 +21,11 @@ public class Invoice {
     @NotNull(message = "isPaid cannot be null")
     private Boolean isPaid;
 
-    @NotNull(message = "dueDate cannot be null")
-    private LocalTime dueDate;
+    @NotNull(message = "isDue cannot be null")
+    private Boolean isDue;
 
-    @ManyToOne
-    @NotNull(message = "client cannot be null")
-    private Client client;
+    @NotNull(message = "dueDate cannot be null")
+    private LocalDateTime dueDate;
 
     @ManyToOne
     @NotNull(message = "residence cannot be null")
@@ -44,19 +43,14 @@ public class Invoice {
     @Min(value = 0,message = "totalConsumptionKWH cannot be lower than 0")
     private Float totalConsumptionKWH;
 
-    @NotNull(message = "initialDate cannot be null")
-    private LocalTime initialDate;
-
-    @NotNull(message = "lastDate cannot be null")
-    private LocalTime lastDate;
-
-    @ManyToOne
-    @NotNull(message = "tariff cannot be null")
-    private Tariff tariff;
-
     @NotNull(message = "totalAmount cannot be null")
     @Min(value = 0,message = "totalAmount cannot be lower than 0")
     private Float totalAmount;
 
+
+    //aca consigo el total de consumo que tuvo el usuario
+    public float getTotalConsumption(){
+        return lastReading - firstReading;
+    }
 
 }

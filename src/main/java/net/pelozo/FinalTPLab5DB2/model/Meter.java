@@ -21,6 +21,11 @@ public class Meter {
     @GeneratedValue
     private Long id;
 
+    @NotNull(message = "isDeleted cannot be null")
+    @NotEmpty(message = "isDeleted cannot be empty")
+    @NotBlank(message = "isDeleted cannot be blank")
+    private boolean isDeleted;
+
     @NotNull(message = "brand cannot be null")
     @NotEmpty(message = "brand cannot be empty")
     @NotBlank(message = "brand cannot be blank")

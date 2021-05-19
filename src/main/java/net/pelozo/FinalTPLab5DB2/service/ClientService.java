@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.PaginationResponse;
 import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
@@ -23,42 +24,43 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-    public PaginationResponse<Client> getAll(Pageable pageable) {
+//    public PaginationResponse<Client> getAll(Pageable pageable) {
+//
+//        Page<Client> clientPage = clientRepository.findAll(pageable);
+//
+//        if(!clientPage.isEmpty()){
+//            return new PaginationResponse<>(clientPage.getContent(),
+//                                            clientPage.getTotalPages(),
+//                                            clientPage.getTotalElements());
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+//        }
+//    }
 
-        Page<Client> clientPage = clientRepository.findAll(pageable);
-
-        if(!clientPage.isEmpty()){
-            return new PaginationResponse<>(clientPage.getContent(),
-                                            clientPage.getTotalPages(),
-                                            clientPage.getTotalElements());
-        }else{
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
-    }
-
-    public ResponseEntity<Client> add(Client client) {
-
+    public Client add(Client client) {
         try{
-            Client c = clientRepository.save(client);
-
-            return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(c.getId()).toUri()).build();
-        }catch (DataIntegrityViolationException e) {
-            //System.out.println("client already exists");
-            //e.printStackTrace();
-            throw new ClientExistsException(e.getMessage());
+            return clientRepository.save(client);
+        }catch(DataIntegrityViolationException e){
+            throw new ClientExistsException();
         }
     }
 
-    public void deleteById(Long id) {
-        clientRepository.deleteById(id);
+    public void deleteById(Long id) throws ClientNotExistsException {
+        Client c = getById(id);
+        clientRepository.delete(c);
     }
 
-    public Client getById(Long id) {
+    public Client getById(Long id) throws ClientNotExistsException {
         Optional<Client> client = clientRepository.findById(id);
         if(client.isPresent()) {
             return client.get();
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ClientNotExistsException();
         }
+    }
+
+    public Page<Client> getAll(Pageable pageable) {
+        return clientRepository.findAll(pageable);
+
     }
 }

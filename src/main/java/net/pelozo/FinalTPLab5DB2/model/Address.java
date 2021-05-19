@@ -21,6 +21,8 @@ public class Address {
 
     private String street;
 
+    private boolean isDeleted;
+
     private int number;
 
 

@@ -39,8 +39,6 @@ public class Client extends User {
     @NotNull(message = "last name cannot be null")
     private String lastName;
 
-    @NotEmpty(message = "residence cannot be empty")
-    @NotBlank(message = "residence cannot be blank")
     @NotNull(message = "residence cannot be null")
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "residence_id")
