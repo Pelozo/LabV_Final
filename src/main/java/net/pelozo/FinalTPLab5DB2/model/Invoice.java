@@ -1,5 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Invoice {
 
     @Id
@@ -24,6 +27,7 @@ public class Invoice {
     @NotNull(message = "isDue cannot be null")
     private Boolean isDue;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "dueDate cannot be null")
     private LocalDateTime dueDate;
 
@@ -51,6 +55,10 @@ public class Invoice {
     //aca consigo el total de consumo que tuvo el usuario
     public float getTotalConsumption(){
         return lastReading - firstReading;
+    }
+
+    public float getTotalAmount(){
+        return residence.getTariff().getValue() * totalConsumptionKWH;
     }
 
 }
