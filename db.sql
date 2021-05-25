@@ -111,6 +111,9 @@ CREATE TABLE measurements(
     CONSTRAINT fk_measurement_invoce FOREIGN KEY(invoice_id) REFERENCES invoices(id)
 );
 
+
+INSERT INTO users (user,password) values ('pelozo', 'asd');
+
 # a) BACKOFFICE, que permitirá el manejo de clientes, medidores y tarifas.
 
 CREATE USER 'backoffice'@'localhost' IDENTIFIED BY '1234';

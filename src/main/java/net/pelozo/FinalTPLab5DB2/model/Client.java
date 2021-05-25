@@ -32,16 +32,19 @@ public class Client extends User {
     @NotEmpty(message = "first name cannot be empty")
     @NotBlank(message = "first name cannot be blank")
     @NotNull(message = "first name cannot be null")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotEmpty(message = "last name cannot be empty")
     @NotBlank(message = "last name cannot be blank")
     @NotNull(message = "last name cannot be null")
+    @Column(name = "last_name")
     private String lastName;
 
+
     @NotNull(message = "residence cannot be null")
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "residence_id")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "client")
     private List<Residence> residence;
+
 
 }

@@ -22,13 +22,17 @@ import java.util.List;
 @RequestMapping("/clients")
 public class ClientController {
 
+
     private ClientService clientService;
     private InvoiceService invoiceService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ClientController(ClientService clientService, InvoiceService invoiceService) {
+    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.invoiceService = invoiceService;
+        this.modelMapper = modelMapper;
+
     }
 
     @GetMapping
@@ -88,6 +92,7 @@ public class ClientController {
         List<Invoice> invoices = invoiceService.getByClientId(id);
         return ResponseEntity.status(invoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK).build();
     }
+
 
     //consultar facturas por fecha
 
