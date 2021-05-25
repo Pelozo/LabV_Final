@@ -20,8 +20,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/clients")
 public class ClientController {
 
+
+    private ClientService clientService;
+    private ModelMapper modelMapper;
+
     @Autowired
-    ClientService clientService;
+    public ClientController(ClientService clientService, ModelMapper modelMapper) {
+        this.clientService = clientService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<Page<ClientDto>> getAll(
@@ -59,6 +66,7 @@ public class ClientController {
 
         return ResponseEntity.ok(cd);
     }
+
 
     //consultar facturas por fecha
 

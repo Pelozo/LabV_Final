@@ -4,6 +4,7 @@ import net.pelozo.FinalTPLab5DB2.exception.ClientExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.PaginationResponse;
+import net.pelozo.FinalTPLab5DB2.model.User;
 import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,6 +62,11 @@ public class ClientService {
 
     public Page<Client> getAll(Pageable pageable) {
         return clientRepository.findAll(pageable);
+    }
 
+    public Client login(String username, String password) {
+        return clientRepository.findByUsernameAndPassword(username, password);
     }
 }
+
+

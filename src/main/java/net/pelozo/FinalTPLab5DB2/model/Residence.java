@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
+@Table(name = "residences")
 public class Residence {
 
     @Id
