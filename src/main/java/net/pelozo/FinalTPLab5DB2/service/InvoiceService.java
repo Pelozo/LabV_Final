@@ -5,6 +5,9 @@ import net.pelozo.FinalTPLab5DB2.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class InvoiceService {
 
@@ -13,5 +16,16 @@ public class InvoiceService {
 
     public Invoice add(Invoice invoice) {
         return invoiceRepository.save(invoice);
+    }
+
+    public List<Invoice> getAll() {
+        return invoiceRepository.findAll();
+    }
+
+    public List<Invoice> getByClientId(long id) {
+        return invoiceRepository.findAll()
+                .stream().
+                filter(invoice -> invoice.getResidence().getClient().getId() == id).
+                collect(Collectors.toList());
     }
 }
