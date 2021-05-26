@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tariffs",uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
+
 public class Tariff {
 
     @Id
@@ -25,8 +26,7 @@ public class Tariff {
     @NotEmpty(message = "cannot be empty")
     private String name;
 
-    private boolean isDeleted;
-
     @NotNull(message = "cannot be null")
+    @Column(name = "amount")
     private Float value;
 }

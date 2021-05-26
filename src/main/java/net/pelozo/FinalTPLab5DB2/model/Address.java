@@ -11,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import javax.persistence.*;
+
+
 
 //TODO this is a placeholder
 @Data
@@ -24,10 +27,10 @@ public class Address {
     @GeneratedValue
     private int id;
 
+    @Column(name = "street")
     private String street;
 
-    private boolean isDeleted;
-
+    @Column(name = "street_number")
     private int number;
 
 

@@ -15,28 +15,16 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "meters",uniqueConstraints={@UniqueConstraint(columnNames={"serialNumber"})})
+
 public class Meter {
-
-
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @NotNull(message = "isDeleted cannot be null")
-    @NotEmpty(message = "isDeleted cannot be empty")
-    @NotBlank(message = "isDeleted cannot be blank")
-    private boolean isDeleted;
-
-    @NotNull(message = "brand cannot be null")
-    @NotEmpty(message = "brand cannot be empty")
-    @NotBlank(message = "brand cannot be blank")
-    private String brand; //maybe make entity
-
     @NotNull(message = "model cannot be null")
-    @NotEmpty(message = "model cannot be empty")
-    @NotBlank(message = "model cannot be blank")
-    private String model;
+    @ManyToOne
+    private MeterModel model;
 
     @NotNull(message = "serialNumber cannot be null")
     @NotEmpty(message = "serialNumber cannot be empty")
@@ -45,3 +33,4 @@ public class Meter {
     private String serialNumber;
 
 }
+
