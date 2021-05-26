@@ -3,6 +3,8 @@ package net.pelozo.FinalTPLab5DB2.service;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-    public List<Invoice> getAll() {
-        return invoiceRepository.findAll();
+    public Page<Invoice> getAll(Pageable pageable) {
+        return invoiceRepository.findAll(pageable);
     }
 
     public List<Invoice> getByClientId(long id) {

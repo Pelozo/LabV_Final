@@ -3,6 +3,8 @@ package net.pelozo.FinalTPLab5DB2.controller;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,8 +32,8 @@ public class InvoiceController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<Invoice>> getInvoices(){
-        List<Invoice> invoices = invoiceService.getAll();
+    public ResponseEntity<Page<Invoice>> getInvoices(Pageable pageable){
+        Page<Invoice> invoices = invoiceService.getAll(pageable);
         return ResponseEntity.ok(invoices);
     }
 

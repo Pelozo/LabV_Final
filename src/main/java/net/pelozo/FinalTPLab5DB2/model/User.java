@@ -1,7 +1,9 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -9,7 +11,9 @@ import javax.validation.constraints.*;
 
 @Data
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "users",uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 

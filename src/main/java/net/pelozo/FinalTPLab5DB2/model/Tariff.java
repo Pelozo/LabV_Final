@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +10,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@NoArgsConstructor
 @Data
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "tariffs",uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 public class Tariff {
 
     @Id

@@ -5,6 +5,8 @@ import net.pelozo.FinalTPLab5DB2.model.Measurements;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +34,9 @@ public class MeasurementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MeasurementsDto>> getAllMeasurements(){
-        List<MeasurementsDto> measurements = measurementService.getAll()
-                .stream()
-                .map(o -> new ModelMapper().map(o,MeasurementsDto.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<MeasurementsDto>> getAllMeasurements(Pageable pageable){
+        Page<MeasurementsDto> measurements = measurementService.getAll(pageable)
+                .map(m -> new ModelMapper().map(m,MeasurementsDto.class));
 
         return ResponseEntity.status(measurements.isEmpty()? HttpStatus.NO_CONTENT: HttpStatus.OK).body(measurements);
     }

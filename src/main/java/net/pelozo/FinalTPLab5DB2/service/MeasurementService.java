@@ -4,6 +4,8 @@ package net.pelozo.FinalTPLab5DB2.service;
 import net.pelozo.FinalTPLab5DB2.model.Measurements;
 import net.pelozo.FinalTPLab5DB2.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class MeasurementService {
         return measurementRepository.save(measurements);
     }
 
-    public List<Measurements> getAll() {
-        return measurementRepository.findAll();
+    public Page<Measurements> getAll(Pageable pageable) {
+        return measurementRepository.findAll(pageable);
     }
 }

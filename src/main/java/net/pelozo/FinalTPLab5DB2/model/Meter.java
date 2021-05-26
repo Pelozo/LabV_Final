@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +12,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"serialNumber"})})
+@Table(name = "meters",uniqueConstraints={@UniqueConstraint(columnNames={"serialNumber"})})
 public class Meter {
 
 
