@@ -2,10 +2,12 @@ package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.utils.AbstractController;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,11 @@ public class ClientControllerTest extends AbstractController{
 
     @MockBean
     private ClientService clientService;
+    @MockBean
+    private InvoiceService invoiceService;
+
+    @MockBean
+    private ModelMapper modelMapper;
 
     @Test
     public void getAllTestOk() throws Exception {

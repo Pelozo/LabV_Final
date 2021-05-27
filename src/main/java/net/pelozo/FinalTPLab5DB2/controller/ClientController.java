@@ -6,6 +6,7 @@ import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -66,7 +67,7 @@ public class ClientController {
     @GetMapping("/{id}")
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
         //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
-        ClientDto cd = new ModelMapper().map(clientService.getById(id),ClientDto.class);
+        ClientDto cd = modelMapper.map(clientService.getById(id),ClientDto.class);
 
         return ResponseEntity.ok(cd);
     }
