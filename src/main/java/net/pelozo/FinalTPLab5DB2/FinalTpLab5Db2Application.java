@@ -32,6 +32,7 @@ public class FinalTpLab5Db2Application {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
+					.antMatchers(HttpMethod.POST, "/measurement").permitAll()
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
 					.antMatchers("/console/**").permitAll() //TODO borrar esta linea
 					.antMatchers("/tariff/**").hasAuthority(User.TYPE.BLACKOFFICE.name())

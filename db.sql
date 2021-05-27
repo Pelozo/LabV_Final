@@ -112,8 +112,6 @@ CREATE TABLE measurements(
 );
 
 
-INSERT INTO users (user,password) values ('pelozo', 'asd');
-
 # a) BACKOFFICE, que permitirá el manejo de clientes, medidores y tarifas.
 
 CREATE USER 'backoffice'@'localhost' IDENTIFIED BY '1234';
