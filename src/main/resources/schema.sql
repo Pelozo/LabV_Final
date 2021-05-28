@@ -103,6 +103,7 @@ create table measurements
     residence_id int     not null,
     kwh_value    int     not null,
     `date`       date    not null,
+    kwh_price    float   not null,
     invoice_id   int,
     constraint pk_measurement primary key (id),
     constraint fk_measurement_meter foreign key (residence_id) references residences (id),
