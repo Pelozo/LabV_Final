@@ -26,18 +26,18 @@ public class ClientController {
 
     private ClientService clientService;
     private InvoiceService invoiceService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ClientController(ClientService clientService, InvoiceService invoiceService) {
+    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.invoiceService = invoiceService;
+        this.modelMapper = modelMapper;
 
     }
 
     @GetMapping
     public ResponseEntity<Page<ClientDto>> getAll(Pageable pageable){
-
-
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
         return ResponseEntity
                 .status(page.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)

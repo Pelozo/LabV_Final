@@ -17,7 +17,7 @@ public class MeasurementService {
     @Autowired
     private MeasurementRepository measurementRepository;
 
-    public Measurement add(MeasurementDto measurement){
+    public Measurement add(MeasurementDto measurement) {
 
         //TODO check meterId exists, check password is correct, check is assigned to a house,
 
@@ -27,4 +27,5 @@ public class MeasurementService {
 
     public Page<Measurement> getAll(Pageable pageable) {
         return measurementRepository.findAll(pageable);
+    }
 }

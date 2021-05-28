@@ -34,6 +34,7 @@ public class FinalTpLab5Db2Application {
 					.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/measurement").permitAll()
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
+					.antMatchers(HttpMethod.POST, "/backoffice/login").permitAll()
 					.antMatchers("/console/**").permitAll() //TODO borrar esta linea
 					.antMatchers("/tariff/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
 					.antMatchers("/clients/**").hasAuthority(User.TYPE.BLACKOFFICE.name())

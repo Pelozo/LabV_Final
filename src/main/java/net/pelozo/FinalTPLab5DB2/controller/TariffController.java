@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -21,8 +22,16 @@ public class TariffController {
     }
 
     @PostMapping
-    public Tariff addTariff(@RequestBody Tariff tariff){
-        return tariffService.add(tariff);
+    public ResponseEntity<Tariff> addTariff(@RequestBody Tariff newTariff){
+        Tariff tariff =  tariffService.add(newTariff);
+        System.out.println(tariff);
+
+        return ResponseEntity.created(ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(tariff.getId())
+                .toUri())
+                .build();
     }
 
     @GetMapping("/{id}")

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.User;
 import net.pelozo.FinalTPLab5DB2.model.dto.LoginRequestDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.LoginResponseDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.UserDto;
+import net.pelozo.FinalTPLab5DB2.service.BackofficeService;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +34,17 @@ import static net.pelozo.FinalTPLab5DB2.utils.Constants.JWT_SECRET;
 @RequestMapping(value = "/")
 public class UserController {
 
-    private final ClientService clientService;
-    private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
+    private ClientService clientService;
+    private BackofficeService backofficeService;
+    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public UserController(ObjectMapper objectMapper, ModelMapper modelMapper, ClientService clientService) {
+    public UserController(ObjectMapper objectMapper, ModelMapper modelMapper, ClientService clientService, BackofficeService backoffice) {
         this.objectMapper = objectMapper;
         this.modelMapper = modelMapper;
         this.clientService = clientService;
+        this.backofficeService = backoffice;
     }
 
 
@@ -57,20 +61,15 @@ public class UserController {
 
     @PostMapping(value = "backoffice/login")
     public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
-        //TODO hacer esto o ver una manera de combinarlo con el de arriba
-        return null;
-        /*
-        Client user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        Backoffice user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
         if (user != null) {
             UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.CLIENT.name())).build());
+            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.BLACKOFFICE.name())).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-         */
-
     }
-
 
     private String generateToken(UserDto userDto, String authority) {
         try {

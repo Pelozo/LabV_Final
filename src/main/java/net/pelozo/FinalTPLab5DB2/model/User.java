@@ -39,4 +39,25 @@ public abstract class User {
     @Size(min = 5, message = "password must have at least 5 characters")
     private String password;
 
+    @NotNull(message = "email cannot be null")
+    @NotEmpty(message = "email cannot be empty")
+    @NotBlank(message = "email cannot be blank")
+    @Email(message = "email must be valid!")
+    private String email;
+
+    @NotEmpty(message = "first name cannot be empty")
+    @NotBlank(message = "first name cannot be blank")
+    @NotNull(message = "first name cannot be null")
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotEmpty(message = "last name cannot be empty")
+    @NotBlank(message = "last name cannot be blank")
+    @NotNull(message = "last name cannot be null")
+    @Column(name = "last_name")
+    private String lastName;
+
+
+
+
 }

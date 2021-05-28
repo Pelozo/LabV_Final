@@ -34,6 +34,19 @@ CREATE TABLE clients(
     CONSTRAINT unq_client UNIQUE (dni)
 );
 
+DROP TABLE IF EXISTS users_backoffice;
+CREATE TABLE users_backoffice(
+    `id`       INT(11)     NOT NULL AUTO_INCREMENT,
+    username      VARCHAR(50) NOT NULL,
+    `password` VARCHAR(50) NOT NULL,
+    email       VARCHAR(20) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name  VARCHAR(50) NOT NULL,
+    CONSTRAINT pk_backoffice PRIMARY KEY (id),
+    CONSTRAINT unq_pk_backoffice_username UNIQUE (username),
+    CONSTRAINT unq_pk_backoffice_email UNIQUE (email)
+);
+
 DROP TABLE IF EXISTS tariffs;
 CREATE TABLE tariffs
 (
