@@ -37,8 +37,6 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<Page<ClientDto>> getAll(Pageable pageable){
-
-
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
         return ResponseEntity
                 .status(page.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)

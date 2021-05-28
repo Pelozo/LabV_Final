@@ -17,11 +17,6 @@ import java.util.List;
 @Table(name = "clients", uniqueConstraints={@UniqueConstraint(columnNames={"dni"})})
 public class Client extends User {
 
-    @NotNull(message = "email cannot be null")
-    @NotEmpty(message = "email cannot be empty")
-    @NotBlank(message = "email cannot be blank")
-    @Email(message = "email must be valid!")
-    private String email;
 
     @NotNull(message = "dni cannot be null")
     @NotEmpty(message = "dni cannot be empty")
@@ -29,17 +24,6 @@ public class Client extends User {
     @Size(min = 8,max = 8,message = "DNI must be exactly 8 (eight) numbers!")
     private String dni;
 
-    @NotEmpty(message = "first name cannot be empty")
-    @NotBlank(message = "first name cannot be blank")
-    @NotNull(message = "first name cannot be null")
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotEmpty(message = "last name cannot be empty")
-    @NotBlank(message = "last name cannot be blank")
-    @NotNull(message = "last name cannot be null")
-    @Column(name = "last_name")
-    private String lastName;
 
 
     @NotNull(message = "residence cannot be null")

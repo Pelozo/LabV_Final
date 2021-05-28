@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class Tariff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "cannot be null")
