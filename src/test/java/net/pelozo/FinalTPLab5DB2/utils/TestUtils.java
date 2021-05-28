@@ -2,9 +2,7 @@ package net.pelozo.FinalTPLab5DB2.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.pelozo.FinalTPLab5DB2.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.model.Client;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 

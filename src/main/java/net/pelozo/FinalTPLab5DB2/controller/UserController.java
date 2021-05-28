@@ -65,7 +65,7 @@ public class UserController {
         Backoffice user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
         if (user != null) {
             UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.BLACKOFFICE.name())).build());
+            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.BACKOFFICE.name())).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

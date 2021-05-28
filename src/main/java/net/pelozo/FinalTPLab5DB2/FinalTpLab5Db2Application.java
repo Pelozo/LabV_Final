@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.lang.reflect.Constructor;
-
 
 @SpringBootApplication
 //Si se le saca el comentario a la linea de abajo y matás el metodo configure se deshabilita spring security
@@ -32,12 +30,12 @@ public class FinalTpLab5Db2Application {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/measurement").permitAll()
+					.antMatchers(HttpMethod.POST, "/measurements").permitAll()
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/backoffice/login").permitAll()
 					.antMatchers("/console/**").permitAll() //TODO borrar esta linea
-					.antMatchers("/tariff/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
-					.antMatchers("/clients/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
+					.antMatchers("/tariff/**").hasAuthority(User.TYPE.BACKOFFICE.name())
+					.antMatchers("/clients/**").hasAuthority(User.TYPE.BACKOFFICE.name())
 					.anyRequest().authenticated();
 
 			http.headers().frameOptions().disable(); //TODO remove this (h2 console won't work w/o this line)

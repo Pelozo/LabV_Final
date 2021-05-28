@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,17 @@ public class Measurement {
 
     @Column(name = "kwh_price")
     private float kwhPrice;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "residence_id")
+    private Residence residence;
+
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
 
 }

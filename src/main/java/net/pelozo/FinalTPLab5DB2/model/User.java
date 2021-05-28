@@ -13,14 +13,14 @@ import javax.validation.constraints.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users",uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 
     public enum TYPE{
         CLIENT,
-        BLACKOFFICE
+        BACKOFFICE
     }
 
     @Id

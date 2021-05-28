@@ -86,9 +86,9 @@ public class ClientController {
     //consulta facturas por cliente
     //TODO: hacer que esta funcion acepte parametros para revisar por fecha y por impagas
     @GetMapping("/{id}/invoices")
-    public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id){
-        List<Invoice> invoices = invoiceService.getByClientId(id);
-        return ResponseEntity.status(invoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK).build();
+    public ResponseEntity<Page<Invoice>> getInvoices(@PathVariable long id, Pageable pageable){
+        Page<Invoice> invoices = invoiceService.getByClientId(id, pageable);
+        return ResponseEntity.status(invoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK).body(invoices);
     }
 
 

@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +25,12 @@ public class InvoiceService {
         return invoiceRepository.findAll(pageable);
     }
 
-    public List<Invoice> getByClientId(long id) {
-        return invoiceRepository.findAll()
+    public Page<Invoice> getByClientId(long id, Pageable pageable) {
+
+        return invoiceRepository.findByResidence_Client_Id(id, pageable);
+        /*return invoiceRepository.findAll()
                 .stream().
                 filter(invoice -> invoice.getResidence().getClient().getId() == id).
-                collect(Collectors.toList());
+                collect(Collectors.toList());*/
     }
 }

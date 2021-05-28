@@ -1,6 +1,8 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.dto.MeasurementsDto;
+import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
@@ -24,7 +26,7 @@ public class MeasurementController {
     private MeasurementService measurementService;
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody MeasurementDto measurement){
+    public ResponseEntity<Object> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
         Measurement m = measurementService.add(measurement);
         return  ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentRequest()
