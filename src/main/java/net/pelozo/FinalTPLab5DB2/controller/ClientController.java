@@ -26,12 +26,13 @@ public class ClientController {
 
     private ClientService clientService;
     private InvoiceService invoiceService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ClientController(ClientService clientService, InvoiceService invoiceService) {
+    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.invoiceService = invoiceService;
-
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
