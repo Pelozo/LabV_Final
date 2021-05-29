@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class Residence {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     private Long id;
 
     // TODO: a esto hay que ponerle @JsonIgnore

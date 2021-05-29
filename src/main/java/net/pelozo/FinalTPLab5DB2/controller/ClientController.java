@@ -4,19 +4,23 @@ import net.pelozo.FinalTPLab5DB2.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
+import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 
+import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @RestController
@@ -27,12 +31,14 @@ public class ClientController {
     private ClientService clientService;
     private InvoiceService invoiceService;
     private ModelMapper modelMapper;
+    private MeasurementService measurementService;
 
     @Autowired
-    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper) {
+    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper, MeasurementService measurementService) {
         this.clientService = clientService;
         this.invoiceService = invoiceService;
         this.modelMapper = modelMapper;
+        this.measurementService = measurementService;
     }
 
     @GetMapping
@@ -99,6 +105,16 @@ public class ClientController {
     //consultar consumo por rango de fechas
 
     //consultar mediciones por rango de fecha
+//    @GetMapping("/{id}/measurements")
+//    public ResponseEntity<Page<Measurement>> getMeasurementsByDateRange(@PathVariable long id,
+//                                                                        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+//                                                                        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+//                                                                        Pageable pageable){
+//
+//        Page<Measurement> measurements = measurementService.getMeasurementsByRangeOfDates(id,from,to,pageable);
+//
+//        return ResponseEntity.status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK).body(measurements);
+//    }
 
 
 }

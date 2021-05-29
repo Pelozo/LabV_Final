@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -57,4 +58,8 @@ public class MeasurementService {
     public Page<Measurement> getAll(Pageable pageable) {
         return measurementRepository.findAll(pageable);
     }
+
+//    public Page<Measurement> getMeasurementsByRangeOfDates(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+//        return measurementRepository.findMeasurementsByRangeOfDates(id,from,to,pageable);
+//    }
 }
