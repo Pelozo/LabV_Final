@@ -24,13 +24,18 @@ public class Meter {
 
     @NotNull(message = "model cannot be null")
     @ManyToOne
+    @JoinColumn(name = "model_id")
     private MeterModel model;
 
     @NotNull(message = "serialNumber cannot be null")
     @NotEmpty(message = "serialNumber cannot be empty")
     @NotBlank(message = "serialNumber cannot be blank")
-    //preguntar por final al profe
     private String serialNumber;
+
+    @NotNull(message = "password cannot be null")
+    @NotEmpty(message = "password cannot be empty")
+    @NotBlank(message = "password cannot be blank")
+    private String password;
 
 }
 

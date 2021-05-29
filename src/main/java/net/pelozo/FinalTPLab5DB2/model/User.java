@@ -13,6 +13,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 

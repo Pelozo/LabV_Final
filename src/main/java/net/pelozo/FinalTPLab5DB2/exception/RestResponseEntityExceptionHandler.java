@@ -45,8 +45,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(ClientNotExistsException.class)
-    public ResponseEntity<Object> clientNotExistsHandler(ClientNotExistsException ex, WebRequest request){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This client does not exists!");
+    public ResponseEntity<String> clientNotExistsHandler(ClientNotExistsException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This client does not exists!");
+    }
+
+    @ExceptionHandler(ResidenceNotExistsException.class)
+    public ResponseEntity<String> residenceNotExistsHandler(ResidenceNotExistsException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This residence does not exists!");
+    }
+
+    @ExceptionHandler(MeterNotExistsException.class)
+    public ResponseEntity<String> meterNotExistsHandler(MeterNotExistsException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This meter does not exists!");
     }
 
     @ExceptionHandler(AccessDeniedException.class)

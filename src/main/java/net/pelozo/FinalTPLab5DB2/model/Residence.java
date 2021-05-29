@@ -23,6 +23,7 @@ public class Residence {
 
     // TODO: a esto hay que ponerle @JsonIgnore
     // TODO: es necesario hacer ResidenceDTO por si queresmos mostrar el dueño de una casa???
+
     @JsonBackReference
     @NotNull
     @ManyToOne
@@ -35,7 +36,7 @@ public class Residence {
     private Tariff tariff;
 
     @NotNull
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meter_id")
     private Meter meter;
 

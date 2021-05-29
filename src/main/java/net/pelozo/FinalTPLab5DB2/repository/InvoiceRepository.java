@@ -6,10 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
@@ -34,6 +35,13 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
 
     Page<List<Invoice>> findByResidence_ClientIdAndIsPaidFalse(Long clientId, Pageable pageable);
 
-
+    @Query(value = "SELECT * " +
+            "FROM INVOICES I " +
+            "JOIN RESIDENCES R " +
+            "ON I.RESIDENCE_ID = R.ID " +
+            "JOIN CLIENTS C " +
+            "ON  R.CLIENT_ID = :userid "
+            ,nativeQuery = true)
+    Page<Invoice> findByResidence_Client_Id(@Param("userid")Long id, Pageable pageable);
 
 }
