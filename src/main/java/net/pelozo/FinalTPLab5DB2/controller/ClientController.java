@@ -11,11 +11,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,9 +28,9 @@ import java.util.List;
 public class ClientController {
 
 
-    private ClientService clientService;
-    private InvoiceService invoiceService;
-    private ModelMapper modelMapper;
+    private final ClientService clientService;
+    private final InvoiceService invoiceService;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper) {
@@ -35,7 +39,7 @@ public class ClientController {
         this.modelMapper = modelMapper;
 
     }
-
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<Page<ClientDto>> getAll(Pageable pageable){
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
@@ -44,6 +48,7 @@ public class ClientController {
                 .body(page);
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity<Client> add(@RequestBody Client client){
         Client c = clientService.add(client);
@@ -55,13 +60,15 @@ public class ClientController {
                     .toUri())
                 .build();
     }
-
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteById(@PathVariable Long id) throws ClientNotExistsException {
         clientService.deleteById(id);
         return ResponseEntity.ok().body("Client successfully deleted! ");
     }
 
+
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
         //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
@@ -85,11 +92,28 @@ public class ClientController {
 
 
     //consulta facturas por cliente
-    //TODO: hacer que esta funcion acepte parametros para revisar por fecha y por impagas
     @GetMapping("/{id}/invoices")
-    public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id){
-        List<Invoice> invoices = invoiceService.getByClientId(id);
-        return ResponseEntity.status(invoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK).build();
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
+    public ResponseEntity<Page<List<Invoice>>> getInvoices(@PathVariable long id,
+                                                     @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date startDate,
+                                                     @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
+                                                     Pageable pageable,
+                                                     Principal principal){
+        Page<List<Invoice>> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
+        return ResponseEntity
+                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
+                .body(invoices);
+    }
+
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
+    @GetMapping("/{id}/invoices/unpaid")
+    public ResponseEntity<Page<List<Invoice>>> getUnpaidInvoices(@PathVariable long id,
+                                                                 Pageable pageable,
+                                                                 Principal principal){
+        Page<List<Invoice>> invoices = invoiceService.getByClientUnpaid(id,pageable);
+        return ResponseEntity
+                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
+                .body(invoices);
     }
 
 

@@ -37,4 +37,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
+    //Consulta de facturas por rango de fechas.
+
+
 }

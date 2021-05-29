@@ -72,6 +72,7 @@ CREATE TABLE meters
     `id`          INT(11) NOT NULL AUTO_INCREMENT,
     serial_number INT(11) NOT NULL,
     model_id         int     NOT NULL,
+    password varchar(20)  NOT NULL,
     CONSTRAINT pk_meter PRIMARY KEY (id),
     CONSTRAINT unq_meter UNIQUE (serial_number),
     constraint fk_model foreign key (model_id) references meter_models (id)
@@ -101,6 +102,7 @@ CREATE TABLE invoices
     is_paid         BOOLEAN DEFAULT FALSE,
     is_due          BOOLEAN DEFAULT FALSE,
     due_date        DATE NOT NULL,
+    issue_date      DATE NOT NULL,
     kwh_measurement FLOAT   NOT NULL,
     first_reading FLOAT NOT NULL,
     last_reading FLOAT NOT NULL,

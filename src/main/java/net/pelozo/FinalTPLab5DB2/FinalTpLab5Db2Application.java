@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,7 @@ public class FinalTpLab5Db2Application {
 
 	@EnableWebSecurity
 	@Configuration
+	@EnableGlobalMethodSecurity(prePostEnabled = true)
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 		@Override
@@ -36,8 +38,8 @@ public class FinalTpLab5Db2Application {
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/backoffice/login").permitAll()
 					.antMatchers("/console/**").permitAll() //TODO borrar esta linea
-					.antMatchers("/tariff/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
-					.antMatchers("/clients/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
+					//.antMatchers("/tariff/**").hasAuthority(User.TYPE.BLACKOFFICE.name())
+					//.antMatchers("/clients/**").denyAll()
 					.anyRequest().authenticated();
 
 			http.headers().frameOptions().disable(); //TODO remove this (h2 console won't work w/o this line)
