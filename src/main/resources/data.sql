@@ -29,4 +29,3 @@ INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(1,1,1,1);
 --invoices
 INSERT INTO invoices(residence_id,is_paid,is_due,due_date, issue_date,kwh_measurement,first_reading,last_reading,total) VALUES(1,1,0,'2021-05-13','2021-06-13',5.0,1.2,3.4,1200);
 INSERT INTO invoices(residence_id,is_paid,is_due,due_date, issue_date,kwh_measurement,first_reading,last_reading,total) VALUES(1,0,0,'2020-05-13','2020-06-13',5.0,1.2,3.4,1200);
-INSERT INTO invoices(residence_id,is_paid,is_due,due_date,kwh_measurement,first_reading,last_reading,total) VALUES(1,1,0,'2021-05-13',5.0,1.2,3.4,1200);

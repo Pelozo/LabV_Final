@@ -113,20 +113,20 @@ public class ClientController {
     @GetMapping("/{id}/invoices/unpaid")
     public ResponseEntity<Page<List<Invoice>>> getUnpaidInvoices(@PathVariable long id,
                                                                  Pageable pageable,
-                                                                 Principal principal){
-        Page<List<Invoice>> invoices = invoiceService.getByClientUnpaid(id,pageable);
+                                                                 Principal principal) {
+        Page<List<Invoice>> invoices = invoiceService.getByClientUnpaid(id, pageable);
         return ResponseEntity
-                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
+                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK)
                 .body(invoices);
 
 
-    //consultar facturas por fecha
+        //consultar facturas por fecha
 
-    //consultar facturas impagas
+        //consultar facturas impagas
 
-    //consultar consumo por rango de fechas
+        //consultar consumo por rango de fechas
 
-    //consultar mediciones por rango de fecha
+        //consultar mediciones por rango de fecha
 //    @GetMapping("/{id}/measurements")
 //    public ResponseEntity<Page<Measurement>> getMeasurementsByDateRange(@PathVariable long id,
 //                                                                        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
@@ -137,6 +137,7 @@ public class ClientController {
 //
 //        return ResponseEntity.status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK).body(measurements);
 //    }
+    }
 
 
 }
