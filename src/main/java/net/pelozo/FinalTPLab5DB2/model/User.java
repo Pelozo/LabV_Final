@@ -10,11 +10,10 @@ import javax.validation.constraints.*;
 
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"username"})})
-
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 
@@ -24,7 +23,7 @@ public abstract class User {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
 

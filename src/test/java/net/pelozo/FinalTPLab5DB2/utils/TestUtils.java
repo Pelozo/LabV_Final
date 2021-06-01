@@ -26,7 +26,7 @@ public class TestUtils {
         c.setEmail("martincaminero64@gmail.com");
         c.setFirstName("martin");
         c.setLastName("caminero");
-        c.setResidence(List.of());
+        c.setResidences(List.of());
         c.setPassword("1234");
         c.setUsername("martin64");
 

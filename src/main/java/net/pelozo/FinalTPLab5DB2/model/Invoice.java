@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -36,7 +37,11 @@ public class Invoice {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "dueDate cannot be null")
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private Date dueDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "dueDate cannot be null")
+    private Date issueDate;
 
     @ManyToOne
     @NotNull(message = "residence cannot be null")

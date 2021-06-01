@@ -18,9 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import java.security.Principal;
+import java.util.Date;
+import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -29,11 +32,11 @@ import java.util.Optional;
 @RequestMapping("/clients")
 public class ClientController {
 
-
     private ClientService clientService;
     private InvoiceService invoiceService;
     private ModelMapper modelMapper;
     private MeasurementService measurementService;
+
 
     @Autowired
     public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper, MeasurementService measurementService) {
@@ -42,7 +45,7 @@ public class ClientController {
         this.modelMapper = modelMapper;
         this.measurementService = measurementService;
     }
-
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<Page<ClientDto>> getAll(Pageable pageable){
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
@@ -51,6 +54,7 @@ public class ClientController {
                 .body(page);
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity<Client> add(@RequestBody Client client){
         Client c = clientService.add(client);
@@ -62,13 +66,15 @@ public class ClientController {
                     .toUri())
                 .build();
     }
-
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteById(@PathVariable Long id) throws ClientNotExistsException {
         clientService.deleteById(id);
         return ResponseEntity.ok().body("Client successfully deleted! ");
     }
 
+
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
         //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
@@ -92,41 +98,59 @@ public class ClientController {
 
 
     //consulta facturas por cliente
-    //TODO: hacer que esta funcion acepte parametros para revisar por fecha y por impagas
     @GetMapping("/{id}/invoices")
-    public ResponseEntity<Page<Invoice>> getInvoices(@PathVariable long id, Pageable pageable){
-        Page<Invoice> invoices = invoiceService.getByClientId(id, pageable);
-        return ResponseEntity.status(invoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK).body(invoices);
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
+    public ResponseEntity<Page<List<Invoice>>> getInvoices(@PathVariable long id,
+                                                     @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date startDate,
+                                                     @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
+                                                     Pageable pageable,
+                                                     Principal principal){
+        Page<List<Invoice>> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
+        return ResponseEntity
+                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
+                .body(invoices);
+    }
+
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
+    @GetMapping("/{id}/invoices/unpaid")
+    public ResponseEntity<Page<List<Invoice>>> getUnpaidInvoices(@PathVariable long id,
+                                                                 Pageable pageable,
+                                                                 Principal principal) {
+        Page<List<Invoice>> invoices = invoiceService.getByClientUnpaid(id, pageable);
+        return ResponseEntity
+                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK)
+                .body(invoices);
     }
 
 
-    //consultar facturas por fecha
+        //consultar facturas por fecha
 
-    //consultar facturas impagas
+        //consultar facturas impagas
 
-    //consultar consumo por rango de fechas
+        //consultar mediciones por rango de fecha
+        @GetMapping("/{id}/intake")
+        public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
+        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to){
 
-    //consultar mediciones por rango de fecha
-    @GetMapping("/{id}/intake")
-    public ResponseEntity<Optional<Intake>> getIntakeByDateRange(@PathVariable long id,
-                                                                       @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                       @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to){
+            Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id, from, to);
 
-        Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id,from,to);
+            return ResponseEntity.status(intake.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(intake);
+        }
 
-        return ResponseEntity.status(intake.isEmpty() ?HttpStatus.NO_CONTENT:HttpStatus.OK).body(intake);
+
+        //consultar mediciones por rango de fecha
+        @GetMapping("/{id}/measurements")
+        public ResponseEntity<Page<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
+        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+        Pageable pageable)
+        {
+            Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
+            return ResponseEntity.status(measurements.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(measurements);
+        }
+        //consultar consumo por rango de fechas
+
+
     }
 
-
-    @GetMapping("/{id}/measurements")
-    public ResponseEntity<Page<MeasurementProjection>> getMeasurementsByDateRange(@PathVariable long id,
-                                                                        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-                                                                        Pageable pageable)
-    {
-        Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id,from,to,pageable);
-        return ResponseEntity.status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK).body(measurements);
-    }
-
-
-}

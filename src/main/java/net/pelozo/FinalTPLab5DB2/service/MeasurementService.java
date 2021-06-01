@@ -73,7 +73,7 @@ public class MeasurementService {
         measurements.forEach(o -> intake.get()
                 .setKwhPrice(intake.get().getKwhPrice() + o.getKwhPrice()));
 
-        intake.get().setKwhValue(measurements.getLast().getKwhValue() - measurements.getFirst().getKwhValue());
+        intake.get().setKwhValue(measurements.getLast().getKwhValue());
 
 
         return intake;

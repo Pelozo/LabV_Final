@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Data
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class Residence {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // TODO: a esto hay que ponerle @JsonIgnore

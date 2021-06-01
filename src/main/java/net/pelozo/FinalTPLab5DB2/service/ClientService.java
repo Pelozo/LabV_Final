@@ -41,7 +41,7 @@ public class ClientService {
         }
     }
 
-    public Page<Client> getAll(Pageable pageable) {
+    public Page<Client> getAll(Pageable pageable){
         return clientRepository.findAll(pageable);
     }
 

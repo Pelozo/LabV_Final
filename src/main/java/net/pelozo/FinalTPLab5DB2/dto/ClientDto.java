@@ -17,6 +17,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDto {
 
+    private Long id;
+
     private String username;
 
     private String email;
@@ -27,10 +29,11 @@ public class ClientDto {
 
     private String lastName;
 
-    private List<Residence> residence;
+    private List<Residence> residences;
 
     public static ClientDto from(Client client){
         return ClientDto.builder()
+                .id(client.getId())
                 .username(client.getUsername())
                 .dni(client.getDni())
                 .email(client.getEmail())
