@@ -3,10 +3,12 @@ package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
+import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
+import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
 import net.pelozo.FinalTPLab5DB2.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Service
@@ -59,7 +61,26 @@ public class MeasurementService {
         return measurementRepository.findAll(pageable);
     }
 
-//    public Page<Measurement> getMeasurementsByRangeOfDates(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
-//        return measurementRepository.findMeasurementsByRangeOfDates(id,from,to,pageable);
-//    }
+
+
+
+    public Optional<Intake> getIntakeByRangeOfDates(long id, LocalDateTime from, LocalDateTime to) {
+
+        Optional<Intake> intake = Optional.of(new Intake());
+
+        LinkedList<Measurement> measurements = measurementRepository.findListOfIntakeByRangeOfDates(id,from,to);
+
+        measurements.forEach(o -> intake.get()
+                .setKwhPrice(intake.get().getKwhPrice() + o.getKwhPrice()));
+
+        intake.get().setKwhValue(measurements.getLast().getKwhValue() - measurements.getFirst().getKwhValue());
+
+
+        return intake;
+    }
+
+    public Page<MeasurementProjection> getMeasurementsByDateRange(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+
+        return measurementRepository.findMeasurementsByRangeOfDate(id,from,to,pageable);
+    }
 }
