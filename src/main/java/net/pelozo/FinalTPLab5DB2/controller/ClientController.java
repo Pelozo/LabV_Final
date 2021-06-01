@@ -68,9 +68,9 @@ public class ClientController {
     }
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteById(@PathVariable Long id) throws ClientNotExistsException {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) throws ClientNotExistsException {
         clientService.deleteById(id);
-        return ResponseEntity.ok().body("Client successfully deleted! ");
+        return ResponseEntity.ok("Client Successfully Deleted! ");
     }
 
 

@@ -4,6 +4,8 @@ import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,8 @@ public class TariffService {
     @Autowired
     TariffRepository tariffRepository;
 
-    public List<Tariff> getAll() {
-        List<Tariff> tariffs = tariffRepository.findAll();
-        if(!tariffs.isEmpty()){
-           return tariffs;
-        }else{
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
+    public Page<Tariff> getAll(Pageable pageable) {
+        return tariffRepository.findAll(pageable);
     }
 
     public Tariff add(Tariff tariff) {
