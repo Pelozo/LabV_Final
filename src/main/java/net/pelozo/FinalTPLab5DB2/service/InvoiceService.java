@@ -35,7 +35,7 @@ public class InvoiceService {
                 collect(Collectors.toList());*/
     }
 
-    public Page<List<Invoice>> getByClientIdAndDate(long id, Date startDate, Date endDate, Pageable pageable) {
+    public Page<Invoice> getByClientIdAndDate(long id, Date startDate, Date endDate, Pageable pageable) {
         //return invoiceRepository.findAllByResidence_Client_Id(id);
         //return invoiceRepository.findAllByResidence_Client_IdAndIssueDateLessThanEqualAndIssueDateGreaterThanEqual(id, startDate,endDate,pageable);
         return invoiceRepository.findByClient(id, startDate, endDate, pageable);

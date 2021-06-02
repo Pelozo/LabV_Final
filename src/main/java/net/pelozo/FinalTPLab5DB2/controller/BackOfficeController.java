@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/backoffice")
 public class BackOfficeController {
 
-    private final BackofficeService backofficeService;
     private final TariffController tariffController;
 
     @Autowired
-    public BackOfficeController(BackofficeService backofficeService, TariffController tariffController) {
-        this.backofficeService = backofficeService;
+    public BackOfficeController(TariffController tariffController) {
         this.tariffController = tariffController;
     }
 

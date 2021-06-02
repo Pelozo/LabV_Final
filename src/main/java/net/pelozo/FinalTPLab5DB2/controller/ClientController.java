@@ -5,11 +5,9 @@ import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
-
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,10 @@ import java.util.Optional;
 @RequestMapping("/clients")
 public class ClientController {
 
-    private ClientService clientService;
-    private InvoiceService invoiceService;
-    private ModelMapper modelMapper;
-    private MeasurementService measurementService;
+    private final ClientService clientService;
+    private final InvoiceService invoiceService;
+    private final ModelMapper modelMapper;
+    private final MeasurementService measurementService;
 
 
     @Autowired
@@ -47,11 +45,13 @@ public class ClientController {
     }
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
-    public ResponseEntity<Page<ClientDto>> getAll(Pageable pageable){
+    public ResponseEntity<List<ClientDto>> getAll(Pageable pageable){
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
         return ResponseEntity
                 .status(page.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
-                .body(page);
+                .header("X-Total-Pages", String.valueOf(page.getTotalPages()))
+                .header("X-Total-Content",String.valueOf(page.getTotalElements()))
+                .body(page.getContent());
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
@@ -100,15 +100,15 @@ public class ClientController {
     //consulta facturas por cliente
     @GetMapping("/{id}/invoices")
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
-    public ResponseEntity<Page<List<Invoice>>> getInvoices(@PathVariable long id,
+    public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date startDate,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
                                                      Pageable pageable,
                                                      Principal principal){
-        Page<List<Invoice>> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
+        Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
         return ResponseEntity
                 .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
-                .body(invoices);
+                .body(invoices.getContent());
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
