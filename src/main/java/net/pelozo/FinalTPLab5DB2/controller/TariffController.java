@@ -5,12 +5,13 @@ import net.pelozo.FinalTPLab5DB2.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+
+import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 
 @RestController
 @RequestMapping("/tariff")
@@ -20,9 +21,10 @@ public class TariffController {
     TariffService tariffService;
 
     @GetMapping
-    public ResponseEntity<Page<Tariff>> getAll(Pageable pageable){
+    public ResponseEntity<List<Tariff>> getAll(Pageable pageable){
         Page<Tariff> tariffs = tariffService.getAll(pageable);
-        return ResponseEntity.status(tariffs.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK).body(tariffs);
+        return response(tariffs)
+                .body(tariffs.getContent());
     }
 
     @PostMapping
@@ -54,6 +56,7 @@ public class TariffController {
         Tariff t = tariffService.update(tariff);
         return ResponseEntity.ok(t);
     }
+
 
 
 }

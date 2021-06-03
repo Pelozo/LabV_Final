@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 
 
 @RestController
@@ -47,10 +48,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<List<ClientDto>> getAll(Pageable pageable){
         Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
-        return ResponseEntity
-                .status(page.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
-                .header("X-Total-Pages", String.valueOf(page.getTotalPages()))
-                .header("X-Total-Content",String.valueOf(page.getTotalElements()))
+        return response(page)
                 .body(page.getContent());
     }
 
@@ -106,20 +104,18 @@ public class ClientController {
                                                      Pageable pageable,
                                                      Principal principal){
         Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
-        return ResponseEntity
-                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
+        return response(invoices)
                 .body(invoices.getContent());
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}/invoices/unpaid")
-    public ResponseEntity<Page<List<Invoice>>> getUnpaidInvoices(@PathVariable long id,
+    public ResponseEntity<List<Invoice>> getUnpaidInvoices(@PathVariable long id,
                                                                  Pageable pageable,
                                                                  Principal principal) {
-        Page<List<Invoice>> invoices = invoiceService.getByClientUnpaid(id, pageable);
-        return ResponseEntity
-                .status(invoices.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK)
-                .body(invoices);
+        Page<Invoice> invoices = invoiceService.getByClientUnpaid(id, pageable);
+        return response(invoices)
+                .body(invoices.getContent());
     }
 
 
@@ -127,7 +123,7 @@ public class ClientController {
 
         //consultar facturas impagas
 
-        //consultar mediciones por rango de fecha
+        //consultar consumo por rango de fechas
         @GetMapping("/{id}/intake")
         public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
         @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
@@ -141,15 +137,16 @@ public class ClientController {
 
         //consultar mediciones por rango de fecha
         @GetMapping("/{id}/measurements")
-        public ResponseEntity<Page<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
+        public ResponseEntity<List<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
         @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
         @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
         Pageable pageable)
         {
             Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
-            return ResponseEntity.status(measurements.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(measurements);
+            return response(measurements)
+                    .body(measurements.getContent());
         }
-        //consultar consumo por rango de fechas
+
 
 
     }

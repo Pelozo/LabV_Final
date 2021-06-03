@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/backoffice")
@@ -26,7 +28,7 @@ public class BackOfficeController {
     }
 
     @GetMapping("/tariffs")
-    public ResponseEntity<Page<Tariff>> getAllTariffs(Pageable pageable){
+    public ResponseEntity<List<Tariff>> getAllTariffs(Pageable pageable){
         return tariffController.getAll(pageable);
     }
 

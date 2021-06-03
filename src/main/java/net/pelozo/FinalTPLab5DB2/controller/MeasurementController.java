@@ -10,13 +10,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 
 @RestController
 @RequestMapping("/measurements")
@@ -26,7 +26,7 @@ public class MeasurementController {
     private MeasurementService measurementService;
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
+    public ResponseEntity<Measurement> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
         Measurement m = measurementService.add(measurement);
         return  ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -37,10 +37,13 @@ public class MeasurementController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MeasurementsDto>> getAllMeasurements(Pageable pageable){
+    public ResponseEntity<List<MeasurementsDto>> getAllMeasurements(Pageable pageable){
         Page<MeasurementsDto> measurements = measurementService.getAll(pageable)
                 .map(m -> new ModelMapper().map(m,MeasurementsDto.class));
 
-        return ResponseEntity.status(measurements.isEmpty()? HttpStatus.NO_CONTENT: HttpStatus.OK).body(measurements);
+        return response(measurements)
+                .body(measurements.getContent());
     }
+
+
 }

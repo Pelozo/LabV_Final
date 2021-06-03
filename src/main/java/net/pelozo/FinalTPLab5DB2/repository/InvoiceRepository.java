@@ -33,7 +33,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
             nativeQuery = true)
     Page<Invoice> findByClient(Long clientId, Date startDate, Date endDate, Pageable pageable);
 
-    Page<List<Invoice>> findByResidence_ClientIdAndIsPaidFalse(Long clientId, Pageable pageable);
+    Page<Invoice> findByResidence_ClientIdAndIsPaidFalse(Long clientId, Pageable pageable);
 
     @Query(value = "SELECT * " +
             "FROM INVOICES I " +
