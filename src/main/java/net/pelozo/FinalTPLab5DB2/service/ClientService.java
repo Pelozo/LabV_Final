@@ -29,7 +29,11 @@ public class ClientService {
 
     public void deleteById(Long id) throws ClientNotExistsException {
         Client c = getById(id);
-        clientRepository.delete(c);
+        if(c == null){
+            throw new ClientNotExistsException();
+        }else{
+            clientRepository.delete(c);
+        }
     }
 
     public Client getById(Long id) throws ClientNotExistsException {

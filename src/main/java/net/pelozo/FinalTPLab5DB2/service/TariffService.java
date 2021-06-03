@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,12 @@ public class TariffService {
         }
     }
 
-    public Tariff getById(Long id) {
+    public Tariff getById(Long id) throws NonExistentResourceException {
         Optional<Tariff> tariff = tariffRepository.findById(id);
         if(tariff.isPresent()) {
             return tariff.get();
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new NonExistentResourceException();
         }
     }
 

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/backoffice")
@@ -20,13 +22,16 @@ public class BackOfficeController {
         this.tariffController = tariffController;
     }
 
+    /*
     @GetMapping("/tariffs/{id}")
     public ResponseEntity<Tariff> getTariff(@PathVariable long id){
         return tariffController.getById(id);
     }
 
+     */
+
     @GetMapping("/tariffs")
-    public ResponseEntity<Page<Tariff>> getAllTariffs(Pageable pageable){
+    public ResponseEntity<List<Tariff>> getAllTariffs(Pageable pageable){
         return tariffController.getAll(pageable);
     }
 

@@ -64,6 +64,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("watudoinhere boi?");
     }
 
+    @ExceptionHandler(NonExistentResourceException.class)
+    public ResponseEntity<Object> NonExistentResource(NonExistentResourceException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(NonExistentResourceException.errorCode, ex.getMessage()));
+    }
 
 
 }
