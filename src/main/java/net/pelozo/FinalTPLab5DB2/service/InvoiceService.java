@@ -42,7 +42,7 @@ public class InvoiceService {
 
     }
 
-    public Page<List<Invoice>> getByClientUnpaid(long id, Pageable pageable) {
+    public Page<Invoice> getByClientUnpaid(long id, Pageable pageable) {
         return invoiceRepository.findByResidence_ClientIdAndIsPaidFalse(id, pageable);
     }
 }

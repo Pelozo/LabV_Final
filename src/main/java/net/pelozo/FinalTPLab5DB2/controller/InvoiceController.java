@@ -7,9 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+
+import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 
 @RestController
 @RequestMapping("/invoices")
@@ -32,12 +33,17 @@ public class InvoiceController {
 //    }
 
     @GetMapping
-    public ResponseEntity<Page<Invoice>> getInvoices(Pageable pageable){
+    public ResponseEntity<List<Invoice>> getInvoices(Pageable pageable){
         Page<Invoice> invoices = invoiceService.getAll(pageable);
-        return ResponseEntity.ok(invoices);
+        return response(invoices)
+                .body(invoices.getContent());
     }
 
+
+
     //Consulta de facturas por rango de fechas.
+
+
 
 
 }

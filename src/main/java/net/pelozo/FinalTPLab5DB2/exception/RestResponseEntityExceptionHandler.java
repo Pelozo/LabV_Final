@@ -18,6 +18,8 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.pelozo.FinalTPLab5DB2.utils.Misc.parseDataConstraintEx;
+
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -35,7 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<Object> handleConstraintViolation(DataIntegrityViolationException ex, WebRequest request){
         List<String> errors = new ArrayList<>();
         errors.add(ex.getMessage());
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
     }
 

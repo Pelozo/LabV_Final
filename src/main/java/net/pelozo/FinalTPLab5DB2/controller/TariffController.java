@@ -14,6 +14,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
+import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
+
 @RestController
 @RequestMapping("/tariff")
 public class TariffController {
@@ -24,10 +26,7 @@ public class TariffController {
     @GetMapping
     public ResponseEntity<List<Tariff>> getAll(Pageable pageable){
         Page<Tariff> tariffs = tariffService.getAll(pageable);
-        return ResponseEntity
-                .status(tariffs.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK)
-                .header("X-Total-Pages", String.valueOf(tariffs.getTotalPages()))
-                .header("X-Total-Content",String.valueOf(tariffs.getTotalElements()))
+        return response(tariffs)
                 .body(tariffs.getContent());
     }
 
@@ -49,16 +48,17 @@ public class TariffController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) throws  NonExistentResourceException{
+    public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
         tariffService.deleteById(id);
         return ResponseEntity.ok("");
     }
 
     @PutMapping
-    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) {
+    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) throws NonExistentResourceException{
         Tariff t = tariffService.update(tariff);
         return ResponseEntity.ok(t);
     }
+
 
 
 }
