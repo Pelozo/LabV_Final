@@ -50,7 +50,7 @@ public class TariffController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
         tariffService.deleteById(id);
-        return ResponseEntity.ok("");
+        return ResponseEntity.accepted().build();
     }
 
     @PutMapping
