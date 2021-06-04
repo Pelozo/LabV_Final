@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 
 public class MyResponse {
 
-    public static ResponseEntity.BodyBuilder response(Page page){
+    public static ResponseEntity response(Page page){
         return ResponseEntity.status(page.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK)
                 .header("X-Total-Pages", String.valueOf(page.getTotalPages()))
-                .header("X-Total-Content",String.valueOf(page.getTotalElements()));
+                .header("X-Total-Content",String.valueOf(page.getTotalElements()))
+                .body(page.getContent());
     }
 }

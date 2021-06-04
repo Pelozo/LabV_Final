@@ -47,9 +47,8 @@ public class ClientController {
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<List<ClientDto>> getAll(Pageable pageable){
-        Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
-        return response(page)
-                .body(page.getContent());
+        Page<ClientDto> page =  clientService.getAll(pageable).map(o -> modelMapper.map(o,ClientDto.class));
+        return response(page);
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
@@ -104,8 +103,7 @@ public class ClientController {
                                                      Pageable pageable,
                                                      Principal principal){
         Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
-        return response(invoices)
-                .body(invoices.getContent());
+        return response(invoices);
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
@@ -114,8 +112,7 @@ public class ClientController {
                                                                  Pageable pageable,
                                                                  Principal principal) {
         Page<Invoice> invoices = invoiceService.getByClientUnpaid(id, pageable);
-        return response(invoices)
-                .body(invoices.getContent());
+        return response(invoices);
     }
 
 
@@ -143,11 +140,8 @@ public class ClientController {
         Pageable pageable)
         {
             Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
-            return response(measurements)
-                    .body(measurements.getContent());
+            return response(measurements);
         }
-
-
 
     }
 

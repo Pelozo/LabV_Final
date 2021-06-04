@@ -23,8 +23,7 @@ public class TariffController {
     @GetMapping
     public ResponseEntity<List<Tariff>> getAll(Pageable pageable){
         Page<Tariff> tariffs = tariffService.getAll(pageable);
-        return response(tariffs)
-                .body(tariffs.getContent());
+        return response(tariffs);
     }
 
     @PostMapping

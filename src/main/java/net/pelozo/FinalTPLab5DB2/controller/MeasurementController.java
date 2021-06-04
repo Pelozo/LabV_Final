@@ -41,8 +41,7 @@ public class MeasurementController {
         Page<MeasurementsDto> measurements = measurementService.getAll(pageable)
                 .map(m -> new ModelMapper().map(m,MeasurementsDto.class));
 
-        return response(measurements)
-                .body(measurements.getContent());
+        return response(measurements);
     }
 
 

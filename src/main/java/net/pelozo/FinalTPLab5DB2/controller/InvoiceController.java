@@ -35,8 +35,7 @@ public class InvoiceController {
     @GetMapping
     public ResponseEntity<List<Invoice>> getInvoices(Pageable pageable){
         Page<Invoice> invoices = invoiceService.getAll(pageable);
-        return response(invoices)
-                .body(invoices.getContent());
+        return response(invoices);
     }
 
 
