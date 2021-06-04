@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.service.BackofficeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,13 @@ public class BackOfficeController {
         this.tariffController = tariffController;
     }
 
+    /*
     @GetMapping("/tariffs/{id}")
     public ResponseEntity<Tariff> getTariff(@PathVariable long id){
         return tariffController.getById(id);
     }
+
+     */
 
     @GetMapping("/tariffs")
     public ResponseEntity<List<Tariff>> getAllTariffs(Pageable pageable){
@@ -41,13 +45,13 @@ public class BackOfficeController {
 
     //baja tarifa
     @DeleteMapping("/tariffs/{id}")
-    public ResponseEntity<String> deleteTariffById(@PathVariable long id){
+    public ResponseEntity<String> deleteTariffById(@PathVariable long id) throws NonExistentResourceException {
         return tariffController.deleteById(id);
     }
 
     //modificacion tarifa
     @PutMapping("/tariffs")
-    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff){
+    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) throws NonExistentResourceException {
         return tariffController.updateTariff(tariff);
     }
 

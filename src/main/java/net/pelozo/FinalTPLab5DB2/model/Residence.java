@@ -25,22 +25,22 @@ public class Residence {
     // TODO: es necesario hacer ResidenceDTO por si queresmos mostrar el dueño de una casa???
 
     @JsonBackReference
-    @NotNull
+    @NotNull(message = "client cannot be null")
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @NotNull
+    @NotNull(message = "tariff cannot be null")
     @ManyToOne
     @JoinColumn(name = "tariff_id")
     private Tariff tariff;
 
-    @NotNull
+    @NotNull(message = "meter cannot be null")
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meter_id")
     private Meter meter;
 
-    @NotNull
+    @NotNull(message = "address cannot be null")
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;

@@ -90,7 +90,9 @@ CREATE TABLE residences
     CONSTRAINT fk_client_residence FOREIGN KEY (client_id) REFERENCES clients (id),
     CONSTRAINT fk_meter_residence FOREIGN KEY (meter_id) REFERENCES meters (id),
     CONSTRAINT fk_meter_tariff FOREIGN KEY (tariff_id) REFERENCES tariffs (id),
-    CONSTRAINT fk_meter_address FOREIGN KEY (address_id) REFERENCES addresses (id)
+    CONSTRAINT fk_meter_address FOREIGN KEY (address_id) REFERENCES addresses (id),
+    CONSTRAINT unq_residence_meter UNIQUE(meter_id),
+    CONSTRAINT unq_residence_address UNIQUE(address_id)
 );
 
 

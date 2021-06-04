@@ -21,7 +21,7 @@ public class TestUtils {
 
     public static Client aClient(){
         Client c = new Client();
-
+        c.setId(1L);
         c.setDni("39170489");
         c.setEmail("martincaminero64@gmail.com");
         c.setFirstName("martin");
@@ -36,5 +36,6 @@ public class TestUtils {
     public static Page<Client> aClientPage(){
         return new PageImpl<>(List.of(aClient()));
     }
+
 
 }

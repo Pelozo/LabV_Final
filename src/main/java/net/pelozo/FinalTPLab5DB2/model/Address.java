@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.*;
 
 
-
-//TODO this is a placeholder
 @Data
 @Entity
 @AllArgsConstructor

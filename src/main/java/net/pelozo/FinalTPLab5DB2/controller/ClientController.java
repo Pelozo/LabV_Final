@@ -9,15 +9,18 @@ import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
+import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.security.Principal;
 import java.util.Date;
@@ -30,6 +33,8 @@ import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
+
+
 
     private final ClientService clientService;
     private final InvoiceService invoiceService;
@@ -53,15 +58,13 @@ public class ClientController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity<Client> add(@RequestBody Client client){
+    public ResponseEntity add(@RequestBody Client client){
         Client c = clientService.add(client);
-
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(c.getId())
-                    .toUri())
-                .build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(EntityURLBuilder.buildURL("clients",c.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("");
     }
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
@@ -116,22 +119,22 @@ public class ClientController {
     }
 
 
-        //consultar facturas por fecha
+    //consultar facturas por fecha
 
-        //consultar facturas impagas
+    //consultar facturas impagas
 
-        //consultar consumo por rango de fechas
-        @GetMapping("/{id}/intake")
-        public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
-        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to){
+    //consultar consumo por rango de fechas
+    @GetMapping("/{id}/intake")
+    public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
+    @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+    @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to){
 
-            Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id, from, to);
+        Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id, from, to);
 
-            return ResponseEntity.status(intake.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(intake);
-        }
+        return ResponseEntity.status(intake.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(intake);
+    }
 
-
+    
         //consultar mediciones por rango de fecha
         @GetMapping("/{id}/measurements")
         public ResponseEntity<List<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
@@ -142,6 +145,7 @@ public class ClientController {
             Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
             return response(measurements);
         }
+
 
     }
 
