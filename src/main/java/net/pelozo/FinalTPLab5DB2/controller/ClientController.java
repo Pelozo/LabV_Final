@@ -67,9 +67,10 @@ public class ClientController {
     }
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) throws ClientNotExistsException {
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) throws ClientNotExistsException {
         clientService.deleteById(id);
-        return ResponseEntity.ok("Client Successfully Deleted! ");
+        return ResponseEntity.accepted().build();
+
     }
 
 
@@ -78,7 +79,7 @@ public class ClientController {
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
         //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
         ClientDto cd = modelMapper.map(clientService.getById(id),ClientDto.class);
-
+        //ClientDto cd = clientService.getById(id).map(ClientDto::from);
         return ResponseEntity.ok(cd);
     }
 //--------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
                     "where c.id = :clientId\n" +
                     "and i.issue_date between :startDate and :endDate",
             nativeQuery = true)
-    Page<Invoice> findByClient(Long clientId, Date startDate, Date endDate, Pageable pageable);
+    Page<Invoice> findByClientBetweenDates(Long clientId, Date startDate, Date endDate, Pageable pageable);
 
     Page<Invoice> findByResidence_ClientIdAndIsPaidFalse(Long clientId, Pageable pageable);
 
