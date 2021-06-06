@@ -1,6 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import net.pelozo.FinalTPLab5DB2.dto.ClientDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
@@ -20,8 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -69,9 +68,10 @@ public class ClientController {
     }
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) throws ClientNotExistsException {
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) throws ClientNotExistsException {
         clientService.deleteById(id);
-        return ResponseEntity.ok("Client Successfully Deleted! ");
+        return ResponseEntity.accepted().build();
+
     }
 
 
@@ -80,7 +80,7 @@ public class ClientController {
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
         //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
         ClientDto cd = modelMapper.map(clientService.getById(id),ClientDto.class);
-
+        //ClientDto cd = clientService.getById(id).map(ClientDto::from);
         return ResponseEntity.ok(cd);
     }
 //--------------------------------------------------------------------------------------------------
