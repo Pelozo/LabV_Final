@@ -1,4 +1,4 @@
-package net.pelozo.FinalTPLab5DB2.dto;
+package net.pelozo.FinalTPLab5DB2.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

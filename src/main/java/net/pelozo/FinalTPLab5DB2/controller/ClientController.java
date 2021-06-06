@@ -1,11 +1,11 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import net.pelozo.FinalTPLab5DB2.dto.ClientDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
+import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
@@ -20,8 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +57,7 @@ public class ClientController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity add(@RequestBody Client client){
+    public ResponseEntity<String> add(@RequestBody Client client){
         Client c = clientService.add(client);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -134,15 +133,15 @@ public class ClientController {
         return ResponseEntity.status(intake.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(intake);
     }
 
-    
+
         //consultar mediciones por rango de fecha
         @GetMapping("/{id}/measurements")
-        public ResponseEntity<List<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
-        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-        Pageable pageable)
+        public ResponseEntity<List<Measurement>> getMeasurementsByDateRange (@PathVariable long id,
+                                                                             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                             @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                             Pageable pageable)
         {
-            Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
+            Page<Measurement> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
             return response(measurements);
         }
 

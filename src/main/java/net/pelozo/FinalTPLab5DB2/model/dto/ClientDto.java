@@ -1,4 +1,4 @@
-package net.pelozo.FinalTPLab5DB2.dto;
+package net.pelozo.FinalTPLab5DB2.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -31,16 +31,16 @@ public class ClientDto {
 
     private List<Residence> residences;
 
-    public static ClientDto from(Client client){
-        return ClientDto.builder()
-                .id(client.getId())
-                .username(client.getUsername())
-                .dni(client.getDni())
-                .email(client.getEmail())
-                .firstName(client.getFirstName())
-                .lastName(client.getLastName())
-                .build();
-    }
+//    public static ClientDto from(Client client){
+//        return ClientDto.builder()
+//                .id(client.getId())
+//                .username(client.getUsername())
+//                .dni(client.getDni())
+//                .email(client.getEmail())
+//                .firstName(client.getFirstName())
+//                .lastName(client.getLastName())
+//                .build();
+//    }
 
 
 }

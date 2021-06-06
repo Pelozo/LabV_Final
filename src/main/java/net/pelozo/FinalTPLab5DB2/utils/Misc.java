@@ -21,13 +21,4 @@ public class Misc {
 
     }
 
-
-    public static ResponseEntity getResponseEntity(Long id){
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/" + id)
-                .buildAndExpand(id)
-                .toUri())
-                .build();
-    }
 }

@@ -1,19 +1,16 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import net.pelozo.FinalTPLab5DB2.dto.ClientDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
-import net.pelozo.FinalTPLab5DB2.utils.Misc;
-import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 

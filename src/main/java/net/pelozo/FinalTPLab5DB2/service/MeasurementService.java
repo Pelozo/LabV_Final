@@ -8,7 +8,6 @@ import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
-import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
 import net.pelozo.FinalTPLab5DB2.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -73,14 +72,18 @@ public class MeasurementService {
         measurements.forEach(o -> intake.get()
                 .setKwhPrice(intake.get().getKwhPrice() + o.getKwhPrice()));
 
-        intake.get().setKwhValue(measurements.getLast().getKwhValue());
+        intake.get().setKwhValue(measurements.getLast().getKwhValue() - measurements.getFirst().getKwhValue());
 
 
         return intake;
     }
 
-    public Page<MeasurementProjection> getMeasurementsByDateRange(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+    public Page<Measurement> getMeasurementsByDateRange(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
 
         return measurementRepository.findMeasurementsByRangeOfDate(id,from,to,pageable);
+    }
+
+    public Page<Measurement> getMeasurementsByResidenceAndRangeOfDate(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        return measurementRepository.findByResidenceAndRangeOfDate(residenceId,from,to,pageable);
     }
 }

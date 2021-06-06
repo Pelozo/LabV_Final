@@ -3,10 +3,12 @@ package net.pelozo.FinalTPLab5DB2.controller;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.service.TariffService;
+import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +32,13 @@ public class TariffController {
     }
 
     @PostMapping
-    public ResponseEntity<Tariff> addTariff(@RequestBody Tariff newTariff){
+    public ResponseEntity<String> addTariff(@RequestBody Tariff newTariff){
         Tariff tariff =  tariffService.add(newTariff);
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(tariff.getId())
-                .toUri())
-                .build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(EntityURLBuilder.buildURL("tariffs",tariff.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("");
     }
 
     @GetMapping("/{id}")

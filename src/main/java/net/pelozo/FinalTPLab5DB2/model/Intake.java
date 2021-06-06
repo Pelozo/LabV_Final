@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class Intake {
 
-
-
     private float kwhValue;
     private float kwhPrice;
 

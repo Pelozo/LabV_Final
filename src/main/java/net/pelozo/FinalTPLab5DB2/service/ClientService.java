@@ -16,8 +16,13 @@ import java.util.Optional;
 public class ClientService {
 
     //private final static String CLIENT_URL = "client";
-    @Autowired
+
     ClientRepository clientRepository;
+
+    @Autowired
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     public Client add(Client client) {
         try{
