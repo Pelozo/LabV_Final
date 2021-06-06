@@ -92,7 +92,7 @@ public class BackOfficeController {
                                                                                        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
                                                                                        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
                                                                                        Pageable pageable){
-        Page<Measurement> measurements = measurementController.getMeasurementsByResidenceAndRangeOfdates(residenceId,from,to,pageable);
+        Page<Measurement> measurements = measurementController.getMeasurementsByResidenceAndRangeOfDates(residenceId,from,to,pageable);
         return  ResponseEntity
                 .status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
                 .body(measurements.getContent());

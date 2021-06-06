@@ -16,8 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.aClient;
-import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.aClientPage;
+import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -106,7 +105,7 @@ public class ClientServiceTest {
 
     @Test
     public void getAllTestOk(){
-        Pageable pageable = PageRequest.of(1,10);
+        Pageable pageable = aPageable();
         Page<Client> page = aClientPage();
 
         when(clientRepository.findAll(pageable)).thenReturn(page);
@@ -119,7 +118,7 @@ public class ClientServiceTest {
 
     @Test
     public void getAllTestNoContent(){
-        Pageable pageable = PageRequest.of(1,10);
+        Pageable pageable = aPageable();
         Page<Client> page = Page.empty(pageable);
 
         when(clientRepository.findAll(pageable)).thenReturn(page);

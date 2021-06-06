@@ -21,12 +21,15 @@ import java.util.Optional;
 @Service
 public class MeasurementService {
 
+    private final MeasurementRepository measurementRepository;
+    private final MeterService meterService;
+    private final ResidenceService residenceService;
     @Autowired
-    private MeasurementRepository measurementRepository;
-    @Autowired
-    private MeterService meterService;
-    @Autowired
-    private ResidenceService residenceService;
+    public MeasurementService(MeasurementRepository measurementRepository, MeterService meterService, ResidenceService residenceService) {
+        this.measurementRepository = measurementRepository;
+        this.meterService = meterService;
+        this.residenceService = residenceService;
+    }
 
     public Measurement add(MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
 

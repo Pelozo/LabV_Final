@@ -49,7 +49,7 @@ public class MeasurementController {
     }
 
 
-    public Page<Measurement> getMeasurementsByResidenceAndRangeOfdates(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+    public Page<Measurement> getMeasurementsByResidenceAndRangeOfDates(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
         return measurementService.getMeasurementsByResidenceAndRangeOfDate(residenceId,from,to,pageable);
     }
 }
