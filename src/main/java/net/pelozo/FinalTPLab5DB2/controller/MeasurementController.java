@@ -6,14 +6,17 @@ import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
+import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
@@ -26,14 +29,15 @@ public class MeasurementController {
     private MeasurementService measurementService;
 
     @PostMapping
-    public ResponseEntity<Measurement> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
+    public ResponseEntity<String> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
         Measurement m = measurementService.add(measurement);
-        return  ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(m.getId())
-                .toUri())
-                    .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(EntityURLBuilder.buildURL("measurements",m.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("");
+
     }
 
     @GetMapping
@@ -41,9 +45,11 @@ public class MeasurementController {
         Page<MeasurementsDto> measurements = measurementService.getAll(pageable)
                 .map(m -> new ModelMapper().map(m,MeasurementsDto.class));
 
-        return response(measurements)
-                .body(measurements.getContent());
+        return response(measurements);
     }
 
 
+    public Page<Measurement> getMeasurementsByResidenceAndRangeOfDates(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        return measurementService.getMeasurementsByResidenceAndRangeOfDate(residenceId,from,to,pageable);
+    }
 }

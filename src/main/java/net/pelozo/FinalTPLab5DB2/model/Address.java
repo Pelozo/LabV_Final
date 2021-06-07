@@ -23,7 +23,7 @@ public class Address {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @Column(name = "street")
     private String street;

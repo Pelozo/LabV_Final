@@ -31,16 +31,16 @@ public class ClientDto {
 
     private List<Residence> residences;
 
-    public static ClientDto from(Client client){
-        return ClientDto.builder()
-                .id(client.getId())
-                .username(client.getUsername())
-                .dni(client.getDni())
-                .email(client.getEmail())
-                .firstName(client.getFirstName())
-                .lastName(client.getLastName())
-                .build();
-    }
+//    public static ClientDto from(Client client){
+//        return ClientDto.builder()
+//                .id(client.getId())
+//                .username(client.getUsername())
+//                .dni(client.getDni())
+//                .email(client.getEmail())
+//                .firstName(client.getFirstName())
+//                .lastName(client.getLastName())
+//                .build();
+//    }
 
 
 }

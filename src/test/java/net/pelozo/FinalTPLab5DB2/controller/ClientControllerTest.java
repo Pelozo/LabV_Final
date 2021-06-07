@@ -3,6 +3,7 @@ package net.pelozo.FinalTPLab5DB2.controller;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
@@ -57,6 +58,7 @@ public class ClientControllerTest{
         //given
         Pageable pageable = PageRequest.of(1,10);
         when(clientService.getAll(pageable)).thenReturn(aClientPage());
+        when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(aClientDto());
 
         //when
         ResponseEntity<List<ClientDto>> response = clientController.getAll(pageable);

@@ -5,7 +5,7 @@ import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.projections.MeasurementProjection;
+import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
@@ -51,14 +51,13 @@ public class ClientController {
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<List<ClientDto>> getAll(Pageable pageable){
-        Page<ClientDto> page =  clientService.getAll(pageable).map(ClientDto::from);
-        return response(page)
-                .body(page.getContent());
+        Page<ClientDto> page =  clientService.getAll(pageable).map(o -> modelMapper.map(o,ClientDto.class));
+        return response(page);
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity add(@RequestBody Client client){
+    public ResponseEntity<String> add(@RequestBody Client client){
         Client c = clientService.add(client);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -106,8 +105,7 @@ public class ClientController {
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
                                                      Pageable pageable){
         Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
-        return response(invoices)
-                .body(invoices.getContent());
+        return response(invoices);
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
@@ -115,8 +113,7 @@ public class ClientController {
     public ResponseEntity<List<Invoice>> getUnpaidInvoices(@PathVariable long id,
                                                                  Pageable pageable) {
         Page<Invoice> invoices = invoiceService.getByClientUnpaid(id, pageable);
-        return response(invoices)
-                .body(invoices.getContent());
+        return response(invoices);
     }
 
 
@@ -136,18 +133,16 @@ public class ClientController {
     }
 
 
-    //consultar mediciones por rango de fecha
-    @GetMapping("/{id}/measurements")
-    public ResponseEntity<List<MeasurementProjection>> getMeasurementsByDateRange ( @PathVariable long id,
-    @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-    @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-    Pageable pageable)
-    {
-        Page<MeasurementProjection> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
-        return response(measurements)
-                .body(measurements.getContent());
-    }
-
+        //consultar mediciones por rango de fecha
+        @GetMapping("/{id}/measurements")
+        public ResponseEntity<List<Measurement>> getMeasurementsByDateRange (@PathVariable long id,
+                                                                             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                             @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                             Pageable pageable)
+        {
+            Page<Measurement> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
+            return response(measurements);
+        }
 
 
     }
