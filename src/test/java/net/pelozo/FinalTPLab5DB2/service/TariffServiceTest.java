@@ -1,28 +1,17 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
-import net.pelozo.FinalTPLab5DB2.controller.ClientController;
-import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
-import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
-import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.List;
 import java.util.Optional;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -47,23 +36,37 @@ public class TariffServiceTest {
 
         //then
         assertEquals(
-                1,
+                aTariffPage().getTotalElements(),
                 response.getTotalElements()
         );
         assertEquals(
-                aTariff().getName(),
+                aTariffPage().getContent().get(0).getName(),
                 response.getContent().get(0).getName()
         );
     }
 
     @Test
-    public void getByIdOk() throws NonExistentResourceException {
+    public void getByIdOkTest(){
         when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
-        Tariff response = tariffService.getById(1L);
-        assertEquals(
-                aTariff().getName(),
-                response.getName()
-        );
+
+        try {
+            Tariff response = tariffService.getById(1L);
+            assertEquals(
+                    aTariff().getName(),
+                    response.getName()
+            );
+        } catch (NonExistentResourceException e) {
+            fail();
+        }
+
+    }
+
+    @Test
+    public void getById_ThrowsNonExistentExceptionTest() {
+        when(tariffRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NonExistentResourceException.class, () -> {
+            tariffService.getById(1L);
+        });
     }
 
     @Test
@@ -80,32 +83,66 @@ public class TariffServiceTest {
         );
     }
 
-    @Test
-    public void getById_ThrowsNonExistentException() {
-        when(tariffRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(NonExistentResourceException.class, () -> {
-            tariffService.getById(1L);
-        });
-    }
 
     @Test
-    public void deleteTariffOk() throws NonExistentResourceException {
+    public void deleteTariffOkTest(){
         //given
         when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
-        //when
-        tariffService.deleteById(1L);
-        //then
-        verify(tariffRepository, times(1)).findById(1L);
+
+        try {
+            //when
+            tariffService.deleteById(1L);
+            //then
+            verify(tariffRepository, times(1)).findById(1L);
+        } catch (NonExistentResourceException e) {
+            fail();
+        }
+
     }
 
     @Test
-    public void deleteTariff_ThrowsNonExistentException(){
+    public void deleteTariff_ThrowsNonExistentExceptionTest(){
         //given
         when(tariffRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NonExistentResourceException.class, () -> {
             tariffService.deleteById(1L);
         });
+    }
+
+    @Test
+    public void updateTariffOkTest(){
+        when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
+        Tariff newTariff = aTariff();
+        newTariff.setName("new name");
+
+        try {
+            tariffService.update(aTariff().getId(), newTariff);
+            verify(tariffRepository, times(1)).findById(aTariff().getId());
+            verify(tariffRepository, times(1)).save(newTariff);
+        } catch (NonExistentResourceException | IdViolationException e) {
+            fail();
+        }
 
     }
+
+    @Test
+    public void updateTariff_ThrowsNonExistentExceptionTest(){
+        when(tariffRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NonExistentResourceException.class, () -> {
+            tariffService.update(aTariff().getId(), aTariff());
+        });
+    }
+
+    @Test
+    public void updateTariff_ThrowsIdViolationExceptionTest(){
+        when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
+        assertThrows(IdViolationException.class, () -> {
+            Tariff wrongTariff = aTariff();
+            wrongTariff.setId(8L);
+            tariffService.update(aTariff().getId(), wrongTariff);
+        });
+    }
+
+
 }

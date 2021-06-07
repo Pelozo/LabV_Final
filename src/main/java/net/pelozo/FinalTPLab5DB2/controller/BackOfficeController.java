@@ -1,5 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import lombok.SneakyThrows;
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
@@ -62,10 +64,11 @@ public class BackOfficeController {
     }
 
     //modificacion tarifa
+
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @PutMapping("/tariffs")
-    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) throws NonExistentResourceException {
-        return tariffController.updateTariff(tariff);
+    @PutMapping("/tariffs/{id}")
+    public ResponseEntity<Tariff> updateTariff(@PathVariable long id, @RequestBody Tariff tariff) throws NonExistentResourceException, IdViolationException {
+        return tariffController.updateTariff(id, tariff);
     }
 
 

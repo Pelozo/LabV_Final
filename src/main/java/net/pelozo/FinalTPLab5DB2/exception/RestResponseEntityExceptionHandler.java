@@ -11,6 +11,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.pelozo.FinalTPLab5DB2.utils.Misc.parseDataConstraintEx;
 
 @ControllerAdvice
@@ -18,21 +24,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 //    @ExceptionHandler({ConstraintViolationException.class})
 //    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request){
-////        List<String> errors = new ArrayList<>();
-////        for(ConstraintViolation violation : ex.getConstraintViolations()){
-////            errors.add(violation.getMessage());
-////        }
-////        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-////        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
+//        List<String> errors = new ArrayList<>();
+//        for(ConstraintViolation violation : ex.getConstraintViolations()){
+//            errors.add(violation.getMessage());
+//        }
+//        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+//        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
 //
 //        return  ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiError(1,ex.getMessage()));
 //    }
 
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request){
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(2, ex.getConstraintViolations().iterator().next().getMessage()));
+    }
+
     @ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(DataIntegrityViolationException ex, WebRequest request){
-//        List<String> errors = new ArrayList<>();
-//        errors.add(ex.getMessage());
-//        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(1,parseDataConstraintEx(ex)));
     }
 
@@ -64,6 +72,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(NonExistentResourceException.class)
     public ResponseEntity<ApiError> NonExistentResource(NonExistentResourceException ex, WebRequest request){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(NonExistentResourceException.errorCode, ex.getMessage()));
+    }
+
+    @ExceptionHandler(IdViolationException.class)
+    public ResponseEntity<ApiError> NonExistentResource(IdViolationException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(IdViolationException.errorCode, ex.getMessage()));
     }
 
 

@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 public class Misc {
 
     public static String parseDataConstraintEx(DataIntegrityViolationException ex){
-        Pattern pattern = Pattern.compile(".*constraint.+FOREIGN KEY\\((.+)\\) REFERENCES", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(".+?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(ex.getMessage());
         if(matcher.find()) {
-            return matcher.group(1);
+            return "Constraint error with "  + matcher.group(1).toLowerCase();
         } else {
-            return null;
+            return "Constraint error";
         }
     }
 }

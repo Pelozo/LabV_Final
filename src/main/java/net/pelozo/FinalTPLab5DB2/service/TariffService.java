@@ -1,8 +1,10 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,12 +49,16 @@ public class TariffService {
         }
     }
 
-    public Tariff update(Tariff _tariff) throws NonExistentResourceException {
-        Optional<Tariff> tariff = tariffRepository.findById(_tariff.getId());
-        if(tariff.isPresent()) {
-            tariff.get().setName(_tariff.getName());
-            tariff.get().setValue(_tariff.getValue());
-            return tariffRepository.save(tariff.get());
+    public void update(Long id, Tariff _tariff) throws NonExistentResourceException, IdViolationException {
+        Optional<Tariff> tariff = tariffRepository.findById(id);
+        if(tariff.isPresent()){
+            if(_tariff.getId() != null && !tariff.get().getId().equals(_tariff.getId())){
+                throw new IdViolationException();
+            }else{
+                _tariff.setId(tariff.get().getId());
+                tariffRepository.save(_tariff);
+            }
+
         }else{
             throw new NonExistentResourceException();
         }

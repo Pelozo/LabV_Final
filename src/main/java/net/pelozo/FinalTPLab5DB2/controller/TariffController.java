@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.service.TariffService;
@@ -53,10 +54,11 @@ public class TariffController {
         return ResponseEntity.accepted().build();
     }
 
-    @PutMapping
-    public ResponseEntity<Tariff> updateTariff(@RequestBody Tariff tariff) throws NonExistentResourceException{
-        Tariff t = tariffService.update(tariff);
-        return ResponseEntity.ok(t);
+    @PutMapping("/{id}")
+    public ResponseEntity updateTariff(@PathVariable Long id,
+                                               @RequestBody Tariff tariff) throws NonExistentResourceException, IdViolationException {
+        tariffService.update(id, tariff);
+        return ResponseEntity.accepted().build();
     }
 
 
