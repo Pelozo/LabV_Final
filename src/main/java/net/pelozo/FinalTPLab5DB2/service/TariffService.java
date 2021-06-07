@@ -13,16 +13,20 @@ import java.util.Optional;
 @Service
 public class TariffService {
 
-    @Autowired
+
     TariffRepository tariffRepository;
+
+    @Autowired
+    public TariffService(TariffRepository tariffRepository) {
+        this.tariffRepository = tariffRepository;
+    }
 
     public Page<Tariff> getAll(Pageable pageable) {
         return tariffRepository.findAll(pageable);
     }
 
     public Tariff add(Tariff tariff) {
-        Tariff newTariff = tariffRepository.save(tariff);
-        return newTariff;
+        return tariffRepository.save(tariff);
     }
 
     public Tariff getById(Long id) throws NonExistentResourceException {

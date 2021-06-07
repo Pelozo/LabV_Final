@@ -2,6 +2,7 @@ package net.pelozo.FinalTPLab5DB2.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @Table(name = "invoices")
 @AllArgsConstructor

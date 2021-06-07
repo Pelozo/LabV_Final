@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -143,20 +145,76 @@ public class ClientControllerTest{
     }
 
     @Test
-    public void getInvoicesTest(){
+    public void getInvoicesByClientAndDatesTest(){
         //given
         Date date = mock(Date.class);
         when(date.getTime()).thenReturn(30L);
-
-        System.out.println(date);
-        //when(invoiceService.getByClientIdAndDate(anyLong(), date, date, aPageable())).thenReturn()
-
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(aInvoicePage());
         //when
+        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        //then
+        assertEquals(
+                HttpStatus.OK,
+                response.getStatusCode()
+        );
+        assertEquals(
+                1,
+                response.getBody().size()
+        );
+        assertEquals(
+                aInvoicePage().toList().get(0).getLastReading(),
+                response.getBody().get(0).getLastReading()
+        );
+    }
+
+    @Test
+    public void getUnpaidInvoicesByClient(){
+        //given
+        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(aInvoicePage());
+        //when
+        ResponseEntity<List<Invoice>> response = clientController.getUnpaidInvoices(1L, aPageable());
 
         //then
+        assertEquals(
+                HttpStatus.OK,
+                response.getStatusCode()
+        );
+        assertEquals(
+                1,
+                response.getBody().size()
+        );
+        assertEquals(
+                aInvoicePage().toList().get(0).getLastReading(),
+                response.getBody().get(0).getLastReading()
+        );
     }
 
 
+/*
+
+    public void getInvoicesByUserAndDate_ExpectsEmptyResponseTest(){
+        //given
+        Date date = mock(Date.class);
+        when(date.getTime()).thenReturn(30L);
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(anEmptyPage());
+        //when
+        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        //then
+        assertEquals(
+                HttpStatus.OK,
+                response.getStatusCode()
+        );
+        assertEquals(
+                1,
+                response.getBody().size()
+        );
+        assertEquals(
+                aInvoicePage().toList().get(0).getLastReading(),
+                response.getBody().get(0).getLastReading()
+        );
+    }
+
+ */
 
 //    @Test
 //    public void getAllTestOk() throws Exception {

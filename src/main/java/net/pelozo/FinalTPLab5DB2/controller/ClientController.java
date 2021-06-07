@@ -104,8 +104,7 @@ public class ClientController {
     public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date startDate,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
-                                                     Pageable pageable,
-                                                     Principal principal){
+                                                     Pageable pageable){
         Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
         return response(invoices)
                 .body(invoices.getContent());
@@ -114,8 +113,7 @@ public class ClientController {
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}/invoices/unpaid")
     public ResponseEntity<List<Invoice>> getUnpaidInvoices(@PathVariable long id,
-                                                                 Pageable pageable,
-                                                                 Principal principal) {
+                                                                 Pageable pageable) {
         Page<Invoice> invoices = invoiceService.getByClientUnpaid(id, pageable);
         return response(invoices)
                 .body(invoices.getContent());

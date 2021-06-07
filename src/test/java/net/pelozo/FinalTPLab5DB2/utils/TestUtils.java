@@ -2,6 +2,8 @@ package net.pelozo.FinalTPLab5DB2.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.pelozo.FinalTPLab5DB2.model.Invoice;
+import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import org.springframework.data.domain.Page;
@@ -55,5 +57,32 @@ public class TestUtils {
     public static Pageable aPageable(){
         return PageRequest.of(0,10);
     }
+
+    public static Invoice aInvoice(){
+        return Invoice.builder()
+                .id(1L)
+                .isDue(false)
+                .isPaid(false)
+                .firstReading(100f)
+                .lastReading(150f)
+                .build();
+    }
+
+    public static Page<Invoice> aInvoicePage(){
+        return new PageImpl<>(List.of(aInvoice()));
+    }
+
+    public static Page<Object> anEmptyPage(){
+        return new PageImpl<>(List.of());
+    }
+
+    public static Tariff aTariff(){
+        return new Tariff(1L, "name", 20f);
+    }
+
+    public static Page<Tariff> aTariffPage(){
+        return new PageImpl<>(List.of(aTariff()));
+    }
+
 
 }
