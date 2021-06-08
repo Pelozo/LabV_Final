@@ -11,11 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,6 +24,7 @@ public class MeasurementsServiceTest {
      MeterService meterService;
      ResidenceService residenceService;
      MeasurementService measurementService;
+     ModelMapper modelMapper;
 
 
      @BeforeEach
@@ -33,7 +32,8 @@ public class MeasurementsServiceTest {
         measurementRepository = mock(MeasurementRepository.class);
         meterService = mock(MeterService.class);
         residenceService = mock(ResidenceService.class);
-        measurementService = new MeasurementService(measurementRepository,meterService,residenceService);
+        modelMapper = mock(ModelMapper.class);
+        measurementService = new MeasurementService(measurementRepository,meterService,residenceService, modelMapper);
     }
 
     @Test

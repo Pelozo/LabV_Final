@@ -6,6 +6,7 @@ import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
@@ -136,12 +137,12 @@ public class ClientController {
 
         //consultar mediciones por rango de fecha
         @GetMapping("/{id}/measurements")
-        public ResponseEntity<List<Measurement>> getMeasurementsByDateRange (@PathVariable long id,
-                                                                             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                             @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-                                                                             Pageable pageable)
+        public ResponseEntity<List<MeasurementsDto>> getMeasurementsByDateRange (@PathVariable long id,
+                                                                                 @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                                 @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                                 Pageable pageable)
         {
-            Page<Measurement> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
+            Page<MeasurementsDto> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
             return response(measurements);
         }
 

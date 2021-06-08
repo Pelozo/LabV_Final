@@ -8,7 +8,9 @@ import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.repository.MeasurementRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +26,14 @@ public class MeasurementService {
     private final MeasurementRepository measurementRepository;
     private final MeterService meterService;
     private final ResidenceService residenceService;
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public MeasurementService(MeasurementRepository measurementRepository, MeterService meterService, ResidenceService residenceService) {
+    public MeasurementService(MeasurementRepository measurementRepository, MeterService meterService, ResidenceService residenceService, ModelMapper modelMapper) {
         this.measurementRepository = measurementRepository;
         this.meterService = meterService;
         this.residenceService = residenceService;
+        this.modelMapper = modelMapper;
     }
 
     public Measurement add(MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
@@ -81,12 +86,12 @@ public class MeasurementService {
         return intake;
     }
 
-    public Page<Measurement> getMeasurementsByDateRange(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+    public Page<MeasurementsDto> getMeasurementsByDateRange(long id, LocalDateTime from, LocalDateTime to, Pageable pageable) {
 
-        return measurementRepository.findMeasurementsByRangeOfDate(id,from,to,pageable);
+        return measurementRepository.findMeasurementsByRangeOfDate(id,from,to,pageable).map(o -> modelMapper.map(o, MeasurementsDto.class));
     }
 
-    public Page<Measurement> getMeasurementsByResidenceAndRangeOfDate(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
-        return measurementRepository.findByResidenceAndRangeOfDate(residenceId,from,to,pageable);
+    public Page<MeasurementsDto> getMeasurementsByResidenceAndRangeOfDate(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        return measurementRepository.findByResidenceAndRangeOfDate(residenceId,from,to,pageable).map(o -> modelMapper.map(o, MeasurementsDto.class));
     }
 }

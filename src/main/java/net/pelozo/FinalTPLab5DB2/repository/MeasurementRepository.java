@@ -25,7 +25,7 @@ public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
     LinkedList<Measurement> findListOfIntakeByRangeOfDates(@Param("clientId")long clientId, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
 
-    @Query(value = "SELECT M.kwh_price AS `kwhPrice`, M.kwh_value AS `kwhValue`" +
+    @Query(value = "SELECT M.*\n" +
             "FROM MEASUREMENTS M " +
             "JOIN RESIDENCES R " +
             "ON M.RESIDENCE_ID = R.ID " +

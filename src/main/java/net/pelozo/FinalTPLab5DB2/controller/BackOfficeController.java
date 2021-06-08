@@ -6,6 +6,7 @@ import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.BackofficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,11 +92,11 @@ public class BackOfficeController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/residences/{residenceId}/measurements")
-    public ResponseEntity<List<Measurement>> getMeasurementsByResidenceAndRangeOfDates(@PathVariable long residenceId,
-                                                                                       @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                                       @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-                                                                                       Pageable pageable){
-        Page<Measurement> measurements = measurementController.getMeasurementsByResidenceAndRangeOfDates(residenceId,from,to,pageable);
+    public ResponseEntity<List<MeasurementsDto>> getMeasurementsByResidenceAndRangeOfDates(@PathVariable long residenceId,
+                                                                                           @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                                           @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                                           Pageable pageable){
+        Page<MeasurementsDto> measurements = measurementController.getMeasurementsByResidenceAndRangeOfDates(residenceId,from,to,pageable);
         return  ResponseEntity
                 .status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
                 .body(measurements.getContent());
