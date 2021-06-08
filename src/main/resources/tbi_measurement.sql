@@ -57,8 +57,14 @@ DELIMITER;
 
 SELECT *FROM measurements
 
+
 SELECT MAX(`date`)
 FROM measurements m
 	JOIN residences r
 	ON m.residence_id = r.id
 	WHERE r.meter_id = 1;
+
+SELECT M.*
+FROM measurements M
+WHERE M.residence_id = :residenceId AND DATE BETWEEN :FROM AND :TO
+

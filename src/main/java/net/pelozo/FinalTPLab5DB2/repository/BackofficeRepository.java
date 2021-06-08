@@ -14,10 +14,5 @@ public interface BackofficeRepository extends JpaRepository<Backoffice, Long> {
 
     Backoffice findByUsernameAndPassword(String username, String password);
 
-    @Query(value = "SELECT I.*\n" +
-            "FROM invoices I\n" +
-            "JOIN residences R\n" +
-            "ON R.id = I.residencec_id\n" +
-            "WHERE I.is_paid = FALSE AND R.id = :residenceId AND R.client_id = :clientId;",nativeQuery = true)
-    List<Invoice> findUnpaidInvoicesByClientAndResidence(@Param("clientId") long clientId,@Param("residenceId") long residenceId);
+
 }

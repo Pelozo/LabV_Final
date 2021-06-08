@@ -74,7 +74,7 @@ public class BackOfficeController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResident(@PathVariable long clientId,@PathVariable long residenceId){
+    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId){
             List<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId);
 
             return ResponseEntity

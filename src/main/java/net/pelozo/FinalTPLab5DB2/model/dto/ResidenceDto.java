@@ -8,7 +8,7 @@ public class ResidenceDto {
 
     private Tariff tariff;
 
-    private Meter meter;
+    private MeterDto meter;
 
     private Address address;
 }

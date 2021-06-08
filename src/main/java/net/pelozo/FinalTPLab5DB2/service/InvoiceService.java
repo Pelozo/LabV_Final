@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class InvoiceService {
@@ -46,5 +47,9 @@ public class InvoiceService {
 
     public Page<Invoice> getByClientUnpaid(long id, Pageable pageable) {
         return invoiceRepository.findByResidence_ClientIdAndIsPaidFalse(id, pageable);
+    }
+
+    public List<Invoice> findUnpaidInvoicesByClientAndResidence(long clientId, long residenceId) {
+        return invoiceRepository.findUnpaidInvoicesByClientAndResidence(clientId,residenceId);
     }
 }

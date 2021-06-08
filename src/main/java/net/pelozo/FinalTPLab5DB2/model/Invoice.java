@@ -35,12 +35,12 @@ public class Invoice {
     @Column(name = "is_due")
     private Boolean isDue;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "dueDate cannot be null")
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "dueDate cannot be null")
     private LocalDate issueDate;
 

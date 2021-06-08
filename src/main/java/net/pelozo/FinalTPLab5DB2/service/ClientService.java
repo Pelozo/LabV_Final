@@ -3,14 +3,19 @@ package net.pelozo.FinalTPLab5DB2.service;
 import net.pelozo.FinalTPLab5DB2.exception.ClientExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -18,10 +23,12 @@ public class ClientService {
     //private final static String CLIENT_URL = "client";
 
     ClientRepository clientRepository;
+    ModelMapper modelMapper;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ModelMapper modelMapper) {
         this.clientRepository = clientRepository;
+        this.modelMapper = modelMapper;
     }
 
     public Client add(Client client) {
@@ -56,6 +63,10 @@ public class ClientService {
 
     public Client login(String username, String password) {
         return clientRepository.findByUsernameAndPassword(username, password);
+    }
+
+    public List<ClientDto> getTopTenConsumers(LocalDate from, LocalDate to){
+        return clientRepository.findTopTenConsumersBetweenDates(from,to).stream().map(o -> modelMapper.map(o, ClientDto.class)).collect(Collectors.toList());
     }
 }
 

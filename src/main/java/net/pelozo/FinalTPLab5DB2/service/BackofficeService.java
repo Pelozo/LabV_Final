@@ -17,12 +17,14 @@ public class BackofficeService {
 
     @Autowired
     BackofficeRepository backofficeRepository;
+    @Autowired
+    InvoiceService invoiceService;
 
     public Backoffice login(String username, String password) {
         return backofficeRepository.findByUsernameAndPassword(username, password);
     }
 
     public List<Invoice> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId) {
-        return backofficeRepository.findUnpaidInvoicesByClientAndResidence(clientId,residenceId);
+        return invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId);
     }
 }

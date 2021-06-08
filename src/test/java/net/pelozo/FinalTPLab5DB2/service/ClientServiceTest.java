@@ -8,6 +8,7 @@ import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,11 +26,13 @@ public class ClientServiceTest {
 
     ClientRepository clientRepository;
     ClientService clientService;
+    ModelMapper modelMapper;
 
     @BeforeEach
     public void setUp(){
         clientRepository = mock(ClientRepository.class);
-        clientService = new ClientService(clientRepository);
+        modelMapper = mock(ModelMapper.class);
+        clientService = new ClientService(clientRepository,modelMapper);
     }
 
     @Test

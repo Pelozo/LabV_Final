@@ -22,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -142,6 +143,16 @@ public class ClientController {
         {
             Page<Measurement> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
             return response(measurements);
+        }
+
+        @GetMapping("topConsumers")
+        public ResponseEntity<List<ClientDto>> getTopTenConsumers(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+                                                               @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to){
+            List<ClientDto> clients = clientService.getTopTenConsumers(from,to);
+
+            return  ResponseEntity
+                    .status(clients.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
+                    .body(clients);
         }
 
 
