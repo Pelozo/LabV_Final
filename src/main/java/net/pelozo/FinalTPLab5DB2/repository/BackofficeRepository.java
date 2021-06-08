@@ -14,5 +14,4 @@ public interface BackofficeRepository extends JpaRepository<Backoffice, Long> {
 
     Backoffice findByUsernameAndPassword(String username, String password);
 
-
 }

@@ -1,37 +1,44 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
-import net.pelozo.FinalTPLab5DB2.controller.ClientController;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
-import net.pelozo.FinalTPLab5DB2.model.Tariff;
+import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
 import net.pelozo.FinalTPLab5DB2.repository.ResidenceRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ResidenceService {
 
-    @Autowired
+
     private ResidenceRepository residenceRepository;
+    private ModelMapper modelMapper;
+    private ClientService clientService;
 
     @Autowired
-    private ClientService clientService;
+    public ResidenceService(ResidenceRepository residenceRepository, ModelMapper modelMapper, ClientService clientService) {
+        this.residenceRepository = residenceRepository;
+        this.modelMapper = modelMapper;
+        this.clientService = clientService;
+
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+    }
 
     public Optional<Residence> getByMeter(Meter meter){
         return residenceRepository.findByMeterId(meter.getId());
     }
 
-    public Page<Residence> getAll(Pageable pageable) {
-        return residenceRepository.findAll(pageable);
+    public Page<ResidenceDto> getAll(Pageable pageable) {
+        return residenceRepository.findAll(pageable).map(residence -> modelMapper.map(residence, ResidenceDto.class));
     }
 
     public Residence add(Long clientId, Residence residence) throws ClientNotExistsException {

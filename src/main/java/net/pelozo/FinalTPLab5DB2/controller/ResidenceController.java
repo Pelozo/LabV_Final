@@ -1,9 +1,12 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
+import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
+import net.pelozo.FinalTPLab5DB2.model.projections.ResidenceView;
 import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +30,8 @@ public class ResidenceController {
     ResidenceService residenceService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Residence>> getAll(Pageable pageable){
-        Page<Residence> residences =  residenceService.getAll(pageable);
+    public ResponseEntity<List<ResidenceDto>> getAll(Pageable pageable){
+        Page<ResidenceDto> residences =  residenceService.getAll(pageable);
         return response(residences);
     }
 
@@ -50,9 +53,9 @@ public class ResidenceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Residence> updateTariff(@PathVariable Long id, @RequestBody Residence residence) throws NonExistentResourceException{
-        Residence r = residenceService.update(id, residence);
-        return ResponseEntity.ok(r);
+    public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody Residence residence) throws NonExistentResourceException, IdViolationException {
+        residenceService.update(id, residence);
+        return ResponseEntity.accepted().build();
     }
 
 

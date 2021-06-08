@@ -58,7 +58,6 @@ public class TariffService {
                 _tariff.setId(tariff.get().getId());
                 tariffRepository.save(_tariff);
             }
-
         }else{
             throw new NonExistentResourceException();
         }

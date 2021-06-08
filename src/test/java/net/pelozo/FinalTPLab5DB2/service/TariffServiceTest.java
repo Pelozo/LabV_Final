@@ -123,7 +123,6 @@ public class TariffServiceTest {
         } catch (NonExistentResourceException | IdViolationException e) {
             fail();
         }
-
     }
 
     @Test

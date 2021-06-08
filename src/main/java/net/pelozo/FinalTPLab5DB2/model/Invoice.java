@@ -25,6 +25,7 @@ import java.time.LocalDate;
 public class Invoice {
 
     @Id
+    @Column(name = "id")
     private Long id;
 
     @NotNull(message = "isPaid cannot be null")
@@ -42,6 +43,7 @@ public class Invoice {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "dueDate cannot be null")
+    @Column(name = "issue_date")
     private LocalDate issueDate;
 
     @ManyToOne
@@ -72,9 +74,12 @@ public class Invoice {
 
 
     //aca consigo el total de consumo que tuvo el usuario
+    /*
     public float getTotalConsumption(){
         return lastReading - firstReading;
     }
+
+     */
 
 
 }
