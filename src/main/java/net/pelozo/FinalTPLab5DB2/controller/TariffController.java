@@ -23,8 +23,13 @@ import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 @RequestMapping("/tariff")
 public class TariffController {
 
-    @Autowired
+
     TariffService tariffService;
+
+    @Autowired
+    public TariffController(TariffService tariffService) {
+        this.tariffService = tariffService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Tariff>> getAll(Pageable pageable){
@@ -60,7 +65,5 @@ public class TariffController {
         tariffService.update(id, tariff);
         return ResponseEntity.accepted().build();
     }
-
-
 
 }

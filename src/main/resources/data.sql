@@ -44,7 +44,7 @@ INSERT INTO addresses(street,street_number) VALUES('call falsa',55555);
 --------------------
 --residences
 INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(1,1,1,1);
-INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(1,1,1,1);
+INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(1,8,1,8);
 INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(2,2,1,2);
 INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(3,3,1,3);
 INSERT INTO residences(client_id,meter_id,tariff_id,address_id) VALUES(3,4,1,4);

@@ -75,8 +75,8 @@ public class BackOfficeController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId){
-            List<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId);
+    public ResponseEntity<Page<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+            Page<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
             return ResponseEntity
                     .status(unpaidInvoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK)

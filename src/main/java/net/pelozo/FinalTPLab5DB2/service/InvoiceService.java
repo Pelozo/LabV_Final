@@ -21,10 +21,6 @@ public class InvoiceService {
         this.invoiceRepository = invoiceRepository;
     }
 
-    public Invoice add(Invoice invoice) {
-        return invoiceRepository.save(invoice);
-    }
-
     public Page<Invoice> getAll(Pageable pageable) {
         return invoiceRepository.findAll(pageable);
     }
@@ -49,7 +45,7 @@ public class InvoiceService {
         return invoiceRepository.findByResidence_ClientIdAndIsPaidFalse(id, pageable);
     }
 
-    public List<Invoice> findUnpaidInvoicesByClientAndResidence(long clientId, long residenceId) {
-        return invoiceRepository.findUnpaidInvoicesByClientAndResidence(clientId,residenceId);
+    public Page<Invoice> findUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) {
+        return invoiceRepository.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
     }
 }

@@ -49,7 +49,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
             "JOIN residences R\n" +
             "ON R.id = I.residence_id\n"+
             "WHERE I.is_paid = FALSE AND R.id = :residenceId AND R.client_id = :clientId",nativeQuery = true)
-    List<Invoice> findUnpaidInvoicesByClientAndResidence(@Param("clientId") long clientId, @Param("residenceId") long residenceId);
+    Page<Invoice> findUnpaidInvoicesByClientAndResidence(@Param("clientId") long clientId, @Param("residenceId") long residenceId, Pageable pageable);
 
 
 }

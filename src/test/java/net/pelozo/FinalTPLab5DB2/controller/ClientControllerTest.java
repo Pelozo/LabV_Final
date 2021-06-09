@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -151,7 +150,7 @@ public class ClientControllerTest{
         //given
         Date date = mock(Date.class);
         when(date.getTime()).thenReturn(30L);
-        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(aInvoicePage());
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(anInvoicePage());
         //when
         ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
@@ -164,7 +163,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                aInvoicePage().toList().get(0).getLastReading(),
+                anInvoicePage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }
@@ -172,7 +171,7 @@ public class ClientControllerTest{
     @Test
     public void getUnpaidInvoicesByClient(){
         //given
-        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(aInvoicePage());
+        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(anInvoicePage());
         //when
         ResponseEntity<List<Invoice>> response = clientController.getUnpaidInvoices(1L, aPageable());
 
@@ -186,7 +185,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                aInvoicePage().toList().get(0).getLastReading(),
+                anInvoicePage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }

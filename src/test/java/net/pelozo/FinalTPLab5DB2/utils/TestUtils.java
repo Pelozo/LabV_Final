@@ -62,7 +62,7 @@ public class TestUtils {
         return PageRequest.of(0,10);
     }
 
-    public static Page<Invoice> aInvoicePage(){
+    public static Page<Invoice> anInvoicePage(){
         return new PageImpl<>(List.of(anInvoice()));
     }
 
