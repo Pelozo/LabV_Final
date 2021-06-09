@@ -16,8 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,22 +43,21 @@ public class UserControllerTest {
 
     @Test
     public void clientloginOkTest(){
-        /*
+
         try {
             when(clientService.login(anyString(), anyString())).thenReturn(aUserDto());
-            when(userController.generateToken().thenReturn("tokencito");
 
             ResponseEntity<LoginResponseDto> response = userController.clientLogin(aLoginRequestDto());
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals("tokencito", response.getBody().getToken());
+            assertNotNull(response.getBody().getToken());
 
 
         } catch (InvalidCombinationUserPassword invalidCombinationUserPassword) {
             fail();
         }
 
-         */
+
 
     }
 
