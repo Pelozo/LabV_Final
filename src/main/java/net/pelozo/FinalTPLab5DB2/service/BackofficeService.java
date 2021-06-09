@@ -11,6 +11,8 @@ import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
 import net.pelozo.FinalTPLab5DB2.repository.InvoiceRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +43,7 @@ public class BackofficeService {
         }
     }
 
-    public List<Invoice> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId) {
-        return invoiceService.findUnpaidInvoicesByClientAndResidence(clientId, residenceId);
+    public Page<Invoice> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) {
+        return invoiceService.findUnpaidInvoicesByClientAndResidence(clientId, residenceId, pageable);
     }
 }
