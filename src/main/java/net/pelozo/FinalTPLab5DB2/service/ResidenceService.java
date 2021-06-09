@@ -8,7 +8,6 @@ import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
 import net.pelozo.FinalTPLab5DB2.repository.ResidenceRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +28,6 @@ public class ResidenceService {
         this.residenceRepository = residenceRepository;
         this.modelMapper = modelMapper;
         this.clientService = clientService;
-
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
     public Optional<Residence> getByMeter(Meter meter){
@@ -44,8 +41,7 @@ public class ResidenceService {
     public Residence add(Long clientId, Residence residence) throws ClientNotExistsException {
         Client client = clientService.getById(clientId);
         residence.setClient(client);
-        Residence newResidence = residenceRepository.save(residence);
-        return newResidence;
+        return residenceRepository.save(residence);
     }
 
     public void deleteById(Long id) throws NonExistentResourceException {

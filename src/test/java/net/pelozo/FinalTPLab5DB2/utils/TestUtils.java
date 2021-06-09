@@ -5,9 +5,7 @@ import com.google.gson.GsonBuilder;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.*;
-import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
-import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
-import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -66,10 +64,6 @@ public class TestUtils {
 
     public static Page<Invoice> anInvoicePage(){
         return new PageImpl<>(List.of(anInvoice()));
-    }
-
-    public static Page<Object> anEmptyPage(){
-        return new PageImpl<>(List.of());
     }
 
     public static Page<Tariff> aTariffPage(){
@@ -136,5 +130,28 @@ public class TestUtils {
 
     public static Page<MeasurementsDto> aMeasurementsDtoPage(){
         return new PageImpl<>(List.of(aMeasurementsDto()));
+    }
+
+    public static Backoffice aBackOffice() {
+        Backoffice backoffice = new Backoffice();
+        backoffice.setUsername("admin");
+        backoffice.setPassword("admin");
+        return backoffice;
+    }
+
+    public static UserDto aUserDtoFromBackOffice(){
+        return new ModelMapper().map(aBackOffice(),UserDto.class);
+    }
+
+    public static UserDto aUserDto() {
+        return new ModelMapper().map(aClient(),UserDto.class);
+    }
+
+    public static Page<Residence> aResidencePage() {
+        return new PageImpl<>(List.of(aResidence()));
+    }
+
+    public static ResidenceDto aResidenceDto(){
+        return new ModelMapper().map(aResidence(),ResidenceDto.class);
     }
 }

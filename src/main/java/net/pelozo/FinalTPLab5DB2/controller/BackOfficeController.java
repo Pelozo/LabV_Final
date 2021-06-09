@@ -1,11 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import lombok.SneakyThrows;
-import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
-import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.model.Measurement;
-import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.BackofficeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +33,12 @@ public class BackOfficeController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<Page<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
             Page<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
             return ResponseEntity
                     .status(unpaidInvoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK)
-                    .body(unpaidInvoices);
+                    .body(unpaidInvoices.getContent());
     }
 
 //    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
