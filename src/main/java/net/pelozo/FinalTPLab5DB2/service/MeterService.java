@@ -10,8 +10,13 @@ import java.util.Optional;
 @Service
 public class MeterService {
 
+
+    private final MeterRepository meterRepository;
+
     @Autowired
-    private MeterRepository meterRepository;
+    public MeterService(MeterRepository meterRepository) {
+        this.meterRepository = meterRepository;
+    }
 
     public Optional<Meter> getBySerialNumberAndPassword(String serialNumber, String password){
         return meterRepository.findBySerialNumberAndPassword(serialNumber,password);

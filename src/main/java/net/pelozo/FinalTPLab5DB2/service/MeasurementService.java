@@ -2,6 +2,7 @@ package net.pelozo.FinalTPLab5DB2.service;
 
 
 import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Intake;
 import net.pelozo.FinalTPLab5DB2.model.Measurement;
@@ -71,16 +72,21 @@ public class MeasurementService {
 
 
 
-    public Optional<Intake> getIntakeByRangeOfDates(long id, LocalDateTime from, LocalDateTime to) {
+    public Optional<Intake> getIntakeByRangeOfDates(long id, LocalDateTime from, LocalDateTime to) throws NonExistentResourceException {
 
         Optional<Intake> intake = Optional.of(new Intake());
 
         LinkedList<Measurement> measurements = measurementRepository.findListOfIntakeByRangeOfDates(id,from,to);
 
-        measurements.forEach(o -> intake.get()
-                .setKwhPrice(intake.get().getKwhPrice() + o.getKwhPrice()));
+        if(!measurements.isEmpty()){
+            measurements.forEach(o -> intake.get()
+                    .setKwhPrice(intake.get().getKwhPrice() + o.getKwhPrice()));
 
-        intake.get().setKwhValue(measurements.getLast().getKwhValue() - measurements.getFirst().getKwhValue());
+            intake.get().setKwhValue(measurements.getLast().getKwhValue() - measurements.getFirst().getKwhValue());
+
+        } else{
+            throw new NonExistentResourceException();
+        }
 
 
         return intake;

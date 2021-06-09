@@ -2,8 +2,10 @@ package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.UserDto;
 import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +63,14 @@ public class ClientService {
         return clientRepository.findAll(pageable);
     }
 
-    public Client login(String username, String password) {
-        return clientRepository.findByUsernameAndPassword(username, password);
+    public UserDto login(String username, String password) throws InvalidCombinationUserPassword {
+        Client c =  clientRepository.findByUsernameAndPassword(username, password);
+
+        if(c != null){
+            return modelMapper.map(c,UserDto.class);
+        }else {
+            throw new InvalidCombinationUserPassword();
+        }
     }
 
     public List<ClientDto> getTopTenConsumers(LocalDate from, LocalDate to){

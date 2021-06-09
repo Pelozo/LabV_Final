@@ -11,11 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.pelozo.FinalTPLab5DB2.utils.Misc.parseDataConstraintEx;
 
@@ -79,5 +75,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(IdViolationException.errorCode, ex.getMessage()));
     }
 
+    @ExceptionHandler(InvalidCombinationUserPassword.class)
+    public ResponseEntity<ApiError> InvalidCombinationHandler(InvalidCombinationUserPassword ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(IdViolationException.errorCode, ex.getMessage()));
+    }
 
 }

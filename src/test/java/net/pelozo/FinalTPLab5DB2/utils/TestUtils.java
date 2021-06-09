@@ -7,6 +7,8 @@ import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.*;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -124,5 +126,15 @@ public class TestUtils {
         return new MeasurementDto("123asd",100.6f,LocalDateTime.now(),"asdf1234");
     }
 
+    public static MeasurementsDto aMeasurementsDto(){
+        return new ModelMapper().map(aMeasurement(),MeasurementsDto.class);
+    }
 
+    public static Page<Measurement> aMeasurementPage() {
+        return new PageImpl<>(List.of(aMeasurement()));
+    }
+
+    public static Page<MeasurementsDto> aMeasurementsDtoPage(){
+        return new PageImpl<>(List.of(aMeasurementsDto()));
+    }
 }

@@ -32,6 +32,7 @@ public class TariffController {
         return response(tariffs);
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity<String> addTariff(@RequestBody Tariff newTariff){
         Tariff tariff =  tariffService.add(newTariff);
@@ -42,18 +43,21 @@ public class TariffController {
                 .body("");
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/{id}")
     public ResponseEntity<Tariff> getById(@PathVariable Long id) throws NonExistentResourceException{
         Tariff tariff = tariffService.getById(id);
         return ResponseEntity.ok(tariff);
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
         tariffService.deleteById(id);
         return ResponseEntity.accepted().build();
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateTariff(@PathVariable Long id,
                                                @RequestBody Tariff tariff) throws NonExistentResourceException, IdViolationException {

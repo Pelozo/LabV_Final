@@ -36,43 +36,6 @@ public class BackOfficeController {
         this.measurementController = measurementController;
     }
 
-    /*
-    @GetMapping("/tariffs/{id}")
-    public ResponseEntity<Tariff> getTariff(@PathVariable long id){
-        return tariffController.getById(id);
-    }
-
-     */
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @GetMapping("/tariffs")
-    public ResponseEntity<List<Tariff>> getAllTariffs(Pageable pageable){
-        return tariffController.getAll(pageable);
-    }
-
-
-    //alta tarifa
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @PostMapping("/tariffs")
-    public ResponseEntity<String> addTariff(@RequestBody Tariff tariff){
-        return tariffController.addTariff(tariff);
-    }
-
-    //baja tarifa
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @DeleteMapping("/tariffs/{id}")
-    public ResponseEntity<String> deleteTariffById(@PathVariable long id) throws NonExistentResourceException {
-        return tariffController.deleteById(id);
-    }
-
-    //modificacion tarifa
-
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @PutMapping("/tariffs/{id}")
-    public ResponseEntity<Tariff> updateTariff(@PathVariable long id, @RequestBody Tariff tariff) throws NonExistentResourceException, IdViolationException {
-        return tariffController.updateTariff(id, tariff);
-    }
-
-
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
     public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId){

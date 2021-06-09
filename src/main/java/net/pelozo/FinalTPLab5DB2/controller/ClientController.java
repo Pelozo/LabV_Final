@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
@@ -127,7 +128,7 @@ public class ClientController {
     @GetMapping("/{id}/intake")
     public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
     @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-    @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to){
+    @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to) throws NonExistentResourceException {
 
         Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id, from, to);
 

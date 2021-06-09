@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
 import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.User;
@@ -47,28 +48,22 @@ public class UserController {
         this.backofficeService = backoffice;
     }
 
-
     @PostMapping(value = "login")
-    public ResponseEntity<LoginResponseDto> clientLogin(@RequestBody LoginRequestDto loginRequestDto) {
-        Client user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        if (user != null) {
-            UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.CLIENT.name())).build());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<LoginResponseDto> clientLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
+        UserDto user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        return ResponseEntity.ok(LoginResponseDto.builder()
+                .token(this.generateToken(user, User.TYPE.CLIENT.name()))
+                .build());
     }
 
     @PostMapping(value = "backoffice/login")
-    public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
-
-        Backoffice user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        if (user != null) {
-            UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.BACKOFFICE.name())).build());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
+        UserDto user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        return ResponseEntity
+                .ok(LoginResponseDto.builder()
+                        .token(this.generateToken(user, User.TYPE.BACKOFFICE.name()))
+                        .build());
     }
 
     private String generateToken(UserDto userDto, String authority) {
