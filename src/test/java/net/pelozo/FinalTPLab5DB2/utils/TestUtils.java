@@ -76,10 +76,6 @@ public class TestUtils {
         return new PageImpl<>(List.of(anInvoice()));
     }
 
-    public static Page<Object> anEmptyPage(){
-        return new PageImpl<>(List.of());
-    }
-
     public static Page<Tariff> aTariffPage(){
         return new PageImpl<>(List.of(aTariff()));
     }
@@ -146,13 +142,34 @@ public class TestUtils {
         return new PageImpl<>(List.of(aMeasurementsDto()));
     }
 
+
+    public static Backoffice aBackOffice() {
+        Backoffice backoffice = new Backoffice();
+        backoffice.setUsername("admin");
+        backoffice.setPassword("admin");
+        return backoffice;
+    }
+
+    public static UserDto aUserDtoFromBackOffice(){
+        return new ModelMapper().map(aBackOffice(),UserDto.class);
+    }
+
     public static UserDto aUserDto() {
         return new ModelMapper().map(aClient(),UserDto.class);
     }
+
 
     public static LoginRequestDto aLoginRequestDto() {
         return new LoginRequestDto("admin", "'or '1'='1");
     }
 
+
+    public static Page<Residence> aResidencePage() {
+        return new PageImpl<>(List.of(aResidence()));
+    }
+
+    public static ResidenceDto aResidenceDto(){
+        return new ModelMapper().map(aResidence(),ResidenceDto.class);
+    }
 }
 

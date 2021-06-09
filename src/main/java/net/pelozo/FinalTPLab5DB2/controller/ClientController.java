@@ -80,25 +80,9 @@ public class ClientController {
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<ClientDto> getById(@PathVariable Long id) throws ClientNotExistsException {
-        //return ResponseEntity.ok(ClientDto.from(clientService.getById(id)));
         ClientDto cd = modelMapper.map(clientService.getById(id),ClientDto.class);
-        //ClientDto cd = clientService.getById(id).map(ClientDto::from);
         return ResponseEntity.ok(cd);
     }
-//--------------------------------------------------------------------------------------------------
-    //revisar como puedo hacer esto
-//    @PostMapping
-//    public ResponseEntity<Invoice> add(@RequestBody Invoice invoice){
-//        Invoice in = invoiceService.add(invoice);
-//
-//        return ResponseEntity.created(ServletUriComponentsBuilder
-//                .fromCurrentRequest()
-//                .path("/{id}")
-//                .buildAndExpand(in.getId())
-//                .toUri())
-//                .build();
-//    }
-
 
     //consulta facturas por cliente
     @GetMapping("/{id}/invoices")

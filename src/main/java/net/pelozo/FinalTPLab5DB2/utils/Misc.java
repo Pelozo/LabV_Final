@@ -1,8 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.utils;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

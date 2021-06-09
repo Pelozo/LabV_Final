@@ -42,11 +42,11 @@ public class ClientService {
     }
 
     public void deleteById(Long id) throws ClientNotExistsException {
-        Client c = getById(id);
-        if(c == null){
+        Optional<Client> c = clientRepository.findById(id);
+        if(c.isEmpty()){
             throw new ClientNotExistsException();
         }else{
-            clientRepository.delete(c);
+            clientRepository.delete(c.get());
         }
     }
 

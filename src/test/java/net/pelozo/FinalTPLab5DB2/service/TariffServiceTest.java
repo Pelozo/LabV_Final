@@ -126,6 +126,21 @@ public class TariffServiceTest {
     }
 
     @Test
+    public void updateTariffTestOkWithNull()  {
+        when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
+
+        Tariff wrongTariff = aTariff();
+        wrongTariff.setId(null);
+        try {
+            tariffService.update(aTariff().getId(), wrongTariff);
+        } catch (NonExistentResourceException | IdViolationException e) {
+            fail();
+        }
+
+        verify(tariffRepository, times(1)).save(aTariff());
+    }
+
+    @Test
     public void updateTariff_ThrowsNonExistentExceptionTest(){
         when(tariffRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NonExistentResourceException.class, () -> {
@@ -142,6 +157,8 @@ public class TariffServiceTest {
             tariffService.update(aTariff().getId(), wrongTariff);
         });
     }
+
+
 
 
 }
