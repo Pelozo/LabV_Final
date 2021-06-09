@@ -66,7 +66,8 @@ public class UserController {
                         .build());
     }
 
-    private String generateToken(UserDto userDto, String authority) {
+    //should be private but testing is hard :(
+    public String generateToken(UserDto userDto, String authority) {
         try {
             List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
             String token = Jwts

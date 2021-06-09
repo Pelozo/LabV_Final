@@ -29,18 +29,6 @@ public class ClientDto {
 
     private String lastName;
 
-    private List<Residence> residences;
-
-//    public static ClientDto from(Client client){
-//        return ClientDto.builder()
-//                .id(client.getId())
-//                .username(client.getUsername())
-//                .dni(client.getDni())
-//                .email(client.getEmail())
-//                .firstName(client.getFirstName())
-//                .lastName(client.getLastName())
-//                .build();
-//    }
-
+    private List<ResidenceDto> residences;
 
 }

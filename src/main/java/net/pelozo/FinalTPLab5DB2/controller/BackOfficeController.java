@@ -38,12 +38,12 @@ public class BackOfficeController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<Page<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
             Page<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
             return ResponseEntity
                     .status(unpaidInvoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK)
-                    .body(unpaidInvoices);
+                    .body(unpaidInvoices.getContent());
     }
 
 //    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")

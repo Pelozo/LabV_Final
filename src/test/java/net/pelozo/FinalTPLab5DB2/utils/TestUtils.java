@@ -1,23 +1,31 @@
 package net.pelozo.FinalTPLab5DB2.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.*;
-import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
-import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
-import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import java.time.LocalDate;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static net.pelozo.FinalTPLab5DB2.utils.Constants.JWT_SECRET;
 
 public class TestUtils {
 
@@ -137,4 +145,14 @@ public class TestUtils {
     public static Page<MeasurementsDto> aMeasurementsDtoPage(){
         return new PageImpl<>(List.of(aMeasurementsDto()));
     }
+
+    public static UserDto aUserDto() {
+        return new ModelMapper().map(aClient(),UserDto.class);
+    }
+
+    public static LoginRequestDto aLoginRequestDto() {
+        return new LoginRequestDto("admin", "'or '1'='1");
+    }
+
 }
+

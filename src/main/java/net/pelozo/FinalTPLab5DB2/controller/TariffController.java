@@ -39,7 +39,7 @@ public class TariffController {
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity<String> addTariff(@RequestBody Tariff newTariff){
+    public ResponseEntity addTariff(@RequestBody Tariff newTariff){
         Tariff tariff =  tariffService.add(newTariff);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
