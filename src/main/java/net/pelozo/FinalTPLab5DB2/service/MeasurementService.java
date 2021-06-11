@@ -57,9 +57,6 @@ public class MeasurementService {
             throw new MeterNotExistsException();
         }
 
-        //TODO check meterId exists, check password is correct, check is assigned to a house,
-
-
 
         //return measurementRepository.save(me);
 
