@@ -11,22 +11,24 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name = "meter_models")
 public class MeterModel2 extends BaseModel{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotNull
     @NotEmpty
     @NotBlank
     private String name;
 
-
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private MeterBrand brand;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 }

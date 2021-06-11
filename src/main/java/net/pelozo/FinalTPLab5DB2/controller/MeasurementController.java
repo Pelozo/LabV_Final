@@ -25,8 +25,13 @@ import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 @RequestMapping("/measurements")
 public class MeasurementController {
 
-    @Autowired
+
     private MeasurementService measurementService;
+
+    @Autowired
+    public MeasurementController(MeasurementService measurementService) {
+        this.measurementService = measurementService;
+    }
 
     @PostMapping
     public ResponseEntity<String> add(@RequestBody MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {

@@ -66,8 +66,7 @@ public class UserController {
                         .build());
     }
 
-    //should be private but testing is hard :(
-    public String generateToken(UserDto userDto, String authority) {
+    private String generateToken(UserDto userDto, String authority) {
         try {
             List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
             String token = Jwts
@@ -78,7 +77,8 @@ public class UserController {
                     .claim("authorities",grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .setIssuedAt(new Date(System.currentTimeMillis()))
                     .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10)) //10 dias
-                    .signWith(SignatureAlgorithm.HS512, JWT_SECRET.getBytes()).compact();
+                    .signWith(SignatureAlgorithm.HS512, JWT_SECRET.getBytes())
+                    .compact();
             return  token;
         } catch(Exception e) {
             return "dummy";

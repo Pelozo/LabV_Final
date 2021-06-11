@@ -40,7 +40,6 @@ public class ClientControllerTest{
 
     private ModelMapper modelMapper;
 
-    @Mock
     private ClientController clientController;
 
     @BeforeEach

@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +19,13 @@ public class MeterServiceTest {
 
     MeterRepository meterRepository;
     MeterService meterService;
+    ModelMapper modelMapper;
 
     @BeforeEach
     public void setUp(){
+        modelMapper = mock(ModelMapper.class);
         meterRepository = mock(MeterRepository.class);
-        meterService = new MeterService(meterRepository);
+        meterService = new MeterService(meterRepository, modelMapper);
     }
 
     @Test

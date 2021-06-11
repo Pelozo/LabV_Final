@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class MeterModel {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -27,7 +27,7 @@ public class MeterModel {
 
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MeterBrand brand;
 
 

@@ -19,11 +19,11 @@ import javax.validation.constraints.NotNull;
 public class Meter {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "model cannot be null")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "model_id")
     private MeterModel model;
 

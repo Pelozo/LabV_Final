@@ -4,9 +4,7 @@ import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
-import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
-import net.pelozo.FinalTPLab5DB2.model.projections.ResidenceView;
 import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 

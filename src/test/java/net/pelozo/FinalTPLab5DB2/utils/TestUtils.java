@@ -171,5 +171,7 @@ public class TestUtils {
     public static ResidenceDto aResidenceDto(){
         return new ModelMapper().map(aResidence(),ResidenceDto.class);
     }
+
+
 }
 
