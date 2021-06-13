@@ -45,6 +45,7 @@ public class UserController {
         this.backofficeService = backoffice;
     }
 
+    //1) Login de clientes
     @PostMapping(value = "login")
     public ResponseEntity<LoginResponseDto> clientLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
         UserDto user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
@@ -54,6 +55,7 @@ public class UserController {
                 .build());
     }
 
+    //1) Login de empleados.
     @PostMapping(value = "backoffice/login")
     public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
         UserDto user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());

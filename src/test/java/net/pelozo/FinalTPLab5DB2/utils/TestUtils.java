@@ -182,7 +182,6 @@ public class TestUtils {
 
     public static Page<MeterDto> aMeterDtoPage(){
         return new PageImpl<>(List.of(aMeterDto()));
-
     }
 
 }

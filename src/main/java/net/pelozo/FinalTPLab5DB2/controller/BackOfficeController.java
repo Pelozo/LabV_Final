@@ -1,3 +1,4 @@
+/*
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+
 @RestController
 @RequestMapping("/backoffice")
 public class BackOfficeController {
@@ -31,21 +33,6 @@ public class BackOfficeController {
         this.measurementController = measurementController;
     }
 
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
-            Page<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
-
-            return ResponseEntity
-                    .status(unpaidInvoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK)
-                    .body(unpaidInvoices.getContent());
-    }
-
-//    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-//    @GetMapping("/consumers/topTen")
-//    public ResponseEntity<List<>> getTopTenConsumers(){
-//
-//    }
-
 
 }
+*/

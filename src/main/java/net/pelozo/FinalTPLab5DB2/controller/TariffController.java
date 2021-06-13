@@ -37,6 +37,7 @@ public class TariffController {
         return response(tariffs);
     }
 
+    //2) Alta, baja y modificación de tarifas.
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity addTariff(@RequestBody Tariff newTariff){
@@ -55,6 +56,7 @@ public class TariffController {
         return ResponseEntity.ok(tariff);
     }
 
+    //2) Alta, baja y modificación de tarifas.
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
@@ -62,6 +64,7 @@ public class TariffController {
         return ResponseEntity.accepted().build();
     }
 
+    //2) Alta, baja y modificación de tarifas.
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateTariff(@PathVariable Long id,

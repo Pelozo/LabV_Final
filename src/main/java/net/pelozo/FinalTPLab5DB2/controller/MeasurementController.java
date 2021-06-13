@@ -47,6 +47,7 @@ public class MeasurementController {
 
     }
 
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<List<MeasurementsDto>> getAllMeasurements(Pageable pageable){
         Page<MeasurementsDto> measurements = measurementService.getAll(pageable)
@@ -56,6 +57,7 @@ public class MeasurementController {
     }
 
 
+    //6) Consulta de mediciones de un domicilio por rango de fechas
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/residence/{residenceId}")
     public ResponseEntity<List<MeasurementsDto>> getMeasurementsByResidenceAndRangeOfDates(@PathVariable long residenceId,

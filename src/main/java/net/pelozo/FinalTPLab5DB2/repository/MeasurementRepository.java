@@ -20,8 +20,8 @@ public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
             "FROM MEASUREMENTS M " +
             "JOIN RESIDENCES R " +
             "ON M.RESIDENCE_ID = R.ID " +
-            "WHERE R.CLIENT_ID = :clientId AND M.DATE BETWEEN :from AND :to "
-            ,nativeQuery = true)
+            "WHERE R.CLIENT_ID = :clientId AND M.DATE BETWEEN :from AND :to ",
+            nativeQuery = true)
     LinkedList<Measurement> findListOfIntakeByRangeOfDates(@Param("clientId")long clientId, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
 
@@ -29,13 +29,14 @@ public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
             "FROM MEASUREMENTS M " +
             "JOIN RESIDENCES R " +
             "ON M.RESIDENCE_ID = R.ID " +
-            "WHERE R.CLIENT_ID = :clientId AND M.DATE BETWEEN :from AND :to "
-            ,nativeQuery = true)
+            "WHERE R.CLIENT_ID = :clientId AND M.DATE BETWEEN :from AND :to ",
+            nativeQuery = true)
     Page<Measurement> findMeasurementsByRangeOfDate(@Param("clientId")long clientId, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to, Pageable pageable);
 
 
     @Query(value = "SELECT M.*\n" +
             "FROM measurements M\n" +
-            "WHERE M.residence_id = :residenceId AND DATE BETWEEN :from AND :to",nativeQuery = true)
+            "WHERE M.residence_id = :residenceId AND DATE BETWEEN :from AND :to",
+            nativeQuery = true)
     Page<Measurement> findByResidenceAndRangeOfDate(@Param("residenceId") long residenceId,@Param("from") LocalDateTime from,@Param("to") LocalDateTime to, Pageable pageable);
 }

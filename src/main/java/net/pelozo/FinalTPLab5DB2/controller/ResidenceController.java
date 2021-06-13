@@ -50,6 +50,7 @@ public class ResidenceController {
         return response(residences);
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @PostMapping("/clients/{clientId}/residencies")
     public ResponseEntity<String> addResidence(@PathVariable Long clientId, @RequestBody Residence newResidence) throws ClientNotExistsException {
         Residence residence = residenceService.add(clientId, newResidence);
@@ -61,12 +62,14 @@ public class ResidenceController {
                 .body("");
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException {
         residenceService.deleteById(id);
         return ResponseEntity.accepted().build();
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @PutMapping("/{id}")
     public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody Residence residence) throws NonExistentResourceException, IdViolationException {
         residenceService.update(id, residence);

@@ -36,8 +36,6 @@ public class FinalTpLab5Db2Application {
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/backoffice/login").permitAll()
 					.antMatchers("/console/**").permitAll() //TODO borrar esta linea
-					//.antMatchers("/tariff/**").hasAuthority(User.TYPE.BACKOFFICE.name())
-					//.antMatchers("/clients/**").hasAuthority(User.TYPE.BACKOFFICE.name())
 					.anyRequest().authenticated();
 
 			http.headers().frameOptions().disable(); //TODO remove this (h2 console won't work w/o this line)

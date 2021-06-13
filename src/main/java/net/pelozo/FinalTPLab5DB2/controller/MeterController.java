@@ -37,6 +37,7 @@ public class MeterController {
         return response(meters);
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity add(@RequestBody Meter newMeter){
@@ -55,6 +56,7 @@ public class MeterController {
         return ResponseEntity.ok(meter);
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
@@ -62,6 +64,7 @@ public class MeterController {
         return ResponseEntity.accepted().build();
     }
 
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateMeter(@PathVariable Long id,

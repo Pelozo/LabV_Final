@@ -17,6 +17,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
@@ -64,7 +66,35 @@ public class MeasurementControllerTest {
                 aMeasurementPage().getContent().get(0).getKwhPrice(),
                 response.getBody().get(0).getKwhPrice()
         );
+    }
 
+    @Test
+    public void getByResidenceOkTest(){
+        when(measurementService.getMeasurementsByResidenceAndRangeOfDate(
+                anyLong(),
+                any(LocalDateTime.class),
+                any(LocalDateTime.class),
+                any(Pageable.class))
+        ).thenReturn(aMeasurementsDtoPage());
+
+        ResponseEntity<List<MeasurementsDto>> response = measurementController.getMeasurementsByResidenceAndRangeOfDates(
+                1L,
+                LocalDateTime.of(2020, 1, 1, 1, 1),
+                LocalDateTime.of(2020, 1, 1, 1, 1),
+                aPageable()
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(
+                aMeasurementsDtoPage().getTotalElements(),
+                Long.valueOf(response.getHeaders().get("X-Total-Pages").get(0))
+        );
+
+        assertEquals(
+                aMeasurementsDtoPage().getContent().get(0).getKwhPrice(),
+                response.getBody().get(0).getKwhPrice()
+        );
     }
 
 }
