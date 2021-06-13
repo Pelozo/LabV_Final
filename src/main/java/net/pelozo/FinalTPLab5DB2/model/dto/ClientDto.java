@@ -29,6 +29,6 @@ public class ClientDto {
 
     private String lastName;
 
-    private List<ResidenceDto> residences;
+    //private List<ResidenceDto> residences;
 
 }

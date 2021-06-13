@@ -150,9 +150,11 @@
 				<configuration>
 					<excludes>
 						<!-- Exclude full package from test coverage -->
+						<exclude>**/*net/pelozo/FinalTPLab5DB2/model/TestDeleteLater/**</exclude>
 						<!--
 						<exclude>**/*net/pelozo/FinalTPLab5DB2/model/**</exclude>
 						<exclude>**/*net/pelozo/FinalTPLab5DB2/exception/**</exclude>
+
 						-->
 					</excludes>
 				</configuration>

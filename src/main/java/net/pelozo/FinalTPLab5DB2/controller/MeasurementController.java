@@ -11,9 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -54,7 +56,15 @@ public class MeasurementController {
     }
 
 
-    public Page<MeasurementsDto> getMeasurementsByResidenceAndRangeOfDates(long residenceId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
-        return measurementService.getMeasurementsByResidenceAndRangeOfDate(residenceId,from,to,pageable);
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
+    @GetMapping("/residence/{residenceId}")
+    public ResponseEntity<List<MeasurementsDto>> getMeasurementsByResidenceAndRangeOfDates(@PathVariable long residenceId,
+                                                                                           @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                                           @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                                           Pageable pageable){
+        Page<MeasurementsDto> measurements = measurementService.getMeasurementsByResidenceAndRangeOfDate(residenceId,from,to,pageable);
+        return  response(measurements);
     }
+
+
 }

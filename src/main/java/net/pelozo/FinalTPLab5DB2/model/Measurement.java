@@ -24,17 +24,17 @@ public class Measurement {
     private long id;
 
     @Column(name = "kwh_value")
-    @NotNull
+    @NotNull(message = "khwValue cannot be null")
     private float kwhValue;
 
-    @NotNull
+    @NotNull(message = "Date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
     @Column(name = "kwh_price")
     private float kwhPrice;
 
-    @NotNull
+    @NotNull(message = "Residence cannot be null")
     @ManyToOne
     @JoinColumn(name = "residence_id")
     private Residence residence;

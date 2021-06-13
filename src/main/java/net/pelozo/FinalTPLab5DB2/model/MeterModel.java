@@ -20,13 +20,13 @@ public class MeterModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    @NotBlank
+    @NotNull(message = "Name cannot be null")
+    @NotEmpty(message = "Name cannot be empty")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
 
-    @NotNull
+    @NotNull(message = "Brand cannot be null")
     @ManyToOne(cascade = CascadeType.ALL)
     private MeterBrand brand;
 

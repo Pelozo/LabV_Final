@@ -4,7 +4,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-public class EntityURLBuilder {
+public class EntityURLBuilder{
+
+    private EntityURLBuilder() {}
 
     public static URI buildURL(final String entity, final Long id) {
         return ServletUriComponentsBuilder

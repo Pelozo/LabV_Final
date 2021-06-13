@@ -48,16 +48,4 @@ public class BackOfficeController {
 //    }
 
 
-    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
-    @GetMapping("/residences/{residenceId}/measurements")
-    public ResponseEntity<List<MeasurementsDto>> getMeasurementsByResidenceAndRangeOfDates(@PathVariable long residenceId,
-                                                                                           @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                                           @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-                                                                                           Pageable pageable){
-        Page<MeasurementsDto> measurements = measurementController.getMeasurementsByResidenceAndRangeOfDates(residenceId,from,to,pageable);
-        return  ResponseEntity
-                .status(measurements.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
-                .body(measurements.getContent());
-    }
-
 }

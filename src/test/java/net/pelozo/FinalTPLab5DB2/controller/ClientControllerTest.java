@@ -54,17 +54,19 @@ public class ClientControllerTest{
     @Test
     public void getAllTestOk() throws Exception {
         //given
-        Pageable pageable = PageRequest.of(1,10);
-        when(clientService.getAll(pageable)).thenReturn(aClientPage());
+        when(clientService.getAll(aPageable())).thenReturn(aClientPage());
         when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(aClientDto());
 
         //when
-        ResponseEntity<List<ClientDto>> response = clientController.getAll(pageable);
+        ResponseEntity<List<ClientDto>> response = clientController.getAll(aPageable());
 
         //then
         assertEquals(HttpStatus.OK.value(),response.getStatusCodeValue());
         assertEquals(1, Objects.requireNonNull(response.getBody()).size());
-        assertEquals(aClientPage().getContent().get(0).getDni(),response.getBody().get(0).getDni());
+        assertEquals(
+                aClientPage().getContent().get(0).getDni(),
+                response.getBody().get(0).getDni()
+        );
     }
 
 

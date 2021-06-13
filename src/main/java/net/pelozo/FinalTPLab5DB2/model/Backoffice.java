@@ -16,5 +16,4 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "users_backoffice")
 public class Backoffice extends User{
 
-
 }

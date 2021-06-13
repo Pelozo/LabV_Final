@@ -18,6 +18,8 @@ import static net.pelozo.FinalTPLab5DB2.utils.Constants.JWT_SECRET;
 
 public class Misc {
 
+    private Misc() {}
+
     public static String parseDataConstraintEx(DataIntegrityViolationException ex){
         Pattern pattern = Pattern.compile(".+?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(ex.getMessage());
