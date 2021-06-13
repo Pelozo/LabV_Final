@@ -3,6 +3,7 @@ package net.pelozo.FinalTPLab5DB2.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,11 +25,11 @@ public class Client extends User {
     @Size(min = 8,max = 8,message = "DNI must be exactly 8 (eight) numbers!")
     private String dni;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private List<Residence> residences;
 
 
-    @NotNull(message = "residence cannot be null")
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "client")
-    private List<Residence> residence;
 
 
 }

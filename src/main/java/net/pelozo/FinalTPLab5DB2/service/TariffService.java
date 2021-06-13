@@ -1,65 +1,65 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TariffService {
 
-    @Autowired
+
     TariffRepository tariffRepository;
 
-    public List<Tariff> getAll() {
-        List<Tariff> tariffs = tariffRepository.findAll();
-        if(!tariffs.isEmpty()){
-           return tariffs;
-        }else{
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
+    @Autowired
+    public TariffService(TariffRepository tariffRepository) {
+        this.tariffRepository = tariffRepository;
+    }
+
+    public Page<Tariff> getAll(Pageable pageable) {
+        return tariffRepository.findAll(pageable);
     }
 
     public Tariff add(Tariff tariff) {
-        try{
-            Tariff newTariff = tariffRepository.save(tariff);
-            return newTariff;
-        }catch (DataIntegrityViolationException e) {
-            System.out.println("tariff already exists");
-            //e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        return tariffRepository.save(tariff);
     }
 
-    public Tariff getById(Long id) {
+    public Tariff getById(Long id) throws NonExistentResourceException {
         Optional<Tariff> tariff = tariffRepository.findById(id);
         if(tariff.isPresent()) {
             return tariff.get();
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new NonExistentResourceException();
         }
     }
 
-    public void deleteById(Long id) {
-        tariffRepository.deleteById(id);
-    }
-
-    public Tariff update(Tariff _tariff) {
-        Optional<Tariff> tariff = tariffRepository.findById(_tariff.getId());
-        if(tariff.isPresent()) {
-            tariff.get().setName(_tariff.getName());
-            tariff.get().setValue(_tariff.getValue());
-            return tariffRepository.save(tariff.get());
+    public void deleteById(Long id) throws NonExistentResourceException {
+        Optional<Tariff> tariff = tariffRepository.findById(id);
+        if(tariff.isPresent()){
+            tariffRepository.deleteById(id);
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new NonExistentResourceException();
         }
     }
 
+    public void update(Long id, Tariff _tariff) throws NonExistentResourceException, IdViolationException {
+        Optional<Tariff> tariff = tariffRepository.findById(id);
+        if(tariff.isPresent()){
+            if(_tariff.getId() != null && !tariff.get().getId().equals(_tariff.getId())){
+                throw new IdViolationException();
+            }else{
+                _tariff.setId(tariff.get().getId());
+                tariffRepository.save(_tariff);
+            }
+        }else{
+            throw new NonExistentResourceException();
+        }
+    }
 }

@@ -19,18 +19,23 @@ import javax.validation.constraints.NotNull;
 public class Meter {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "model cannot be null")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "model_id")
     private MeterModel model;
 
     @NotNull(message = "serialNumber cannot be null")
     @NotEmpty(message = "serialNumber cannot be empty")
     @NotBlank(message = "serialNumber cannot be blank")
-    //preguntar por final al profe
     private String serialNumber;
+
+    @NotNull(message = "password cannot be null")
+    @NotEmpty(message = "password cannot be empty")
+    @NotBlank(message = "password cannot be blank")
+    private String password;
 
 }
 

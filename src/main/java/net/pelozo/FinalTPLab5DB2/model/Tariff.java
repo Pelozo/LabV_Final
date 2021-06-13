@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,18 +16,17 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tariffs",uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
-
 public class Tariff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "cannot be null")
-    @NotEmpty(message = "cannot be empty")
+    @NotNull(message = "name cannot be null")
+    @NotEmpty(message = "name cannot be empty")
     private String name;
 
-    @NotNull(message = "cannot be null")
+    @NotNull(message = "value cannot be null")
     @Column(name = "amount")
     private Float value;
 }

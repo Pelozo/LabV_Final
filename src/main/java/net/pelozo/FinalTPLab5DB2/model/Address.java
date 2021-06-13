@@ -12,10 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
-
-//TODO this is a placeholder
 @Data
 @Entity
 @AllArgsConstructor
@@ -25,11 +24,13 @@ public class Address {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
+    @NotNull(message = "Street cannot be null")
     @Column(name = "street")
     private String street;
 
+    @NotNull(message = "Number cannot be null")
     @Column(name = "street_number")
     private int number;
 

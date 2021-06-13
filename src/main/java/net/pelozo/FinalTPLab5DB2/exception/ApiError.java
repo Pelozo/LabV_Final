@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-
-@AllArgsConstructor
 @Data
 @Builder
 public class ApiError {
-    private HttpStatus Httpstatus;
-    private String message;
-    private List<String> errors;
+    private Integer errorCode;
+    private String errorMessage;
+
+    public ApiError(Integer code, String message) {
+        errorCode = code;
+        errorMessage = message;
+    }
 }

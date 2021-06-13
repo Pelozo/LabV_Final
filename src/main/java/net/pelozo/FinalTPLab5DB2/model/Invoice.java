@@ -2,6 +2,7 @@ package net.pelozo.FinalTPLab5DB2.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,16 +14,18 @@ import javax.persistence.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @Table(name = "invoices")
 @AllArgsConstructor
 public class Invoice {
 
     @Id
+    @Column(name = "id")
     private Long id;
 
     @NotNull(message = "isPaid cannot be null")
@@ -33,10 +36,15 @@ public class Invoice {
     @Column(name = "is_due")
     private Boolean isDue;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "dueDate cannot be null")
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "dueDate cannot be null")
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
 
     @ManyToOne
     @NotNull(message = "residence cannot be null")
@@ -66,9 +74,12 @@ public class Invoice {
 
 
     //aca consigo el total de consumo que tuvo el usuario
+    /*
     public float getTotalConsumption(){
         return lastReading - firstReading;
     }
+
+     */
 
 
 }

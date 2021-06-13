@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import net.pelozo.FinalTPLab5DB2.model.Backoffice;
-import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
 import net.pelozo.FinalTPLab5DB2.model.User;
 import net.pelozo.FinalTPLab5DB2.model.dto.LoginRequestDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.LoginResponseDto;
@@ -14,7 +13,6 @@ import net.pelozo.FinalTPLab5DB2.service.BackofficeService;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -47,28 +45,24 @@ public class UserController {
         this.backofficeService = backoffice;
     }
 
-
+    //1) Login de clientes
     @PostMapping(value = "login")
-    public ResponseEntity<LoginResponseDto> clientLogin(@RequestBody LoginRequestDto loginRequestDto) {
-        Client user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        if (user != null) {
-            UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.CLIENT.name())).build());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<LoginResponseDto> clientLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
+        UserDto user = clientService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        return ResponseEntity.ok(LoginResponseDto.builder()
+                .token(this.generateToken(user, User.TYPE.CLIENT.name()))
+                .build());
     }
 
+    //1) Login de empleados.
     @PostMapping(value = "backoffice/login")
-    public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
-
-        Backoffice user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        if (user != null) {
-            UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(LoginResponseDto.builder().token(this.generateToken(dto, User.TYPE.BLACKOFFICE.name())).build());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCombinationUserPassword {
+        UserDto user = backofficeService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        return ResponseEntity
+                .ok(LoginResponseDto.builder()
+                        .token(this.generateToken(user, User.TYPE.BACKOFFICE.name()))
+                        .build());
     }
 
     private String generateToken(UserDto userDto, String authority) {
@@ -81,8 +75,9 @@ public class UserController {
                     .claim("user", objectMapper.writeValueAsString(userDto))
                     .claim("authorities",grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //24 horas
-                    .signWith(SignatureAlgorithm.HS512, JWT_SECRET.getBytes()).compact();
+                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10)) //10 dias
+                    .signWith(SignatureAlgorithm.HS512, JWT_SECRET.getBytes())
+                    .compact();
             return  token;
         } catch(Exception e) {
             return "dummy";

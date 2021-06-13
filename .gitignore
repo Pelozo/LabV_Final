@@ -35,3 +35,5 @@ build/
 ### Remote configuration
 src/main/resources/application-remote.yml
 src/main/resources/application-dev.yml
+
+db.sql
