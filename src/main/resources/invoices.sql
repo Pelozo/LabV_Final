@@ -90,9 +90,11 @@ END;
 
 DELIMITER ;
 
+DROP EVENT IF EXISTS invoice_event
+
 DELIMITER //
 CREATE EVENT invoice_event ON SCHEDULE EVERY 1 MONTH
-STARTS NOW() DO
+STARTS "2021-07-01 00:00:00" DO
 BEGIN 
 	CALL create_all_invoices();
 END;
@@ -100,3 +102,6 @@ END;
 DELIMITER ;
 
 SHOW EVENTS
+
+
+SELECT * FROM measurements
