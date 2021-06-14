@@ -59,7 +59,7 @@ public class TestUtils {
                 .email("martincaminero64@gmail.com")
                 .firstName("martin")
                 .lastName("caminero")
-                .residences(List.of())
+                //.residences(List.of())
                 .username("martin64")
                 .build();
     }
@@ -171,5 +171,18 @@ public class TestUtils {
     public static ResidenceDto aResidenceDto(){
         return new ModelMapper().map(aResidence(),ResidenceDto.class);
     }
+
+    public static MeterDto aMeterDto(){
+        return MeterDto.builder().serialNumber("123asd").id(1L).build();
+    }
+
+    public static Page<Meter> aMeterPage(){
+        return new PageImpl<>(List.of(aMeter()));
+    }
+
+    public static Page<MeterDto> aMeterDtoPage(){
+        return new PageImpl<>(List.of(aMeterDto()));
+    }
+
 }
 

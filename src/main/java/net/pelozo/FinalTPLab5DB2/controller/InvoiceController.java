@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,30 +20,21 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    //revisar no es algo que se pueda hacer desde el postman
-//    @PostMapping
-//    public ResponseEntity<Invoice> add(@RequestBody Invoice invoice){
-//        Invoice in = invoiceService.add(invoice);
-//
-//        return ResponseEntity.created(ServletUriComponentsBuilder
-//                    .fromCurrentRequest()
-//                    .path("/{id}")
-//                    .buildAndExpand(in.getId())
-//                    .toUri())
-//                .build();
-//    }
-
     @GetMapping
     public ResponseEntity<List<Invoice>> getInvoices(Pageable pageable){
         Page<Invoice> invoices = invoiceService.getAll(pageable);
         return response(invoices);
     }
+/*
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
+    //@GetMapping("/clients/{clientId}/residences/{residenceId}/invoices/unpaid")
+    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+        Page<Invoice> unpaidInvoices = backofficeService.getUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
-
-
-    //Consulta de facturas por rango de fechas.
-
-
-
+        return ResponseEntity
+                .status(unpaidInvoices.isEmpty()? HttpStatus.NO_CONTENT:HttpStatus.OK)
+                .body(unpaidInvoices.getContent());
+    }
+*/
 
 }

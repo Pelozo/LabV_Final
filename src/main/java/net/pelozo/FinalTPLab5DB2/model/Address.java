@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Data
@@ -25,9 +26,11 @@ public class Address {
     @GeneratedValue
     private long id;
 
+    @NotNull(message = "Street cannot be null")
     @Column(name = "street")
     private String street;
 
+    @NotNull(message = "Number cannot be null")
     @Column(name = "street_number")
     private int number;
 

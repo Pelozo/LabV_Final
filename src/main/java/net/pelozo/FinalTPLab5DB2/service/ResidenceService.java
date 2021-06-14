@@ -62,4 +62,12 @@ public class ResidenceService {
         }
     }
 
+    public Page<Residence> getByClient(Long clientId, Pageable pageable) throws ClientNotExistsException {
+        Client client = clientService.getById(clientId);
+        if(client != null){
+            return residenceRepository.findAllByClientId(clientId, pageable);
+        }else{
+            throw new ClientNotExistsException();
+        }
+    }
 }

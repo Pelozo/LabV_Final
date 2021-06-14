@@ -151,9 +151,11 @@ public class TariffServiceTest {
     @Test
     public void updateTariff_ThrowsIdViolationExceptionTest(){
         when(tariffRepository.findById(anyLong())).thenReturn(Optional.of(aTariff()));
+
+        Tariff wrongTariff = aTariff();
+        wrongTariff.setId(8L);
+
         assertThrows(IdViolationException.class, () -> {
-            Tariff wrongTariff = aTariff();
-            wrongTariff.setId(8L);
             tariffService.update(aTariff().getId(), wrongTariff);
         });
     }

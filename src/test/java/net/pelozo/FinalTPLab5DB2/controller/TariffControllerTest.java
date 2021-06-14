@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.service.TariffService;
@@ -112,7 +113,7 @@ public class TariffControllerTest {
         when(tariffService.getById(anyLong())).thenThrow(new NonExistentResourceException());
         //then
         assertThrows(NonExistentResourceException.class, () -> {
-            tariffService.getById(1L);
+            tariffController.getById(1L);
         });
     }
 
@@ -137,7 +138,7 @@ public class TariffControllerTest {
     @Test
     public void deleteTariff_ThrowsNonExistentResourceExceptionTest() throws NonExistentResourceException {
         //given
-        when(tariffController.deleteById(anyLong())).thenThrow(new NonExistentResourceException());
+        doThrow(new NonExistentResourceException()).when(tariffService).deleteById(anyLong());
         //then
         assertThrows(NonExistentResourceException.class, () -> {
             tariffController.deleteById(20L);
@@ -159,6 +160,24 @@ public class TariffControllerTest {
         } catch (NonExistentResourceException | IdViolationException e) {
             fail();
         }
+    }
 
+    @Test
+    public void updateMeter_ThrowsNonExistentResourceExceptionTest() throws IdViolationException, NonExistentResourceException {
+        doThrow(new NonExistentResourceException()).when(tariffService).update(anyLong(), any(Tariff.class));
+
+        assertThrows(NonExistentResourceException.class, () ->{
+            tariffController.updateTariff(1L, aTariff());
+        });
+
+    }
+
+    @Test
+    public void updateMeter_ThrowsIdViolationExceptionTest() throws IdViolationException, NonExistentResourceException {
+        doThrow(new IdViolationException()).when(tariffService).update(anyLong(), any(Tariff.class));
+
+        assertThrows(IdViolationException.class, () ->{
+            tariffController.updateTariff(1L, aTariff());
+        });
     }
 }

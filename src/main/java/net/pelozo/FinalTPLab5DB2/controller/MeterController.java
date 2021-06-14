@@ -2,8 +2,10 @@ package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
+import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
-import net.pelozo.FinalTPLab5DB2.service.TariffService;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
+import net.pelozo.FinalTPLab5DB2.service.MeterService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,63 +15,61 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
 import static net.pelozo.FinalTPLab5DB2.utils.MyResponse.response;
 
 @RestController
-@RequestMapping("/tariff")
-public class TariffController {
+@RequestMapping("/meters")
+public class MeterController {
 
-
-    TariffService tariffService;
+    private MeterService meterService;
 
     @Autowired
-    public TariffController(TariffService tariffService) {
-        this.tariffService = tariffService;
+    public MeterController(MeterService meterService) {
+        this.meterService = meterService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Tariff>> getAll(Pageable pageable){
-        Page<Tariff> tariffs = tariffService.getAll(pageable);
-        return response(tariffs);
+    public ResponseEntity<List<MeterDto>> getAll(Pageable pageable){
+        Page<MeterDto> meters = meterService.getAll(pageable);
+        return response(meters);
     }
 
-    //2) Alta, baja y modificación de tarifas.
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity addTariff(@RequestBody Tariff newTariff){
-        Tariff tariff =  tariffService.add(newTariff);
+    public ResponseEntity add(@RequestBody Meter newMeter){
+        MeterDto meter =  meterService.add(newMeter);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .location(EntityURLBuilder.buildURL("tariffs",tariff.getId()))
+                .location(EntityURLBuilder.buildURL("meters", meter.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body("");
     }
 
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/{id}")
-    public ResponseEntity<Tariff> getById(@PathVariable Long id) throws NonExistentResourceException{
-        Tariff tariff = tariffService.getById(id);
-        return ResponseEntity.ok(tariff);
+    public ResponseEntity<MeterDto> getById(@PathVariable Long id) throws NonExistentResourceException {
+        MeterDto meter = meterService.getById(id);
+        return ResponseEntity.ok(meter);
     }
 
-    //2) Alta, baja y modificación de tarifas.
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException{
-        tariffService.deleteById(id);
+        meterService.deleteById(id);
         return ResponseEntity.accepted().build();
     }
 
-    //2) Alta, baja y modificación de tarifas.
+    //3) Alta, baja y modificación de domicilios y medidores
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
-    public ResponseEntity updateTariff(@PathVariable Long id,
-                                               @RequestBody Tariff tariff) throws NonExistentResourceException, IdViolationException {
-        tariffService.update(id, tariff);
+    public ResponseEntity updateMeter(@PathVariable Long id,
+                                       @RequestBody Meter meter) throws NonExistentResourceException, IdViolationException {
+        meterService.update(id, meter);
         return ResponseEntity.accepted().build();
     }
 

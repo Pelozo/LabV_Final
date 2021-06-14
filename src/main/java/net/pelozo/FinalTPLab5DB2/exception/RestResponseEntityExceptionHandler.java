@@ -18,18 +18,6 @@ import static net.pelozo.FinalTPLab5DB2.utils.Misc.parseDataConstraintEx;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @ExceptionHandler({ConstraintViolationException.class})
-//    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request){
-//        List<String> errors = new ArrayList<>();
-//        for(ConstraintViolation violation : ex.getConstraintViolations()){
-//            errors.add(violation.getMessage());
-//        }
-//        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-//        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getHttpstatus());
-//
-//        return  ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiError(1,ex.getMessage()));
-//    }
-
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request){
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(2, ex.getConstraintViolations().iterator().next().getMessage()));
@@ -61,8 +49,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> AccessDeniedViolation(AccessDeniedException ex, WebRequest request){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied!");
+    public ResponseEntity<ApiError> AccessDeniedViolation(AccessDeniedException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiError(3, ex.getMessage()));
     }
 
     @ExceptionHandler(NonExistentResourceException.class)
@@ -71,7 +59,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(IdViolationException.class)
-    public ResponseEntity<ApiError> NonExistentResource(IdViolationException ex, WebRequest request){
+    public ResponseEntity<ApiError> IdViolationException(IdViolationException ex, WebRequest request){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(IdViolationException.errorCode, ex.getMessage()));
     }
 

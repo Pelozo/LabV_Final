@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,7 @@ import java.util.Objects;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class ClientControllerTest{
@@ -40,7 +40,6 @@ public class ClientControllerTest{
 
     private ModelMapper modelMapper;
 
-    @Mock
     private ClientController clientController;
 
     @BeforeEach
@@ -53,19 +52,21 @@ public class ClientControllerTest{
     }
 
     @Test
-    public void getAllTestOk() throws Exception {
+    public void getAllTestOk(){
         //given
-        Pageable pageable = PageRequest.of(1,10);
-        when(clientService.getAll(pageable)).thenReturn(aClientPage());
+        when(clientService.getAll(aPageable())).thenReturn(aClientPage());
         when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(aClientDto());
 
         //when
-        ResponseEntity<List<ClientDto>> response = clientController.getAll(pageable);
+        ResponseEntity<List<ClientDto>> response = clientController.getAll(aPageable());
 
         //then
         assertEquals(HttpStatus.OK.value(),response.getStatusCodeValue());
         assertEquals(1, Objects.requireNonNull(response.getBody()).size());
-        assertEquals(aClientPage().getContent().get(0).getDni(),response.getBody().get(0).getDni());
+        assertEquals(
+                aClientPage().getContent().get(0).getDni(),
+                response.getBody().get(0).getDni()
+        );
     }
 
 
@@ -92,15 +93,19 @@ public class ClientControllerTest{
     }
 
     @Test
-    public void deleteClientOk() throws ClientNotExistsException {
-        //given
-        doNothing().when(clientService).deleteById(anyLong());
+    public void deleteClientOk(){
 
-        //when
-        ResponseEntity<Object> responseEntity = clientController.deleteById(1L);
+        try {
+            //given
+            doNothing().when(clientService).deleteById(anyLong());
+            //when
+            ResponseEntity<Object> responseEntity = clientController.deleteById(1L);
 
-        //then
-        assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
+            //then
+            assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
+        } catch (ClientNotExistsException e) {
+           fail();
+        }
     }
 
     @Test
@@ -115,24 +120,30 @@ public class ClientControllerTest{
     }
 
     @Test
-    public void getByIdTestOk() throws ClientNotExistsException {
-        //given
-        when(clientService.getById(anyLong())).thenReturn(aClient());
-        when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(aClientDto());
+    public void getByIdTestOk(){
 
-        //when
-        ResponseEntity<ClientDto> response = clientController.getById(1L);
+        try {
+            //given
+            when(clientService.getById(anyLong())).thenReturn(aClient());
+            when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(aClientDto());
 
-        //then
-        assertEquals(
-                HttpStatus.OK,
-                response.getStatusCode()
-        );
+            //when
+            ResponseEntity<ClientDto> response = clientController.getById(1L);
 
-        assertEquals(
-                aClient().getDni(),
-                response.getBody().getDni()
-        );
+            //then
+            assertEquals(
+                    HttpStatus.OK,
+                    response.getStatusCode()
+            );
+
+            assertEquals(
+                    aClient().getDni(),
+                    response.getBody().getDni()
+            );
+        } catch (ClientNotExistsException e) {
+            fail();
+        }
+
     }
 
     @Test
@@ -190,75 +201,26 @@ public class ClientControllerTest{
         );
     }
 
-
-/*
-
+    @Test
     public void getInvoicesByUserAndDate_ExpectsEmptyResponseTest(){
         //given
         Date date = mock(Date.class);
         when(date.getTime()).thenReturn(30L);
-        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(anEmptyPage());
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(Page.empty());
         //when
         ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
         assertEquals(
-                HttpStatus.OK,
+                HttpStatus.NO_CONTENT,
                 response.getStatusCode()
         );
         assertEquals(
-                1,
+                0,
                 response.getBody().size()
-        );
-        assertEquals(
-                aInvoicePage().toList().get(0).getLastReading(),
-                response.getBody().get(0).getLastReading()
         );
     }
 
- */
 
-//    @Test
-//    public void getAllTestOk() throws Exception {
-//
-//
-//        Mockito.when(clientService.getAll(Mockito.any(Pageable.class)))
-//                .thenReturn(aClientPage());
-//
-//        final ResultActions resultActions = givenController().perform(MockMvcRequestBuilders
-//                .get("/clients")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//
-//        assertEquals(HttpStatus.OK.value(), resultActions.andReturn().getResponse().getStatus());
-//    }
 
-//    @Test
-//    public void addClientTestOk() throws Exception {
-//
-//        Mockito.when(clientService.add(Mockito.any(Client.class)))
-//                .thenReturn(aClient());
-//
-//        final ResultActions resultActions = givenController().perform(MockMvcRequestBuilders
-//                .post("/clients")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(aClientJSON()))
-//                .andExpect(status().isCreated());
-//
-//        assertEquals(HttpStatus.CREATED.value(), resultActions.andReturn().getResponse().getStatus());
-//    }
-//
-//    @Test
-//    public void getByIdTestOk() throws Exception, ClientNotExistsException {
-//
-//        Mockito.when(clientService.getById(Mockito.any(Long.class)))
-//                .thenReturn(aClient());
-//
-//        final ResultActions resultActions = givenController().perform(MockMvcRequestBuilders
-//                    .get("/clients/1")
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk());
-//
-//        assertEquals(HttpStatus.OK.value(),resultActions.andReturn().getResponse().getStatus());
-//    }
 
 }

@@ -122,4 +122,34 @@ public class ResidenceServiceTest {
         });
     }
 
+    @Test
+    public void getByClientOkTest(){
+
+        try {
+            when(clientService.getById(anyLong())).thenReturn(aClient());
+            when(residenceRepository.findAllByClientId(anyLong(), any(Pageable.class))).thenReturn(aResidencePage());
+
+            Page<Residence> residences = residenceService.getByClient(1L, aPageable());
+
+            assertTrue(residences.hasContent());
+            assertEquals(aResidence().getId(),residences.getContent().get(0).getId());
+
+        } catch (ClientNotExistsException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void getByClient_ThrowsClientNotExistsExceptionTest() throws ClientNotExistsException {
+
+        when(clientService.getById(anyLong())).thenReturn(null);
+
+        assertThrows(ClientNotExistsException.class,()->{
+            residenceService.getByClient(1L,aPageable());
+        });
+
+
+    }
+
+
 }

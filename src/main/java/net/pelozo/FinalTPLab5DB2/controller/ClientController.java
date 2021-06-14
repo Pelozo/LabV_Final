@@ -84,7 +84,7 @@ public class ClientController {
         return ResponseEntity.ok(cd);
     }
 
-    //consulta facturas por cliente
+    //2) Consulta de facturas por rango de fechas.
     @GetMapping("/{id}/invoices")
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id,
@@ -95,6 +95,7 @@ public class ClientController {
         return response(invoices);
     }
 
+    //3) Consulta de deuda (Facturas impagas)
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}/invoices/unpaid")
     public ResponseEntity<List<Invoice>> getUnpaidInvoices(@PathVariable long id,
@@ -103,44 +104,51 @@ public class ClientController {
         return response(invoices);
     }
 
-
-    //consultar facturas por fecha
-
-    //consultar facturas impagas
-
-    //consultar consumo por rango de fechas
+    //4) Consulta de consumo por rango de fechas (el usuario va a ingresar un rango
+    //de fechas y quiere saber cuánto consumió en ese periodo en Kwh y dinero)
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}/intake")
-    public ResponseEntity<Optional<Intake>> getIntakeByDateRange ( @PathVariable long id,
-    @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-    @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to) throws NonExistentResourceException {
+    public ResponseEntity<Optional<Intake>> getIntakeByDateRange (@PathVariable long id,
+                                                                  @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                  @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to)throws NonExistentResourceException {
 
         Optional<Intake> intake = measurementService.getIntakeByRangeOfDates(id, from, to);
 
         return ResponseEntity.status(intake.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(intake);
     }
 
-
-        //consultar mediciones por rango de fecha
-        @GetMapping("/{id}/measurements")
-        public ResponseEntity<List<MeasurementsDto>> getMeasurementsByDateRange (@PathVariable long id,
-                                                                                 @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
-                                                                                 @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
-                                                                                 Pageable pageable)
-        {
-            Page<MeasurementsDto> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
-            return response(measurements);
-        }
-
-        @GetMapping("topConsumers")
-        public ResponseEntity<List<ClientDto>> getTopTenConsumers(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                                               @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to){
-            List<ClientDto> clients = clientService.getTopTenConsumers(from,to);
-
-            return  ResponseEntity
-                    .status(clients.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
-                    .body(clients);
-        }
-
-
+    //5) Consulta de mediciones por rango de fechas
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
+    @GetMapping("/{id}/measurements")
+    public ResponseEntity<List<MeasurementsDto>> getMeasurementsByDateRange (@PathVariable long id,
+                                                                             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime from,
+                                                                             @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime to,
+                                                                             Pageable pageable){
+        Page<MeasurementsDto> measurements = measurementService.getMeasurementsByDateRange(id, from, to, pageable);
+        return response(measurements);
     }
+
+    //5) Consulta 10 clientes más consumidores en un rango de fechas.
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
+    @GetMapping("topConsumers")
+    public ResponseEntity<List<ClientDto>> getTopTenConsumers(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+                                                              @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to){
+        List<ClientDto> clients = clientService.getTopTenConsumers(from,to);
+
+        return  ResponseEntity
+                .status(clients.isEmpty()?HttpStatus.NO_CONTENT:HttpStatus.OK)
+                .body(clients);
+    }
+
+    //4) Consulta de facturas impagas por cliente y domicilio.
+    @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
+    @GetMapping("/{clientId}/residences/{residenceId}/invoices/unpaid")
+    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+        Page<Invoice> unpaidInvoices = invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
+
+        return response(unpaidInvoices);
+    }
+
+
+}
 
