@@ -17,6 +17,9 @@ Login de empleados.| POST|/backoffice/login|[UserController:60](https://github.c
 Alta de tarifas.|POST|/tariff|[TariffController:43](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/TariffController.java#L43)|{"name": "basic","value": 8}|✔
 Baja de tarifas.|DELETE|/tariff/{id]|[TariffController:61](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/TariffController.java#L61)||✔
 Modificación de tarifas.|PUT|/tariff/{id]|[TariffController:70](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/TariffController.java#L70)|{"name": "basic","value": 10}|✔
+Alta de domicilios|POST|/clients/{idClient}/residences|[ResidenceController:55](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/ResidenceController.java#L55)|{"tariff": {"id": 1},"meter": {"id": 13},"address": {"street": "una calle","number":754}}|✔
+Baja de domicilios|DELETE|/residences/{idResidence}|
+
 Alta de domicilios|POST|/clients/{idClient}/residences|[ResidenceController:55](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/ResidenceController.java#L55)||
 
 
@@ -70,4 +73,7 @@ Domicilio:
 6) Consulta de mediciones de un domicilio por rango de fechas
 
    	measurements/residence/{residenceId}
+
+
+
 
