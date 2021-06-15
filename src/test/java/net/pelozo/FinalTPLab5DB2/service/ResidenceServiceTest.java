@@ -4,7 +4,10 @@ import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
+import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
+import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
 import net.pelozo.FinalTPLab5DB2.repository.ResidenceRepository;
+import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -24,13 +27,19 @@ public class ResidenceServiceTest {
     ModelMapper modelMapper;
     ClientService clientService;
     ResidenceService residenceService;
+    TariffRepository tariffRepository;
+    MeterRepository meterRepository;
+    ClientRepository clientRepository;
 
     @BeforeEach
     public void setUp(){
         residenceRepository = mock(ResidenceRepository.class);
         modelMapper = mock(ModelMapper.class);
         clientService = mock(ClientService.class);
-        residenceService = new ResidenceService(residenceRepository,modelMapper,clientService);
+        tariffRepository = mock(TariffRepository.class);
+        meterRepository = mock(MeterRepository.class);
+        clientRepository = mock(ClientRepository.class);
+        residenceService = new ResidenceService(residenceRepository,modelMapper,clientService, tariffRepository, meterRepository, clientRepository);
     }
 
     @Test
@@ -106,7 +115,7 @@ public class ResidenceServiceTest {
                 .thenReturn(Optional.of(aResidence()));
         when(residenceRepository.save(any(Residence.class)))
                 .thenReturn(aResidence());
-        Residence residence = residenceService.update(1L,aResidence());
+        Residence residence = residenceService.update(1L,aNewResidenceDto());
 
         assertNotNull(residence);
         assertEquals(aResidence().getId(),residence.getId());
@@ -118,7 +127,7 @@ public class ResidenceServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(NonExistentResourceException.class,()->{
-            residenceService.update(1L,aResidence());
+            residenceService.update(1L,aNewResidenceDto());
         });
     }
 

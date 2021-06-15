@@ -1,16 +1,14 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
+import net.pelozo.FinalTPLab5DB2.model.*;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
-import net.pelozo.FinalTPLab5DB2.model.Client;
-import net.pelozo.FinalTPLab5DB2.model.Intake;
-import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.model.Measurement;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
+import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +40,17 @@ public class ClientController {
     private final InvoiceService invoiceService;
     private final ModelMapper modelMapper;
     private final MeasurementService measurementService;
-
+    private final ResidenceService residenceService;
 
     @Autowired
-    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper, MeasurementService measurementService) {
+    public ClientController(ClientService clientService, InvoiceService invoiceService, ModelMapper modelMapper, MeasurementService measurementService, ResidenceService residenceService) {
         this.clientService = clientService;
         this.invoiceService = invoiceService;
         this.modelMapper = modelMapper;
         this.measurementService = measurementService;
+        this.residenceService = residenceService;
     }
+
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping
     public ResponseEntity<List<ClientDto>> getAll(Pageable pageable){
@@ -147,6 +147,18 @@ public class ClientController {
         Page<Invoice> unpaidInvoices = invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
         return response(unpaidInvoices);
+    }
+
+    //3) Alta, baja y modificación de domicilios y medidores
+    @PostMapping("/{clientId}/residences")
+    public ResponseEntity<String> addResidence(@PathVariable Long clientId, @RequestBody Residence newResidence) throws ClientNotExistsException {
+        Residence residence = residenceService.add(clientId, newResidence);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(EntityURLBuilder.buildURL("residences",residence.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("");
     }
 
 

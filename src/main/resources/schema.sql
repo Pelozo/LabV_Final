@@ -70,7 +70,7 @@ DROP TABLE IF EXISTS meters;
 CREATE TABLE meters
 (
     `id`          INT(11) NOT NULL AUTO_INCREMENT,
-    serial_number INT(11) NOT NULL,
+    serial_number VARCHAR(30) NOT NULL,
     model_id      INT(11) NOT NULL,
     PASSWORD      VARCHAR(20) NOT NULL,
     CONSTRAINT pk_meter PRIMARY KEY (id),

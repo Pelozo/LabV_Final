@@ -2,6 +2,7 @@ package net.pelozo.FinalTPLab5DB2.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,15 +15,13 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "residences")
 public class Residence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // TODO: a esto hay que ponerle @JsonIgnore
-    // TODO: es necesario hacer ResidenceDTO por si queresmos mostrar el dueño de una casa???
 
     @JsonBackReference
     @NotNull(message = "client cannot be null")
@@ -31,17 +30,17 @@ public class Residence {
     private Client client;
 
     @NotNull(message = "tariff cannot be null")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "tariff_id")
     private Tariff tariff;
 
     @NotNull(message = "meter cannot be null")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "meter_id")
     private Meter meter;
 
     @NotNull(message = "address cannot be null")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 

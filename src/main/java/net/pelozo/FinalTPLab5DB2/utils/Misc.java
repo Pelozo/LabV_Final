@@ -21,12 +21,17 @@ public class Misc {
     private Misc() {}
 
     public static String parseDataConstraintEx(DataIntegrityViolationException ex){
-        Pattern pattern = Pattern.compile(".+?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
+        //Pattern pattern = Pattern.compile(".+?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
+        //Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?", Pattern.CASE_INSENSITIVE);
+
         Matcher matcher = pattern.matcher(ex.getMessage());
+
+        ex.printStackTrace();
         if(matcher.find()) {
-            return "Constraint error with "  + matcher.group(1).toLowerCase();
+            return "Constraint error with " + matcher.group(1).toLowerCase();
         } else {
-            return "Constraint error";
+            return "Constraint error: " + ex.getMessage();
         }
     }
 

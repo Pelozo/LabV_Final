@@ -134,6 +134,10 @@ public class TestUtils {
         return new ModelMapper().map(aMeasurement(),MeasurementsDto.class);
     }
 
+    public static NewResidenceDto aNewResidenceDto(){
+        return new ModelMapper().map(aResidence(),NewResidenceDto.class);
+    }
+
     public static Page<Measurement> aMeasurementPage() {
         return new PageImpl<>(List.of(aMeasurement()));
     }
