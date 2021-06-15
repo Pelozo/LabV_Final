@@ -103,5 +103,31 @@ DELIMITER ;
 
 SHOW EVENTS
 
+EXPLAIN SELECT * 
+FROM measurements m
+JOIN residences r 
+ON r.id = m.residence_id
+JOIN clients c
+ON c.id = r.client_id
+JOIN meters mt
+ON r.meter_id = mt.id
+WHERE m.date BETWEEN "2022-04-17 16:32:08" AND "2022-05-10 14:42:34"
 
-SELECT * FROM measurements
+
+-- esto demuestra que el indice existe y puede ser utilizado
+EXPLAIN SELECT * FROM measurements WHERE `date` BETWEEN "2021-06-17 16:32:08" AND "2021-06-17 16:45:08" AND residence_id = 8;
+
+-- indice por id de residencia
+CREATE INDEX idx_measurements_residence
+ON measurements (residence_id) 
+USING HASH;
+
+
+
+CREATE INDEX idx_measurements_date
+ON measurements (`date`)
+USING BTREE;
+
+SHOW INDEX measurements
+
+SELECT * FROM measurements WHERE residence_id = 2
