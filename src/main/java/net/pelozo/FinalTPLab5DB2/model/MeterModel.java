@@ -26,9 +26,13 @@ public class MeterModel {
     private String name;
 
 
+
     @NotNull(message = "Brand cannot be null")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="brand_id", nullable = false)
     private MeterBrand brand;
+
+
 
 
 }

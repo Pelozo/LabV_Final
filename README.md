@@ -19,3 +19,61 @@ Baja de tarifas.|DELETE|/tariff/{id]|[TariffController:61](https://github.com/Pe
 Modificación de tarifas.|PUT|/tariff/{id]|[TariffController:70](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/TariffController.java#L70)|{"name": "basic","value": 10}|✔
 Alta de domicilios|POST|/clients/{idClient}/residences|[ResidenceController:55](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/ResidenceController.java#L55)|{"tariff": {"id": 1},"meter": {"id": 13},"address": {"street": "una calle","number":754}}|✔
 Baja de domicilios|DELETE|/residences/{idResidence}|
+
+Alta de domicilios|POST|/clients/{idClient}/residences|[ResidenceController:55](https://github.com/Pelozo/LabV_Final/blob/main/src/main/java/net/pelozo/FinalTPLab5DB2/controller/ResidenceController.java#L55)||
+
+
+Alta, baja y modificación de **domicilios** y medidores.
+Domicilio:
+
+			Alta:
+					POST /clients/{idClient}/residences
+					
+			Baja: 
+					DELETE /clients/{idClient}/residences/{idResidence}
+					
+					Salvar:
+							Tariff
+							Client
+					
+					Matar 
+							Meter	
+							Address
+							Measurements
+							Invoice (tratar de salvar?)
+
+			Modificación
+			
+					PUT /clients/{idClient}/residences/{idResidence}
+					
+					Client
+					Tariff
+					Address
+					Meter
+					
+		Medidores:
+		
+			Alta: 
+					POST /meters/					
+			Baja:
+					DELETE /meters/{id}
+
+			Modificación:
+					PUT /meters/{id}
+
+4) Consulta de facturas impagas por cliente y domicilio.
+
+       /clients/{clientId}/residences/{residenceId}/invoices/unpaid
+
+5) Consulta 10 clientes más consumidores en un rango de fechas.
+
+   	/clients/topConsumers?from=2000-01-01&to=2222-01-01
+
+
+6) Consulta de mediciones de un domicilio por rango de fechas
+
+   	measurements/residence/{residenceId}
+
+
+
+

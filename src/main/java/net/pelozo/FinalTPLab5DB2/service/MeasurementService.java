@@ -41,6 +41,7 @@ public class MeasurementService {
 
         Optional<Meter> m = meterService.getBySerialNumberAndPassword(measurement.getSerialNumber(),measurement.getPassword());
 
+        System.out.println(m);
         if(m.isPresent()){
             Optional<Residence> r = residenceService.getByMeter(m.get());
             if(r.isPresent()) {
@@ -50,6 +51,7 @@ public class MeasurementService {
                         .kwhValue(measurement.getValue())
                         .build();
                 return measurementRepository.save(me);
+
             }else{
                 throw new ResidenceNotExistsException();
             }

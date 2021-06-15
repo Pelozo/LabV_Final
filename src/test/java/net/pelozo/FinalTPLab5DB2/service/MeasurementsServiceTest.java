@@ -50,7 +50,7 @@ public class MeasurementsServiceTest {
     }
 
     @Test
-    public void addTestOk() throws MeterNotExistsException, ResidenceNotExistsException {
+    public void addTestOk(){
         Optional<Meter>optMeter = Optional.of(aMeter());
         Optional<Residence>optResidence = Optional.of(aResidence());
         MeasurementDto measurementDto = aMeasurementDto();
@@ -64,11 +64,19 @@ public class MeasurementsServiceTest {
         when(residenceService.getByMeter(aMeter()))
                 .thenReturn(optResidence);
 
-        when(measurementRepository.save(aMeasurement())).thenReturn(aMeasurement());
+        when(measurementRepository.save(any())).thenReturn(aMeasurement());
 
-        Measurement measurement = measurementService.add(measurementDto);
 
-        //assertEquals(aMeasurement().getId(),measurement.getId());
+        try {
+            Measurement measurement = measurementService.add(measurementDto);
+            assertEquals(aMeasurement().getId(),measurement.getId());
+        } catch (ResidenceNotExistsException e) {
+            e.printStackTrace();
+        } catch (MeterNotExistsException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 

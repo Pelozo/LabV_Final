@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.NewResidenceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
 import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
@@ -51,18 +52,6 @@ public class ResidenceController {
     }
 
     //3) Alta, baja y modificación de domicilios y medidores
-    @PostMapping("/clients/{clientId}/residencies")
-    public ResponseEntity<String> addResidence(@PathVariable Long clientId, @RequestBody Residence newResidence) throws ClientNotExistsException {
-        Residence residence = residenceService.add(clientId, newResidence);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .location(EntityURLBuilder.buildURL("residences",residence.getId()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .body("");
-    }
-
-    //3) Alta, baja y modificación de domicilios y medidores
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) throws NonExistentResourceException {
         residenceService.deleteById(id);
@@ -71,7 +60,7 @@ public class ResidenceController {
 
     //3) Alta, baja y modificación de domicilios y medidores
     @PutMapping("/{id}")
-    public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody Residence residence) throws NonExistentResourceException, IdViolationException {
+    public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody NewResidenceDto residence) throws NonExistentResourceException, IdViolationException {
         residenceService.update(id, residence);
         return ResponseEntity.accepted().build();
     }

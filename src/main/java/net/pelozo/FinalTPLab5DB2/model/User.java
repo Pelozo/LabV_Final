@@ -30,7 +30,6 @@ public abstract class User {
     @NotNull(message = "username cannot be null")
     @NotEmpty(message = "username cannot be empty")
     @Size(min = 5, max = 15, message = "username length must be between 5 and 15 characters")
-
     private String username;
 
     //@JsonIgnore//preguntar por @JsonIgnore si esta puesto toma el campo como null

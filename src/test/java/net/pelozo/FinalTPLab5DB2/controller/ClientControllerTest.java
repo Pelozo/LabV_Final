@@ -8,6 +8,7 @@ import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
+import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,10 @@ import static org.mockito.Mockito.*;
 public class ClientControllerTest{
 
     private ClientService clientService;
-
     private InvoiceService invoiceService;
-
     private MeasurementService measurementService;
-
     private ModelMapper modelMapper;
+    private ResidenceService residenceService;
 
     private ClientController clientController;
 
@@ -48,7 +47,8 @@ public class ClientControllerTest{
         invoiceService = mock(InvoiceService.class);
         measurementService = mock(MeasurementService.class);
         modelMapper = mock(ModelMapper.class);
-        clientController = new ClientController(clientService,invoiceService,modelMapper,measurementService);
+        residenceService = mock(ResidenceService.class);
+        clientController = new ClientController(clientService,invoiceService,modelMapper,measurementService, residenceService);
     }
 
     @Test

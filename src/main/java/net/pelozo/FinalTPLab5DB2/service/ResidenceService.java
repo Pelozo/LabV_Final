@@ -5,8 +5,14 @@ import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
+import net.pelozo.FinalTPLab5DB2.model.Tariff;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.NewResidenceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
+import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
+import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
 import net.pelozo.FinalTPLab5DB2.repository.ResidenceRepository;
+import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,12 +28,19 @@ public class ResidenceService {
     private ResidenceRepository residenceRepository;
     private ModelMapper modelMapper;
     private ClientService clientService;
+    private TariffRepository tariffRepository;
+    private MeterRepository meterRepository;
+    private ClientRepository clientRepository;
+
 
     @Autowired
-    public ResidenceService(ResidenceRepository residenceRepository, ModelMapper modelMapper, ClientService clientService) {
+    public ResidenceService(ResidenceRepository residenceRepository, ModelMapper modelMapper, ClientService clientService, TariffRepository tariffRepository, MeterRepository meterRepository, ClientRepository clientRepository) {
         this.residenceRepository = residenceRepository;
         this.modelMapper = modelMapper;
         this.clientService = clientService;
+        this.tariffRepository = tariffRepository;
+        this.meterRepository = meterRepository;
+        this.clientRepository = clientRepository;
     }
 
     public Optional<Residence> getByMeter(Meter meter){
@@ -40,6 +53,12 @@ public class ResidenceService {
 
     public Residence add(Long clientId, Residence residence) throws ClientNotExistsException {
         Client client = clientService.getById(clientId);
+        Tariff t = tariffRepository.getOne(residence.getTariff().getId());
+        Meter m = meterRepository.getOne(residence.getMeter().getId());
+
+
+        residence.setTariff(t);
+        residence.setMeter(m);
         residence.setClient(client);
         return residenceRepository.save(residence);
     }
@@ -53,10 +72,17 @@ public class ResidenceService {
         }
     }
 
-    public Residence update(Long id, Residence residence) throws NonExistentResourceException {
+    public Residence update(Long id, NewResidenceDto residence) throws NonExistentResourceException {
         Optional<Residence> newResidence = residenceRepository.findById(id);
+
+
         if(newResidence.isPresent()) {
-            return residenceRepository.save(residence);
+            Tariff t = tariffRepository.getOne(residence.getTariff().getId());
+            Meter m = meterRepository.getOne(residence.getMeter().getId());
+            newResidence.get().setTariff(t);
+            newResidence.get().setMeter(m);
+            newResidence.get().setAddress(residence.getAddress());
+            return residenceRepository.save(newResidence.get());
         }else{
             throw new NonExistentResourceException();
         }
