@@ -15,7 +15,6 @@ import java.util.LinkedList;
 @Repository
 public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
 
-    //TODO preguntar al profe porque no encuentra el id
     @Query(value = "SELECT M.*" +
             "FROM MEASUREMENTS M " +
             "JOIN RESIDENCES R " +
@@ -23,7 +22,6 @@ public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
             "WHERE R.CLIENT_ID = :clientId AND M.DATE BETWEEN :from AND :to ",
             nativeQuery = true)
     LinkedList<Measurement> findListOfIntakeByRangeOfDates(@Param("clientId")long clientId, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
-
 
     @Query(value = "SELECT M.*\n" +
             "FROM MEASUREMENTS M " +
