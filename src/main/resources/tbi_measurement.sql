@@ -32,6 +32,7 @@ BEGIN
 	ON m.residence_id = r.id
 	WHERE r.meter_id = v_meter_id;
 	
+	-- verificamos si existe una ultima medicion
 	IF(v_last_date IS NOT NULL) THEN
 	
 	/*traemos la ultima medicion del medidor*/
@@ -44,10 +45,11 @@ BEGIN
 		AND `date` = v_last_date
 		ORDER BY m.id DESC
 		LIMIT 1;
-	
+	-- si existe a la nueva medicion le restamos la ultima y multiplicamos el resultado por el valor de la tarifa.
 		SET new.kwh_price = (new.kwh_value - v_last_measurement) * v_tariff_amount;
 	
 	ELSE
+	-- si no existe una ultima medicion entonces tomamos la nueva medicion y la multiplicamos por el valor de la tarifa.
 		SET new.kwh_price = new.kwh_value * v_tariff_amount;
 	END IF;
 

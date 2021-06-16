@@ -58,8 +58,6 @@ public class MeasurementService {
         }else {
             throw new MeterNotExistsException();
         }
-
-
         //return measurementRepository.save(me);
 
     }
