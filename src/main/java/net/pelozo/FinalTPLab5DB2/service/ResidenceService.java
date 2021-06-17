@@ -61,10 +61,11 @@ public class ResidenceService {
         if (t.isEmpty()) {
             throw new InvalidResourceIdException("Tariff");
         }
-
         if (m.isEmpty()) {
             throw new InvalidResourceIdException("Meter");
         }
+
+
 
         residence.setTariff(t.get());
         residence.setMeter(m.get());

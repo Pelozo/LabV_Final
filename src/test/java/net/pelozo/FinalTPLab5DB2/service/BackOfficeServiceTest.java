@@ -3,6 +3,7 @@ package net.pelozo.FinalTPLab5DB2.service;
 import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
 import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
+import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.UserDto;
 import net.pelozo.FinalTPLab5DB2.repository.BackofficeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,9 +62,9 @@ public class BackOfficeServiceTest {
     @Test
     public void getUnpaidInvoicesByClientAndResidenceTestOk(){
         when(invoiceService.findUnpaidInvoicesByClientAndResidence(anyLong(),anyLong(),any(Pageable.class)))
-                .thenReturn(anInvoicePage());
+                .thenReturn(aInvoiceDtoPage());
 
-        Page<Invoice> invoices = backofficeService.getUnpaidInvoicesByClientAndResidence(1L,1L, aPageable());
+        Page<InvoiceDto> invoices = backofficeService.getUnpaidInvoicesByClientAndResidence(1L,1L, aPageable());
 
         assertNotNull(invoices);
         assertEquals(anInvoice().getId(),invoices.getContent().get(0).getId());

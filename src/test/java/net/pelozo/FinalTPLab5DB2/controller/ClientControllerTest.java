@@ -1,31 +1,34 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import net.pelozo.FinalTPLab5DB2.model.Invoice;
-import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
-
+import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.model.Intake;
+import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
+import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
+import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
-import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.ResidenceService;
 import net.pelozo.FinalTPLab5DB2.utils.EntityURLBuilder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.mock.web.MockHttpServletRequest;
+import java.util.Optional;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -161,9 +164,9 @@ public class ClientControllerTest{
         //given
         Date date = mock(Date.class);
         when(date.getTime()).thenReturn(30L);
-        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(anInvoicePage());
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(aInvoiceDtoPage());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
         assertEquals(
                 HttpStatus.OK,
@@ -174,7 +177,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                anInvoicePage().toList().get(0).getLastReading(),
+                aInvoiceDtoPage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }
@@ -182,9 +185,9 @@ public class ClientControllerTest{
     @Test
     public void getUnpaidInvoicesByClient(){
         //given
-        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(anInvoicePage());
+        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(aInvoiceDtoPage());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getUnpaidInvoices(1L, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getUnpaidInvoices(1L, aPageable());
 
         //then
         assertEquals(
@@ -196,7 +199,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                anInvoicePage().toList().get(0).getLastReading(),
+                aInvoiceDtoPage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }
@@ -208,7 +211,7 @@ public class ClientControllerTest{
         when(date.getTime()).thenReturn(30L);
         when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(Page.empty());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
         assertEquals(
                 HttpStatus.NO_CONTENT,
@@ -221,6 +224,65 @@ public class ClientControllerTest{
     }
 
 
+    @Test
+    public void getIntakeByDateRangeTestOk() throws NonExistentResourceException {
+        when(measurementService.getIntakeByRangeOfDates(anyLong(),any(LocalDateTime.class),any(LocalDateTime.class)))
+                .thenReturn(Optional.of(anIntake()));
+
+        ResponseEntity<Optional<Intake>> response = clientController.getIntakeByDateRange(1,LocalDateTime.now(),LocalDateTime.now());
+
+
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().isPresent());
+        assertNotNull(response.getBody().get());
+        assertEquals(response.getBody().get().getKwhPrice(),anIntake().getKwhPrice());
+        assertEquals(response.getStatusCode(),HttpStatus.OK);
+
+    }
+
+    @Test
+    public void getIntakeByDateRangeTest_HttpNoContent() throws NonExistentResourceException {
+        when(measurementService.getIntakeByRangeOfDates(anyLong(),any(LocalDateTime.class),any(LocalDateTime.class)))
+                .thenReturn(Optional.empty());
+
+        ResponseEntity<Optional<Intake>> response = clientController.getIntakeByDateRange(1,LocalDateTime.now(),LocalDateTime.now());
+
+
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isPresent());
+        assertEquals(response.getStatusCode(),HttpStatus.NO_CONTENT);
+
+    }
+
+    @Test
+    public void getMeasurementsByDateRangeTestOk(){
+        when(measurementService.getMeasurementsByDateRange(anyLong(),any(LocalDateTime.class),any(LocalDateTime.class),eq(aPageable())))
+                .thenReturn(aMeasurementsDtoPage());
+
+        ResponseEntity<List<MeasurementsDto>> response = clientController.getMeasurementsByDateRange(1,LocalDateTime.now(),LocalDateTime.now(),aPageable());
+
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
+        response.getBody().forEach(Assertions::assertNotNull);
+        assertEquals(response.getBody().get(0).getKwhPrice(),aMeasurementsDto().getKwhPrice());
+        assertEquals(response.getStatusCode(),HttpStatus.OK);
+    }
+
+
+    @Test
+    public void getTopTenConsumersTestOk(){
+        when(clientService.getTopTenConsumers(any(LocalDate.class),any(LocalDate.class)))
+                .thenReturn(List.of(aClientDto()));
+
+        ResponseEntity<List<ClientDto>> response = clientController.getTopTenConsumers(LocalDate.now(),LocalDate.now());
+
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
+        response.getBody().forEach(Assertions::assertNotNull);
+        assertEquals(response.getBody().get(0).getId(),aClientDto().getId());
+        assertEquals(response.getStatusCode(),HttpStatus.OK);
+
+    }
 
 
 }

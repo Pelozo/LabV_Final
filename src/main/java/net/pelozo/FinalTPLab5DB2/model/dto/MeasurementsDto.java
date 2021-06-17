@@ -20,7 +20,7 @@ public class MeasurementsDto {
 
     private LocalDateTime date;
 
-    private ResidenceDto residenceDto;
+    private ResidenceDto residence;
 
     private float kwhPrice;
 

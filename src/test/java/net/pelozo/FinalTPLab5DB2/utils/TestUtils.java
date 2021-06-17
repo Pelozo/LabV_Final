@@ -76,6 +76,14 @@ public class TestUtils {
         return new PageImpl<>(List.of(anInvoice()));
     }
 
+    public static InvoiceDto anInvoiceDto(){
+        return InvoiceDto.builder().id(1L).totalAmount(300f).build();
+    }
+
+    public static Page<InvoiceDto> aInvoiceDtoPage(){
+        return new PageImpl<>(List.of(anInvoiceDto()));
+    }
+
     public static Page<Tariff> aTariffPage(){
         return new PageImpl<>(List.of(aTariff()));
     }
@@ -176,6 +184,10 @@ public class TestUtils {
         return new ModelMapper().map(aResidence(),ResidenceDto.class);
     }
 
+    public static Page<ResidenceDto> aResidenceDtoPage(){
+        return new PageImpl<>(List.of(aResidenceDto()));
+    }
+
     public static MeterDto aMeterDto(){
         return MeterDto.builder().serialNumber("123asd").id(1L).build();
     }
@@ -188,5 +200,11 @@ public class TestUtils {
         return new PageImpl<>(List.of(aMeterDto()));
     }
 
+    public static Intake anIntake() {
+        return Intake.builder()
+                .kwhValue(15498.5f)
+                .kwhPrice(12.5f)
+                .build();
+    }
 }
 

@@ -11,6 +11,4 @@ import java.util.Optional;
 public interface MeterRepository extends JpaRepository<Meter,Long> {
 
     Optional<Meter> findBySerialNumberAndPassword(String serialNumber, String password);
-
-    Optional<MeterModel> findByModelId(Long id);
 }

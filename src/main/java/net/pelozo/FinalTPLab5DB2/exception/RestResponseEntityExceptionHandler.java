@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-
 import javax.validation.ConstraintViolationException;
 
 import static net.pelozo.FinalTPLab5DB2.utils.Misc.parseDataConstraintEx;
@@ -80,6 +79,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> IllegalArgumentException(IllegalArgumentException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(8, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidIdException.class)
+    public ResponseEntity<ApiError> IllegalArgumentException(InvalidIdException ex, WebRequest request){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(8, ex.getMessage()));
     }
 

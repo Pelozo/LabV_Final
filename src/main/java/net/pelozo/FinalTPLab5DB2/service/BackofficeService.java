@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
+import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.UserDto;
 import net.pelozo.FinalTPLab5DB2.repository.BackofficeRepository;
 import net.pelozo.FinalTPLab5DB2.repository.ClientRepository;
@@ -43,7 +44,7 @@ public class BackofficeService {
         }
     }
 
-    public Page<Invoice> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) {
+    public Page<InvoiceDto> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) {
         return invoiceService.findUnpaidInvoicesByClientAndResidence(clientId, residenceId, pageable);
     }
 }

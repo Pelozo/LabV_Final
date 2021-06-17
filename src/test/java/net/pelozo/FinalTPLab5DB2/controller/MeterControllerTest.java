@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
@@ -123,13 +124,13 @@ public class MeterControllerTest {
             assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
             verify(meterService, times(1)).update(anyLong(), any(Meter.class));
 
-        } catch (NonExistentResourceException | IdViolationException e) {
+        } catch (NonExistentResourceException | IdViolationException | InvalidIdException e) {
             fail();
         }
     }
 
     @Test
-    public void updateMeter_ThrowsNonExistentResourceExceptionTest() throws IdViolationException, NonExistentResourceException {
+    public void updateMeter_ThrowsNonExistentResourceExceptionTest() throws IdViolationException, NonExistentResourceException, InvalidIdException {
         doThrow(new NonExistentResourceException()).when(meterService).update(anyLong(), any(Meter.class));
 
         assertThrows(NonExistentResourceException.class, () ->{
@@ -139,7 +140,7 @@ public class MeterControllerTest {
     }
 
     @Test
-    public void updateMeter_ThrowsIdViolationExceptionTest() throws IdViolationException, NonExistentResourceException {
+    public void updateMeter_ThrowsIdViolationExceptionTest() throws IdViolationException, NonExistentResourceException, InvalidIdException {
         doThrow(new IdViolationException()).when(meterService).update(anyLong(), any(Meter.class));
 
         assertThrows(IdViolationException.class, () ->{

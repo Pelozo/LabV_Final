@@ -69,25 +69,30 @@ public class ResidenceServiceTest {
     }
 
     @Test
-    public void addTestOk() throws ClientNotExistsException, InvalidResourceIdException {
-        when(clientService.getById(anyLong()))
-                .thenReturn(aClient());
-        when(residenceRepository.save(any(Residence.class)))
-                .thenReturn(aResidence());
+    public void addTestOk() {
+
+        try {
+            when(clientService.getById(anyLong()))
+                    .thenReturn(aClient());
+            when(residenceRepository.save(any(Residence.class)))
+                    .thenReturn(aResidence());
+            when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
+            when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
+
+            Residence residence = residenceService.add(1L,aResidence());
+
+            assertNotNull(residence);
+            assertEquals(aClient().getId(),
+                    residence.getClient().getId());
+        } catch (ClientNotExistsException | InvalidResourceIdException e) {
+            fail();
+        }
 
 
-        when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
-        when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
-
-        Residence residence = residenceService.add(1L,aResidence());
-
-        assertNotNull(residence);
-        assertEquals(aClient().getId(),
-                residence.getClient().getId());
     }
 
     @Test
-    public void addTestThrowsClientNotExistsException() throws ClientNotExistsException {
+    public void add_ThrowsClientNotExistsExceptionTest() throws ClientNotExistsException {
 
         when(clientService.getById(anyLong())).thenThrow(ClientNotExistsException.class);
 
@@ -96,6 +101,51 @@ public class ResidenceServiceTest {
         });
 
     }
+
+    @Test
+    public void add_ThrowsInvalidResourceIdException_cuzTariffTest(){
+
+        try {
+            when(clientService.getById(anyLong()))
+                    .thenReturn(aClient());
+
+            when(residenceRepository.save(any(Residence.class)))
+                    .thenReturn(aResidence());
+
+            when(tariffRepository.findById(any())).thenReturn(Optional.empty());
+            when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
+
+            assertThrows(InvalidResourceIdException.class,()->{
+                residenceService.add(1L,aResidence());
+            });
+
+        } catch (ClientNotExistsException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void add_ThrowsInvalidResourceIdException_cuzMeterTest(){
+
+        try {
+            when(clientService.getById(anyLong()))
+                    .thenReturn(aClient());
+
+            when(residenceRepository.save(any(Residence.class)))
+                    .thenReturn(aResidence());
+
+            when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
+            when(meterRepository.findById(any())).thenReturn(Optional.empty());
+
+            assertThrows(InvalidResourceIdException.class,()->{
+                residenceService.add(1L,aResidence());
+            });
+
+        } catch (ClientNotExistsException e) {
+            fail();
+        }
+    }
+
 
     @Test
     public void deleteByIdTestOk() throws NonExistentResourceException {
@@ -139,6 +189,37 @@ public class ResidenceServiceTest {
             residenceService.update(1L,aNewResidenceDto());
         });
     }
+
+    @Test
+    public void update_ThrowsInvalidResourceIdException_cuzTariffTest(){
+
+        when(residenceRepository.findById(anyLong()))
+                .thenReturn(Optional.of(aResidence()));
+
+        when(tariffRepository.findById(any())).thenReturn(Optional.empty());
+        when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
+
+        assertThrows(InvalidResourceIdException.class,()->{
+            residenceService.update(1L,aNewResidenceDto());
+        });
+    }
+
+    @Test
+    public void update_ThrowsInvalidResourceIdException_cuzMeterTest(){
+
+        when(residenceRepository.findById(anyLong()))
+                .thenReturn(Optional.of(aResidence()));
+
+        when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
+        when(meterRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(InvalidResourceIdException.class,()->{
+            residenceService.update(1L,aNewResidenceDto());
+        });
+
+
+    }
+
 
     @Test
     public void getByClientOkTest(){

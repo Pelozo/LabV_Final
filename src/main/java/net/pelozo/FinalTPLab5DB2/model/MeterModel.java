@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,10 +26,9 @@ public class MeterModel {
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotNull(message = "Brand cannot be null")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="brand_id", nullable = false)
     private MeterBrand brand;
 
