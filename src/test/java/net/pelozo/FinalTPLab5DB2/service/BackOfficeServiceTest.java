@@ -1,6 +1,9 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
+import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
 import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
@@ -61,13 +64,18 @@ public class BackOfficeServiceTest {
 
     @Test
     public void getUnpaidInvoicesByClientAndResidenceTestOk(){
-        when(invoiceService.findUnpaidInvoicesByClientAndResidence(anyLong(),anyLong(),any(Pageable.class)))
-                .thenReturn(aInvoiceDtoPage());
 
-        Page<InvoiceDto> invoices = backofficeService.getUnpaidInvoicesByClientAndResidence(1L,1L, aPageable());
+        try {
+            when(invoiceService.findUnpaidInvoicesByClientAndResidence(anyLong(),anyLong(),any(Pageable.class)))
+                    .thenReturn(aInvoiceDtoPage());
+            Page<InvoiceDto> invoices = backofficeService.getUnpaidInvoicesByClientAndResidence(1L,1L, aPageable());
 
-        assertNotNull(invoices);
-        assertEquals(anInvoice().getId(),invoices.getContent().get(0).getId());
+            assertNotNull(invoices);
+            assertEquals(anInvoice().getId(),invoices.getContent().get(0).getId());
+        } catch (ResidenceNotExistsException | ClientNotExistsException | InvalidIdException e) {
+            fail();
+        }
+
     }
 
 }

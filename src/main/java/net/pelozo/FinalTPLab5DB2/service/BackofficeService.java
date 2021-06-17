@@ -1,6 +1,9 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.InvalidCombinationUserPassword;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
+import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.Backoffice;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Invoice;
@@ -44,7 +47,7 @@ public class BackofficeService {
         }
     }
 
-    public Page<InvoiceDto> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) {
+    public Page<InvoiceDto> getUnpaidInvoicesByClientAndResidence(long clientId, long residenceId, Pageable pageable) throws InvalidIdException, ClientNotExistsException, ResidenceNotExistsException {
         return invoiceService.findUnpaidInvoicesByClientAndResidence(clientId, residenceId, pageable);
     }
 }

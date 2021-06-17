@@ -1,0 +1,111 @@
+/* nos dimos cuenta que esto no tendria que existir*/
+var meterBrands [] =  {
+    _id : string,
+    name : string
+    }
+
+var meterModels [] =  {
+    _id : string,
+    name : string,
+    brand : string
+    }
+
+var clients [] =  {
+    _id : string,
+    userName : string,
+    password : string,
+    dni : string,
+    email : string,
+    firstName : string,
+    lastName : string,
+    residences : [] = {
+                    _id : string,
+                    meter : {
+                            _id : string,
+                            serialnumber : string,
+                            password : string,
+                            meterModel : {
+                                        _id : string,
+                                        name : string,
+                                        brand : string
+                            }
+
+                    },
+                    tariff : {
+                            _id : string,
+                            name : string,
+                            amount : float
+                    },
+                    address : {
+                            street : string,
+                            number : string
+                    }
+               }
+    }
+
+var residences-measurements : [] = {
+        measurements : [] = {
+                _id : string,
+                kwhValue : float,
+                date : Date,
+                kwhPrice : float,
+                invoiceId : string
+        }
+}
+
+var backOfficeUsers [] = {
+    _id : string,
+    userName : string,
+    password : string,
+    email : string,
+    firstName : string,
+    lastName : string
+    }
+
+var tariffs [] = {
+    _id : string,
+    name : string,
+    amount : float
+    }
+
+var invoices [] = {
+    _id : string,
+    isPaid : boolean,
+    isDue: boolean,
+    dueDate : Date,
+    issueDate : Date,
+    kwhMeasurement : float,
+    firstReading : float,
+    lastReading : float,
+    total : float,
+    client : {
+            _id : string,
+                dni : string,
+                email : string,
+                firstName : string,
+                lastName : string,
+                residence : {
+                        _id : string,
+                        meter : {
+                                _id : string,
+                                serialnumber : string,
+                                meterModel : {
+                                            _id : string,
+                                            name : string,
+                                            brand : string
+                                }
+
+                        },
+                        tariff : {
+                                _id : string,
+                                name : string,
+                                amount : float
+                        },
+                        address : {
+                                street : string,
+                                number : string
+                        }
+                }
+    }
+
+}
