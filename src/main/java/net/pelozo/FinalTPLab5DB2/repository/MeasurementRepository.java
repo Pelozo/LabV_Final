@@ -37,4 +37,6 @@ public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
             "WHERE M.residence_id = :residenceId AND DATE BETWEEN :from AND :to",
             nativeQuery = true)
     Page<Measurement> findByResidenceAndRangeOfDate(@Param("residenceId") long residenceId,@Param("from") LocalDateTime from,@Param("to") LocalDateTime to, Pageable pageable);
+
+    Measurement findFirstByOrderByIdDesc();
 }

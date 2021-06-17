@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
+import net.pelozo.FinalTPLab5DB2.model.MeterModel;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
 import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
@@ -52,12 +53,15 @@ public class MeterService {
     }
 
     public void update(Long id, Meter _meter) throws NonExistentResourceException, IdViolationException {
+
+        Optional<MeterModel> model = meterRepository.findByModelId(_meter.getModel().getId());
         Optional<Meter> meter = meterRepository.findById(id);
-        if(meter.isPresent()){
+        if(meter.isPresent() && model.isPresent()){
             if(_meter.getId() != null && !meter.get().getId().equals(_meter.getId())){
                 throw new IdViolationException();
             }else{
                 _meter.setId(meter.get().getId());
+                _meter.setModel(model.get());
                 meterRepository.save(_meter);
             }
         }else{

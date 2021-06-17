@@ -2,6 +2,7 @@ package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidResourceIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
@@ -60,7 +61,7 @@ public class ResidenceController {
 
     //3) Alta, baja y modificación de domicilios y medidores
     @PutMapping("/{id}")
-    public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody NewResidenceDto residence) throws NonExistentResourceException, IdViolationException {
+    public ResponseEntity updateResidence(@PathVariable Long id, @RequestBody NewResidenceDto residence) throws NonExistentResourceException, IdViolationException, InvalidResourceIdException {
         residenceService.update(id, residence);
         return ResponseEntity.accepted().build();
     }

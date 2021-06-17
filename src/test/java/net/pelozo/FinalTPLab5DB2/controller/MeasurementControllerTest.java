@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.exception.InvalidDateException;
 import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
@@ -41,7 +42,7 @@ public class MeasurementControllerTest {
     }
 
     @Test
-    public void addMeasurementTest(){
+    public void addMeasurementTest() throws InvalidDateException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         try {

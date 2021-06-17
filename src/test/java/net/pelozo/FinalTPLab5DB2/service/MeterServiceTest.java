@@ -131,6 +131,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeterOkTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
+        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
         Meter newMeter = aMeter();
         newMeter.setSerialNumber("A8B23");
 
@@ -146,7 +147,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeterTestOkWithNull()  {
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
-
+        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
         Meter newMeter = aMeter();
         newMeter.setId(null);
 
@@ -161,14 +162,17 @@ public class MeterServiceTest {
     @Test
     public void updateMeter_ThrowsNonExistentExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
         assertThrows(NonExistentResourceException.class, () -> {
             meterService.update(aMeter().getId(), aMeter());
         });
+
     }
 
     @Test
     public void updateMeter_ThrowsIdViolationExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
+        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
 
         Meter newMeter = aMeter();
         newMeter.setId(8L);
@@ -177,6 +181,14 @@ public class MeterServiceTest {
         });
     }
 
+    @Test
+    public void updateMeter_noModelMeter_ThrowsNonExistentExceptionTest(){
+        when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
+        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NonExistentResourceException.class, () -> {
+            meterService.update(aMeter().getId(), aMeter());
+        });
 
+    }
 
 }

@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
+import net.pelozo.FinalTPLab5DB2.exception.InvalidDateException;
 import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
@@ -11,6 +12,7 @@ import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.repository.MeasurementRepository;
 import net.pelozo.FinalTPLab5DB2.utils.TestUtils;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -54,7 +58,7 @@ public class MeasurementsServiceTest {
         Optional<Meter>optMeter = Optional.of(aMeter());
         Optional<Residence>optResidence = Optional.of(aResidence());
         MeasurementDto measurementDto = aMeasurementDto();
-
+        measurementDto.setDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS));
 
         when(meterService
                 .getBySerialNumberAndPassword(aMeter().getSerialNumber(),
@@ -66,16 +70,16 @@ public class MeasurementsServiceTest {
 
         when(measurementRepository.save(any())).thenReturn(aMeasurement());
 
+        when(measurementRepository.findFirstByOrderByIdDesc()).thenReturn(aMeasurement());
+
+        when(modelMapper.map(any(Measurement.class), any())).thenReturn(aMeasurementsDto());
 
         try {
             Measurement measurement = measurementService.add(measurementDto);
             assertEquals(aMeasurement().getId(),measurement.getId());
-        } catch (ResidenceNotExistsException e) {
-            e.printStackTrace();
-        } catch (MeterNotExistsException e) {
-            e.printStackTrace();
+        } catch (ResidenceNotExistsException | MeterNotExistsException | InvalidDateException e) {
+            fail();
         }
-
 
 
     }

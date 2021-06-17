@@ -68,4 +68,19 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(IdViolationException.errorCode, ex.getMessage()));
     }
 
+    @ExceptionHandler(InvalidResourceIdException.class)
+    public ResponseEntity<ApiError> IdViolationException(InvalidResourceIdException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(InvalidResourceIdException.errorCode, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidDateException.class)
+    public ResponseEntity<ApiError> InvalidDateException(InvalidDateException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(InvalidDateException.errorCode, ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> IllegalArgumentException(IllegalArgumentException ex, WebRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(8, ex.getMessage()));
+    }
+
 }

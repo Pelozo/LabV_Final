@@ -26,5 +26,3 @@ Modificación|PUT|TBA|TBA|TBA|✔
 Consulta de facturas impagas por cliente y domicilio|GET|/clients/{clientId}/residences/{residenceId}/invoices/unpaid|TBA|TBA|✔
 Consulta 10 clientes más consumidores en un rango de fechas|GET|/clients/topConsumers?from=2000-01-01&to=2222-01-01|TBA|TBA|✔
 Consulta de mediciones de un domicilio por rango de fechas|GET|measurements/residence/{residenceId}|TBA|TBA|✔
-
-		
