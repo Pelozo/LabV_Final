@@ -188,5 +188,11 @@ public class TestUtils {
         return new PageImpl<>(List.of(aMeterDto()));
     }
 
+    public static Intake anIntake() {
+        return Intake.builder()
+                .kwhValue(15498.5f)
+                .kwhPrice(12.5f)
+                .build();
+    }
 }
 

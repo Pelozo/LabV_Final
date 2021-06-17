@@ -23,7 +23,7 @@ public class Meter {
     private Long id;
 
     @NotNull(message = "model cannot be null")
-    @ManyToOne(fetch = FetchType.LAZY)//(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)//(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="model_id", nullable = false)
     private MeterModel model;
 
