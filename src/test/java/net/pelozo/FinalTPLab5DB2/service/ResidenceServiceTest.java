@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidResourceIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Residence;
 import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
@@ -67,12 +69,16 @@ public class ResidenceServiceTest {
     }
 
     @Test
-    public void addTestOk() throws ClientNotExistsException {
+    public void addTestOk() throws ClientNotExistsException, InvalidResourceIdException {
         when(clientService.getById(anyLong()))
                 .thenReturn(aClient());
-
         when(residenceRepository.save(any(Residence.class)))
                 .thenReturn(aResidence());
+
+
+        when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
+        when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
+
         Residence residence = residenceService.add(1L,aResidence());
 
         assertNotNull(residence);
@@ -110,13 +116,16 @@ public class ResidenceServiceTest {
     }
 
     @Test
-    public void updateTestOk() throws NonExistentResourceException {
+    public void updateTestOk() throws NonExistentResourceException, InvalidResourceIdException {
         when(residenceRepository.findById(anyLong()))
                 .thenReturn(Optional.of(aResidence()));
         when(residenceRepository.save(any(Residence.class)))
                 .thenReturn(aResidence());
-        Residence residence = residenceService.update(1L,aNewResidenceDto());
 
+        when(tariffRepository.findById(any())).thenReturn(Optional.of(aTariff()));
+        when(meterRepository.findById(any())).thenReturn(Optional.of(aMeter()));
+
+        Residence residence = residenceService.update(1L,aNewResidenceDto());
         assertNotNull(residence);
         assertEquals(aResidence().getId(),residence.getId());
     }

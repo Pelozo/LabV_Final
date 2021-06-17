@@ -22,16 +22,16 @@ public class Misc {
 
     public static String parseDataConstraintEx(DataIntegrityViolationException ex){
         //Pattern pattern = Pattern.compile(".+?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
-        //Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
-        Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?\\((.+?)\\)", Pattern.CASE_INSENSITIVE);
+        //Pattern pattern = Pattern.compile("(?:UNQ|FK|PK)_(.+?)[_\\]].*?", Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = pattern.matcher(ex.getMessage());
 
         ex.printStackTrace();
-        if(matcher.find()) {
-            return "Constraint error with " + matcher.group(1).toLowerCase();
+        if(matcher.find() && matcher.groupCount() == 2) {
+            return "Constraint error with " + matcher.group(2).toLowerCase().replace("_", " ") + " in " + matcher.group(1).toLowerCase();
         } else {
-            return "Constraint error: " + ex.getMessage();
+            return "Constraint error" ;//+ ex.getMessage();
         }
     }
 

@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidResourceIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
@@ -15,6 +16,7 @@ import net.pelozo.FinalTPLab5DB2.repository.ResidenceRepository;
 import net.pelozo.FinalTPLab5DB2.repository.TariffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,16 +53,24 @@ public class ResidenceService {
         return residenceRepository.findAll(pageable).map(residence -> modelMapper.map(residence, ResidenceDto.class));
     }
 
-    public Residence add(Long clientId, Residence residence) throws ClientNotExistsException {
+    public Residence add(Long clientId, Residence residence) throws ClientNotExistsException, InvalidResourceIdException {
         Client client = clientService.getById(clientId);
-        Tariff t = tariffRepository.getOne(residence.getTariff().getId());
-        Meter m = meterRepository.getOne(residence.getMeter().getId());
+        Optional<Tariff> t = tariffRepository.findById(residence.getTariff().getId());
+        Optional<Meter> m = meterRepository.findById(residence.getMeter().getId());
 
+        if (t.isEmpty()) {
+            throw new InvalidResourceIdException("Tariff");
+        }
 
-        residence.setTariff(t);
-        residence.setMeter(m);
+        if (m.isEmpty()) {
+            throw new InvalidResourceIdException("Meter");
+        }
+
+        residence.setTariff(t.get());
+        residence.setMeter(m.get());
         residence.setClient(client);
         return residenceRepository.save(residence);
+
     }
 
     public void deleteById(Long id) throws NonExistentResourceException {
@@ -72,15 +82,21 @@ public class ResidenceService {
         }
     }
 
-    public Residence update(Long id, NewResidenceDto residence) throws NonExistentResourceException {
+    public Residence update(Long id, NewResidenceDto residence) throws NonExistentResourceException, InvalidResourceIdException {
         Optional<Residence> newResidence = residenceRepository.findById(id);
 
+        if(newResidence.isPresent()){
+            Optional<Tariff> t = tariffRepository.findById(residence.getTariff().getId());
+            Optional<Meter> m = meterRepository.findById(residence.getMeter().getId());
 
-        if(newResidence.isPresent()) {
-            Tariff t = tariffRepository.getOne(residence.getTariff().getId());
-            Meter m = meterRepository.getOne(residence.getMeter().getId());
-            newResidence.get().setTariff(t);
-            newResidence.get().setMeter(m);
+            if (t.isEmpty()) {
+                throw new InvalidResourceIdException("Tariff");
+            }
+            if (m.isEmpty()) {
+                throw new InvalidResourceIdException("Meter");
+            }
+            newResidence.get().setTariff(t.get());
+            newResidence.get().setMeter(m.get());
             newResidence.get().setAddress(residence.getAddress());
             return residenceRepository.save(newResidence.get());
         }else{

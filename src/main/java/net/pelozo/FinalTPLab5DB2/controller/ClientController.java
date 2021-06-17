@@ -1,5 +1,6 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
+import net.pelozo.FinalTPLab5DB2.exception.InvalidResourceIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.*;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
@@ -151,7 +152,7 @@ public class ClientController {
 
     //3) Alta, baja y modificación de domicilios y medidores
     @PostMapping("/{clientId}/residences")
-    public ResponseEntity<String> addResidence(@PathVariable Long clientId, @RequestBody Residence newResidence) throws ClientNotExistsException {
+    public ResponseEntity<String> addResidence(@PathVariable Long clientId, @RequestBody Residence newResidence) throws ClientNotExistsException, InvalidResourceIdException {
         Residence residence = residenceService.add(clientId, newResidence);
 
         return ResponseEntity

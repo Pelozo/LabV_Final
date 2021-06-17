@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 
+import net.pelozo.FinalTPLab5DB2.exception.InvalidDateException;
 import net.pelozo.FinalTPLab5DB2.exception.MeterNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.exception.ResidenceNotExistsException;
@@ -37,7 +38,7 @@ public class MeasurementService {
         this.modelMapper = modelMapper;
     }
 
-    public Measurement add(MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException {
+    public Measurement add(MeasurementDto measurement) throws ResidenceNotExistsException, MeterNotExistsException, InvalidDateException {
 
         Optional<Meter> m = meterService.getBySerialNumberAndPassword(measurement.getSerialNumber(),measurement.getPassword());
 
@@ -45,11 +46,19 @@ public class MeasurementService {
         if(m.isPresent()){
             Optional<Residence> r = residenceService.getByMeter(m.get());
             if(r.isPresent()) {
+
+                MeasurementsDto lastM = modelMapper.map(measurementRepository.findFirstByOrderByIdDesc(),MeasurementsDto.class);
+
+                if(lastM.getDate().isAfter(measurement.getDate())){
+                    throw new InvalidDateException();
+                }
+
                 Measurement me = Measurement.builder()
                         .residence(r.get())
                         .date(measurement.getDate())
                         .kwhValue(measurement.getValue())
                         .build();
+
                 return measurementRepository.save(me);
 
             }else{
@@ -58,8 +67,6 @@ public class MeasurementService {
         }else {
             throw new MeterNotExistsException();
         }
-        //return measurementRepository.save(me);
-
     }
 
     public Page<Measurement> getAll(Pageable pageable) {
