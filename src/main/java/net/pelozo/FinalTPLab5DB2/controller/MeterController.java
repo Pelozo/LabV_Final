@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.Tariff;
@@ -68,7 +69,7 @@ public class MeterController {
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateMeter(@PathVariable Long id,
-                                       @RequestBody Meter meter) throws NonExistentResourceException, IdViolationException {
+                                       @RequestBody Meter meter) throws NonExistentResourceException, IdViolationException, InvalidIdException {
         meterService.update(id, meter);
         return ResponseEntity.accepted().build();
     }

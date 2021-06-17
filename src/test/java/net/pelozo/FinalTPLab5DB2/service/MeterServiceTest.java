@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
@@ -140,7 +141,7 @@ public class MeterServiceTest {
             meterService.update(aMeter().getId(), newMeter);
             verify(meterRepository, times(1)).findById(aMeter().getId());
             verify(meterRepository, times(1)).save(newMeter);
-        } catch (NonExistentResourceException | IdViolationException e) {
+        } catch (NonExistentResourceException | IdViolationException | InvalidIdException e) {
             fail();
         }
     }
@@ -154,7 +155,7 @@ public class MeterServiceTest {
 
         try {
             meterService.update(aMeter().getId(), newMeter);
-        } catch (NonExistentResourceException | IdViolationException e) {
+        } catch (NonExistentResourceException | IdViolationException | InvalidIdException e) {
             fail();
         }
         verify(meterRepository, times(1)).save(aMeter());
@@ -186,10 +187,12 @@ public class MeterServiceTest {
     public void updateMeter_noModelMeter_ThrowsNonExistentExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
         when(modelRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(NonExistentResourceException.class, () -> {
+        assertThrows(InvalidIdException.class, () -> {
             meterService.update(aMeter().getId(), aMeter());
         });
 
     }
+
+
 
 }

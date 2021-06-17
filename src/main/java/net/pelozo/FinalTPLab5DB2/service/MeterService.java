@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
+import net.pelozo.FinalTPLab5DB2.exception.InvalidIdException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.MeterModel;
@@ -52,18 +53,23 @@ public class MeterService {
         }
     }
 
-    public void update(Long id, Meter _meter) throws NonExistentResourceException, IdViolationException {
+    public void update(Long id, Meter _meter) throws NonExistentResourceException, IdViolationException, InvalidIdException {
 
         Optional<MeterModel> model = modelRepository.findById(_meter.getModel().getId());
         Optional<Meter> meter = meterRepository.findById(id);
-        if(meter.isPresent() && model.isPresent()){
-            if(_meter.getId() != null && !meter.get().getId().equals(_meter.getId())){
-                throw new IdViolationException();
-            }else{
-                _meter.setId(meter.get().getId());
-                _meter.setModel(model.get());
-                meterRepository.save(_meter);
+        if(meter.isPresent()){
+            if(model.isEmpty()){
+                throw new InvalidIdException("model");
             }
+
+            if((_meter.getId() != null && !meter.get().getId().equals(_meter.getId()))){
+                throw new IdViolationException();
+            }
+
+            _meter.setId(meter.get().getId());
+            _meter.setModel(model.get());
+            meterRepository.save(_meter);
+
         }else{
             throw new NonExistentResourceException();
         }
