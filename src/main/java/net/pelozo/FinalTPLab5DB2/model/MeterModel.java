@@ -28,7 +28,7 @@ public class MeterModel {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotNull(message = "Brand cannot be null")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="brand_id", nullable = false)
     private MeterBrand brand;
 
