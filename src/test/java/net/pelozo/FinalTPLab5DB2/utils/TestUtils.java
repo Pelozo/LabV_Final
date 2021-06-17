@@ -176,6 +176,10 @@ public class TestUtils {
         return new ModelMapper().map(aResidence(),ResidenceDto.class);
     }
 
+    public static Page<ResidenceDto> aResidenceDtoPage(){
+        return new PageImpl<>(List.of(aResidenceDto()));
+    }
+
     public static MeterDto aMeterDto(){
         return MeterDto.builder().serialNumber("123asd").id(1L).build();
     }
