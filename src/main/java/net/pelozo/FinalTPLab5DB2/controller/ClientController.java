@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.*;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
+import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
@@ -88,20 +89,20 @@ public class ClientController {
     //2) Consulta de facturas por rango de fechas.
     @GetMapping("/{id}/invoices")
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
-    public ResponseEntity<List<Invoice>> getInvoices(@PathVariable long id,
+    public ResponseEntity<List<InvoiceDto>> getInvoices(@PathVariable long id,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date startDate,
                                                      @RequestParam @DateTimeFormat(pattern="MM-yyyy") Date endDate,
                                                      Pageable pageable){
-        Page<Invoice> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
+        Page<InvoiceDto> invoices = invoiceService.getByClientIdAndDate(id, startDate, endDate, pageable);
         return response(invoices);
     }
 
     //3) Consulta de deuda (Facturas impagas)
     @PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")
     @GetMapping("/{id}/invoices/unpaid")
-    public ResponseEntity<List<Invoice>> getUnpaidInvoices(@PathVariable long id,
-                                                                 Pageable pageable) {
-        Page<Invoice> invoices = invoiceService.getByClientUnpaid(id, pageable);
+    public ResponseEntity<List<InvoiceDto>> getUnpaidInvoices(@PathVariable long id,
+                                                              Pageable pageable) {
+        Page<InvoiceDto> invoices = invoiceService.getByClientUnpaid(id, pageable);
         return response(invoices);
     }
 
@@ -144,8 +145,8 @@ public class ClientController {
     //4) Consulta de facturas impagas por cliente y domicilio.
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<List<Invoice>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
-        Page<Invoice> unpaidInvoices = invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
+    public ResponseEntity<List<InvoiceDto>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+        Page<InvoiceDto> unpaidInvoices = invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
         return response(unpaidInvoices);
     }

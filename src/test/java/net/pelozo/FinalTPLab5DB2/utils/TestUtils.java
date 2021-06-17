@@ -76,6 +76,14 @@ public class TestUtils {
         return new PageImpl<>(List.of(anInvoice()));
     }
 
+    public static InvoiceDto anInvoiceDto(){
+        return InvoiceDto.builder().id(1L).totalAmount(300f).build();
+    }
+
+    public static Page<InvoiceDto> aInvoiceDtoPage(){
+        return new PageImpl<>(List.of(anInvoiceDto()));
+    }
+
     public static Page<Tariff> aTariffPage(){
         return new PageImpl<>(List.of(aTariff()));
     }

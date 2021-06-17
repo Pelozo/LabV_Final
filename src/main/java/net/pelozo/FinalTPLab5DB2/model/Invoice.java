@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.pelozo.FinalTPLab5DB2.model.dto.ResidenceDto;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -71,15 +72,6 @@ public class Invoice {
     @Column(name = "total")
     private Float totalAmount;
 
-
-
-    //aca consigo el total de consumo que tuvo el usuario
-    /*
-    public float getTotalConsumption(){
-        return lastReading - firstReading;
-    }
-
-     */
 
 
 }

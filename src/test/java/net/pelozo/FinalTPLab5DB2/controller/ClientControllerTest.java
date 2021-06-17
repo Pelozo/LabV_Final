@@ -5,6 +5,7 @@ import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
 import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 
 import net.pelozo.FinalTPLab5DB2.model.Client;
+import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
 import net.pelozo.FinalTPLab5DB2.service.InvoiceService;
 import net.pelozo.FinalTPLab5DB2.service.MeasurementService;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
@@ -161,9 +162,9 @@ public class ClientControllerTest{
         //given
         Date date = mock(Date.class);
         when(date.getTime()).thenReturn(30L);
-        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(anInvoicePage());
+        when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(aInvoiceDtoPage());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
         assertEquals(
                 HttpStatus.OK,
@@ -174,7 +175,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                anInvoicePage().toList().get(0).getLastReading(),
+                aInvoiceDtoPage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }
@@ -182,9 +183,9 @@ public class ClientControllerTest{
     @Test
     public void getUnpaidInvoicesByClient(){
         //given
-        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(anInvoicePage());
+        when(invoiceService.getByClientUnpaid(anyLong(), eq(aPageable()))).thenReturn(aInvoiceDtoPage());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getUnpaidInvoices(1L, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getUnpaidInvoices(1L, aPageable());
 
         //then
         assertEquals(
@@ -196,7 +197,7 @@ public class ClientControllerTest{
                 response.getBody().size()
         );
         assertEquals(
-                anInvoicePage().toList().get(0).getLastReading(),
+                aInvoiceDtoPage().toList().get(0).getLastReading(),
                 response.getBody().get(0).getLastReading()
         );
     }
@@ -208,7 +209,7 @@ public class ClientControllerTest{
         when(date.getTime()).thenReturn(30L);
         when(invoiceService.getByClientIdAndDate(anyLong(), eq(date), eq(date), eq(aPageable()))).thenReturn(Page.empty());
         //when
-        ResponseEntity<List<Invoice>> response = clientController.getInvoices(1L, date, date, aPageable());
+        ResponseEntity<List<InvoiceDto>> response = clientController.getInvoices(1L, date, date, aPageable());
         //then
         assertEquals(
                 HttpStatus.NO_CONTENT,

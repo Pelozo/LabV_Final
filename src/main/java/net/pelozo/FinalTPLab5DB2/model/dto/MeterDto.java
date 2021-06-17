@@ -14,7 +14,7 @@ public class MeterDto{
 
     private Long id;
 
-    //private MeterModel model;
+    private MeterModel model;
 
     private String serialNumber;
 }

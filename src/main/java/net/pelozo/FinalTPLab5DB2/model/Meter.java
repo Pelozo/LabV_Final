@@ -1,6 +1,7 @@
 package net.pelozo.FinalTPLab5DB2.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Meter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotNull(message = "model cannot be null")
     @ManyToOne(fetch = FetchType.LAZY)//(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="model_id", nullable = false)
