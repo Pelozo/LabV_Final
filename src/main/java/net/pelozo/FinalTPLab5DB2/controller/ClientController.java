@@ -1,10 +1,8 @@
 package net.pelozo.FinalTPLab5DB2.controller;
 
-import net.pelozo.FinalTPLab5DB2.exception.InvalidResourceIdException;
-import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
+import net.pelozo.FinalTPLab5DB2.exception.*;
 import net.pelozo.FinalTPLab5DB2.model.*;
 import net.pelozo.FinalTPLab5DB2.model.dto.ClientDto;
-import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.model.dto.InvoiceDto;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeasurementsDto;
 import net.pelozo.FinalTPLab5DB2.service.ClientService;
@@ -145,7 +143,7 @@ public class ClientController {
     //4) Consulta de facturas impagas por cliente y domicilio.
     @PreAuthorize(value= "hasAuthority('BACKOFFICE')")
     @GetMapping("/{clientId}/residences/{residenceId}/invoices/unpaid")
-    public ResponseEntity<List<InvoiceDto>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable){
+    public ResponseEntity<List<InvoiceDto>> getUnpaidInvoicesByClientAndResidence(@PathVariable long clientId,@PathVariable long residenceId, Pageable pageable) throws ResidenceNotExistsException, ClientNotExistsException, InvalidIdException {
         Page<InvoiceDto> unpaidInvoices = invoiceService.findUnpaidInvoicesByClientAndResidence(clientId,residenceId, pageable);
 
         return response(unpaidInvoices);
