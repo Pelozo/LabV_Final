@@ -85,7 +85,7 @@ public class MeasurementsServiceTest {
     }
 
     @Test
-    public void addTestThrowsResidenceNotExistsException(){
+    public void addTest_ThrowsResidenceNotExistsExceptionTest(){
         when(meterService
                 .getBySerialNumberAndPassword(aMeter().getSerialNumber(),
                         aMeter().getPassword()))
@@ -100,7 +100,7 @@ public class MeasurementsServiceTest {
     }
 
     @Test
-    public void addTestThrowsMeterNotExistsException(){
+    public void addTest_ThrowsMeterNotExistsExceptionTest(){
         when(meterService
                 .getBySerialNumberAndPassword(aMeter().getSerialNumber(),
                         aMeter().getPassword()))
@@ -110,6 +110,29 @@ public class MeasurementsServiceTest {
                 .thenReturn(Optional.of(aResidence()));
 
         assertThrows(MeterNotExistsException.class,()->{
+            measurementService.add(aMeasurementDto());
+        });
+    }
+
+    @Test
+    public void addTest_ThrowsInvalidDateExceptionTest(){
+        when(meterService
+                .getBySerialNumberAndPassword(aMeter().getSerialNumber(),
+                        aMeter().getPassword()))
+                .thenReturn(Optional.of(aMeter()));
+
+
+        when(residenceService.getByMeter(aMeter()))
+                .thenReturn(Optional.of(aResidence()));
+
+        when(measurementRepository.findFirstByOrderByIdDesc()).thenReturn(aMeasurement());
+
+        MeasurementsDto measurementsDto = aMeasurementsDto();
+        measurementsDto.setDate(LocalDateTime.now().plus(10, ChronoUnit.DAYS));
+
+        when(modelMapper.map(any(Measurement.class), eq(MeasurementsDto.class))).thenReturn(measurementsDto);
+
+        assertThrows(InvalidDateException.class,()->{
             measurementService.add(aMeasurementDto());
         });
     }

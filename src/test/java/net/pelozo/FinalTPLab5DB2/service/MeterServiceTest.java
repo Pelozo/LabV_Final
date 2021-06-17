@@ -3,8 +3,8 @@ package net.pelozo.FinalTPLab5DB2.service;
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
-import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
+import net.pelozo.FinalTPLab5DB2.repository.MeterModelRepository;
 import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static net.pelozo.FinalTPLab5DB2.utils.TestUtils.*;
@@ -23,6 +22,7 @@ import static org.mockito.Mockito.*;
 public class MeterServiceTest {
 
     MeterRepository meterRepository;
+    MeterModelRepository modelRepository;
     MeterService meterService;
     ModelMapper modelMapper;
 
@@ -30,7 +30,8 @@ public class MeterServiceTest {
     public void setUp(){
         modelMapper = mock(ModelMapper.class);
         meterRepository = mock(MeterRepository.class);
-        meterService = new MeterService(meterRepository, modelMapper);
+        modelRepository = mock(MeterModelRepository.class);
+        meterService = new MeterService(meterRepository, modelRepository, modelMapper);
     }
 
     @Test
@@ -131,7 +132,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeterOkTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
-        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
+        when(modelRepository.findById(anyLong())).thenReturn(Optional.of(aMeterModel()));
         Meter newMeter = aMeter();
         newMeter.setSerialNumber("A8B23");
 
@@ -147,7 +148,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeterTestOkWithNull()  {
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
-        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
+        when(modelRepository.findById(anyLong())).thenReturn(Optional.of(aMeterModel()));
         Meter newMeter = aMeter();
         newMeter.setId(null);
 
@@ -162,7 +163,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeter_ThrowsNonExistentExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.empty());
-        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
+        when(modelRepository.findById(anyLong())).thenReturn(Optional.of(aMeterModel()));
         assertThrows(NonExistentResourceException.class, () -> {
             meterService.update(aMeter().getId(), aMeter());
         });
@@ -172,7 +173,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeter_ThrowsIdViolationExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
-        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.of(aMeterModel()));
+        when(modelRepository.findById(anyLong())).thenReturn(Optional.of(aMeterModel()));
 
         Meter newMeter = aMeter();
         newMeter.setId(8L);
@@ -184,7 +185,7 @@ public class MeterServiceTest {
     @Test
     public void updateMeter_noModelMeter_ThrowsNonExistentExceptionTest(){
         when(meterRepository.findById(anyLong())).thenReturn(Optional.of(aMeter()));
-        when(meterRepository.findByModelId(anyLong())).thenReturn(Optional.empty());
+        when(modelRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NonExistentResourceException.class, () -> {
             meterService.update(aMeter().getId(), aMeter());
         });

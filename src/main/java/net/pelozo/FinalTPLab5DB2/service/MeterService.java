@@ -1,13 +1,11 @@
 package net.pelozo.FinalTPLab5DB2.service;
 
-import net.pelozo.FinalTPLab5DB2.exception.ClientNotExistsException;
 import net.pelozo.FinalTPLab5DB2.exception.IdViolationException;
 import net.pelozo.FinalTPLab5DB2.exception.NonExistentResourceException;
-import net.pelozo.FinalTPLab5DB2.model.Client;
 import net.pelozo.FinalTPLab5DB2.model.Meter;
 import net.pelozo.FinalTPLab5DB2.model.MeterModel;
-import net.pelozo.FinalTPLab5DB2.model.Tariff;
 import net.pelozo.FinalTPLab5DB2.model.dto.MeterDto;
+import net.pelozo.FinalTPLab5DB2.repository.MeterModelRepository;
 import net.pelozo.FinalTPLab5DB2.repository.MeterRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +20,13 @@ public class MeterService {
 
 
     private final MeterRepository meterRepository;
+    private final MeterModelRepository modelRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public MeterService(MeterRepository meterRepository, ModelMapper modelMapper) {
+    public MeterService(MeterRepository meterRepository, MeterModelRepository modelRepository, ModelMapper modelMapper) {
         this.meterRepository = meterRepository;
+        this.modelRepository = modelRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -54,7 +54,7 @@ public class MeterService {
 
     public void update(Long id, Meter _meter) throws NonExistentResourceException, IdViolationException {
 
-        Optional<MeterModel> model = meterRepository.findByModelId(_meter.getModel().getId());
+        Optional<MeterModel> model = modelRepository.findById(_meter.getModel().getId());
         Optional<Meter> meter = meterRepository.findById(id);
         if(meter.isPresent() && model.isPresent()){
             if(_meter.getId() != null && !meter.get().getId().equals(_meter.getId())){
